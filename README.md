@@ -1,1 +1,1 @@
-# StudyNotion Edtech Project
+# Edtech Project Repo for Deployment
