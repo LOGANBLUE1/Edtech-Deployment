@@ -12,8 +12,7 @@ require("dotenv").config()
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email,
-      password, confirmPassword, accountType,
-      contactNumber, otp } = req.body;
+      password, confirmPassword, accountType, otp } = req.body;
     
     if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
       return res.status(403).send({
@@ -42,14 +41,14 @@ exports.signup = async (req, res) => {
     const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
     // const response = await OTP.findOne({ email }).sort({ createdAt: -1 });
     // console.log(response)
+
     if (response.length === 0) {
-    // if(!otp){
       return res.status(400).json({
         success: false,
         message: "The OTP did not found"
       });
     } 
-    // else if(otp != response.otp)
+
     else if (otp !== response[0].otp) {
       return res.status(400).json({
         success: false,
@@ -63,6 +62,8 @@ exports.signup = async (req, res) => {
     // Create the user
     let approved = ""
     approved = approved === "Instructor" ? false : true;  //  ??????????????????????
+    // let approved = ""
+    // approved = accountType === "Instructor" ? false : true;
 
     // Create the Additional Profile For User
     const profileDetails = await Profile.create({
@@ -75,12 +76,11 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       email,
-      contactNumber,
       password: hashedPassword,
       accountType: accountType,
       approved: approved,
       additionalDetails: profileDetails._id,
-      image: ""
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
     })
 
     return res.status(200).json({
@@ -96,6 +96,7 @@ exports.signup = async (req, res) => {
     });
   }
 }
+
 
 
 exports.login = async (req, res) => {
@@ -126,43 +127,46 @@ exports.login = async (req, res) => {
 
     // Generate JWT token and Compare Password
     if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign(
-        { email: user.email, id: user._id, role: user.role },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "24h"
-        }
-      )
+
+      const payload = { email: user.email, id: user._id, role: user.role };
+      const token = jwt.sign( payload,
+          process.env.JWT_SECRET,
+          {expiresIn: "24h"}
+      );
 
       // Save token to user document in database
-      user.token = token
-      user.password = undefined
-      // Set cookie for token and return success response
+      user.token = token;
+      // await user.save(); **
+      user.password = undefined;   // returning empty pass in response
+    
+
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         httpOnly: true
+        // sameSite: 'Strict'
       }
       res.cookie("token", token, options).status(200).json({
         success: true,
         token,
         user,
         message: `User Login Success`
-      })
+      });
+
     } else {
       return res.status(401).json({
         success: false,
         message: `Password is incorrect`
-      })
+      });
     }
   } catch (error) {
-    console.error(error)
-    // Return 500 Internal Server Error status code with error message
+    console.error('Failed to login ', error);
     return res.status(500).json({
       success: false,
       message: `Login Failure Please Try Again`
-    })
+    });
   }
 }
+
 
 
 exports.sendotp = async (req, res) => {
@@ -185,14 +189,29 @@ exports.sendotp = async (req, res) => {
     });
 
     const result = await OTP.findOne({ otp: otp });
-    // console.log("Result is Generate OTP Func")
+    // console.log("Result is Generate OTP Func");
     // console.log("OTP", otp)
-    // console.log("Result", result);
+    // console.log("Result", result)
     while (result) {
       otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false
       })
     }
+
+    // let otp;
+    // let result;
+
+    // do {
+    //   otp = otpGenerator.generate(6, {
+    //     upperCaseAlphabets: false,
+    //     lowerCaseAlphabets: false,
+    //     specialChars: false
+    //   });
+
+    //   result = await OTP.findOne({ otp: otp });
+    // } while (result);
 
     const otpPayload = { email, otp };
     const otpBody = await OTP.create(otpPayload);
@@ -212,13 +231,14 @@ exports.sendotp = async (req, res) => {
   }
 }
 
-// Controller for Changing Password
+
 exports.changePassword = async (req, res) => {
   try {
     // Get user data from req.user
     const userDetails = await User.findById(req.user.id)
 
-    // Get old password, new password, and confirm new password from req.body
+    // Get old password, new password, and confirm new password from req.body***
+    // conf newPass ??????????????????????????????
     const { oldPassword, newPassword } = req.body
 
     // Validate old password
