@@ -38,18 +38,18 @@ exports.signup = async (req, res) => {
     }
 
     // recent OTP for the email
-    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-    // const response = await OTP.findOne({ email }).sort({ createdAt: -1 });
-    // console.log(response)
+    const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    // const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    // console.log(recentOtp)
 
-    if (response.length === 0) {
+    if (recentOtp.length === 0) {
       return res.status(400).json({
         success: false,
         message: "The OTP did not found"
       });
     } 
 
-    else if (otp !== response[0].otp) {
+    else if (otp !== recentOtp[0].otp) {
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid"
@@ -85,8 +85,8 @@ exports.signup = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user,
-      message: "User registered successfully"
+      message: "User registered successfully",
+      user
     });
   } catch (error) {
     console.error(error)
