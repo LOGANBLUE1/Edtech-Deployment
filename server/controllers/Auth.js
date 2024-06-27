@@ -182,38 +182,39 @@ exports.sendotp = async (req, res) => {
       });
     }
 
-    var otp = otpGenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false
-    });
+    // var otp = otpGenerator.generate(6, {
+    //   upperCaseAlphabets: false,
+    //   lowerCaseAlphabets: false,
+    //   specialChars: false
+    // });
 
-    const result = await OTP.findOne({ otp: otp });
-    // console.log("Result is Generate OTP Func");
-    // console.log("OTP", otp)
-    // console.log("Result", result)
-    while (result) {
-      otp = otpGenerator.generate(6, {
-        upperCaseAlphabets: false,
-        lowerCaseAlphabets: false,
-        specialChars: false
-      })
-    }
-
-    // let otp;
-    // let result;
-
-    // do {
+    // const result = await OTP.findOne({ otp: otp });
+    // // console.log("Result is Generate OTP Func");
+    // // console.log("OTP", otp)
+    // // console.log("Result", result)
+    // while (result) {
     //   otp = otpGenerator.generate(6, {
     //     upperCaseAlphabets: false,
     //     lowerCaseAlphabets: false,
     //     specialChars: false
-    //   });
-
+    //   })
     //   result = await OTP.findOne({ otp: otp });
-    // } while (result);
+    // }
 
-    const otpPayload = { email, otp };
+    let otp;
+    let result;
+
+    do {
+      otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false
+      });
+
+      result = await OTP.findOne({ otp: otp });
+    } while (result);
+
+    const otpPayload = { email, otp };//for storing in db
     const otpBody = await OTP.create(otpPayload);
     console.log("OTP Body", otpBody)
 
