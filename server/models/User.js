@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema(
       enum: ["Admin", "Student", "Instructor"],
       required: true,
     },
-    active: {
+    active: {                          //???
       type: Boolean,
       default: true,
     },
-    approved: {
+    approved: {                        //???
       type: Boolean,
       default: true,
     },
@@ -45,10 +45,10 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-    token: {
+    token: {                           //??
       type: String,
     },
-    resetPasswordExpires: {
+    resetPasswordExpires: {                 //??
       type: Date,
     },
     image: {
