@@ -38,18 +38,18 @@ exports.signup = async (req, res) => {
     }
 
     // recent OTP for the email
-    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-    // const response = await OTP.findOne({ email }).sort({ createdAt: -1 });
-    // console.log(response)
+    const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    // const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    // console.log(recentOtp)
 
-    if (response.length === 0) {
+    if (recentOtp.length === 0) {
       return res.status(400).json({
         success: false,
         message: "The OTP did not found"
       });
     } 
 
-    else if (otp !== response[0].otp) {
+    else if (otp !== recentOtp[0].otp) {
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid"
@@ -85,8 +85,8 @@ exports.signup = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user,
-      message: "User registered successfully"
+      message: "User registered successfully",
+      user
     });
   } catch (error) {
     console.error(error)
@@ -182,38 +182,39 @@ exports.sendotp = async (req, res) => {
       });
     }
 
-    var otp = otpGenerator.generate(6, {
-      upperCaseAlphabets: false,
-      lowerCaseAlphabets: false,
-      specialChars: false
-    });
+    // var otp = otpGenerator.generate(6, {
+    //   upperCaseAlphabets: false,
+    //   lowerCaseAlphabets: false,
+    //   specialChars: false
+    // });
 
-    const result = await OTP.findOne({ otp: otp });
-    // console.log("Result is Generate OTP Func");
-    // console.log("OTP", otp)
-    // console.log("Result", result)
-    while (result) {
-      otp = otpGenerator.generate(6, {
-        upperCaseAlphabets: false,
-        lowerCaseAlphabets: false,
-        specialChars: false
-      })
-    }
-
-    // let otp;
-    // let result;
-
-    // do {
+    // const result = await OTP.findOne({ otp: otp });
+    // // console.log("Result is Generate OTP Func");
+    // // console.log("OTP", otp)
+    // // console.log("Result", result)
+    // while (result) {
     //   otp = otpGenerator.generate(6, {
     //     upperCaseAlphabets: false,
     //     lowerCaseAlphabets: false,
     //     specialChars: false
-    //   });
-
+    //   })
     //   result = await OTP.findOne({ otp: otp });
-    // } while (result);
+    // }
 
-    const otpPayload = { email, otp };
+    let otp;
+    let result;
+
+    do {
+      otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false
+      });
+
+      result = await OTP.findOne({ otp: otp });
+    } while (result);
+
+    const otpPayload = { email, otp };//for storing in db
     const otpBody = await OTP.create(otpPayload);
     console.log("OTP Body", otpBody)
 
