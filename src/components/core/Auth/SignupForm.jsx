@@ -39,6 +39,7 @@ function SignupForm() {
 
   // Handle Form Submission
   const handleOnSubmit = (e) => {
+    console.log("Clicked create account")
     e.preventDefault()
 
     if (password !== confirmPassword) {
@@ -192,4 +193,4 @@ function SignupForm() {
   )
 }
 
-export default SignupForm
+export default SignupForm;
