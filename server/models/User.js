@@ -45,10 +45,10 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-    token: {                           //??
+    token: {                           //for resetting password
       type: String,
     },
-    resetPasswordExpires: {                 //??
+    resetPasswordExpires: {                 //token expiry time
       type: Date,
     },
     image: {

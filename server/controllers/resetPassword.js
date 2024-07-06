@@ -18,14 +18,14 @@ exports.resetPasswordToken = async (req, res) => {
       { email: email },
       {
         token: token,
-        resetPasswordExpires: Date.now() + 3600000,
+        resetPasswordExpires: Date.now() + 3600*1000,
       },
       { new: true }
     )
     console.log("DETAILS", updatedDetails)
 
-    // const url = `http://localhost:3000/update-password/${token}`
-    const url = `https://studynotion-edtech-project.vercel.app/update-password/${token}`
+    const url = `http://localhost:3000/update-password/${token}`
+    // const url = `https://studynotion-edtech-project.vercel.app/update-password/${token}`
 
     await mailSender(
       email,
@@ -35,8 +35,7 @@ exports.resetPasswordToken = async (req, res) => {
 
     res.json({
       success: true,
-      message:
-        "Email Sent Successfully, Please Check Your Email to Continue Further",
+      message: "Email Sent Successfully, Please Check Your Email to Continue Further",
     })
   } catch (error) {
     return res.json({
@@ -64,7 +63,7 @@ exports.resetPassword = async (req, res) => {
         message: "Token is Invalid",
       })
     }
-    if (!(userDetails.resetPasswordExpires > Date.now())) {
+    if (!(userDetails.resetPasswordExpires < Date.now())) {   //       ?????????? check again
       return res.status(403).json({
         success: false,
         message: `Token is Expired, Please Regenerate Your Token`,
