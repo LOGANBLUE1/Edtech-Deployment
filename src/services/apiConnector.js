@@ -1,3 +1,4 @@
+import {log} from './log'
 export const apiConnector = (method, url, bodyData, headers, params) => {
   // Construct options object for fetch
   const options = {
@@ -5,7 +6,7 @@ export const apiConnector = (method, url, bodyData, headers, params) => {
     headers: headers || {},
     body: bodyData ? JSON.stringify(bodyData) : undefined,
   };
-
+  log("Api connector : ", method, url, bodyData, headers, params)
   // Append query parameters to URL if present
   const queryString = params ? `?${new URLSearchParams(params)}` : '';
   const requestUrl = `${url}${queryString}`;
@@ -25,3 +26,5 @@ export const apiConnector = (method, url, bodyData, headers, params) => {
       throw new Error(`Network Error: ${error.message}`);
     });
 };
+
+

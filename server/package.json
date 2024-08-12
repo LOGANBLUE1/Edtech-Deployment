@@ -1,16 +1,16 @@
 {
-	"name": "studynotion-backend",
+	"name": "edtech-backend",
 	"version": "1.0.0",
-	"description": "studynotion-backend",
+	"description": "edtech-backend",
 	"main": "index.js",
 	"scripts": {
 		"start": "node index.js",
 		"dev": "nodemon index.js"
 	},
 	"keywords": [
-		"studynotion-backend"
+		"EdTech-backend"
 	],
-	"author": "Saikat Mukherjee",
+	"author": "Aditya Pareek",
 	"license": "ISC",
 	"dependencies": {
 		"bcrypt": "^5.1.0",
