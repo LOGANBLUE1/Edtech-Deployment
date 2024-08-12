@@ -13,6 +13,8 @@ const { cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
 
+import {log} from './../'
+
 // Setting up port number
 const PORT = process.env.PORT || 5000;
 
