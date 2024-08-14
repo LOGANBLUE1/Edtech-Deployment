@@ -1,6 +1,5 @@
-export const formatDate = (dateString) => {
+export const formatDate = (date) => {
   const options = { year: "numeric", month: "long", day: "numeric" }
-  const date = new Date(dateString)
   const formattedDate = date.toLocaleDateString("en-US", options)
 
   const hour = date.getHours()
@@ -12,3 +11,5 @@ export const formatDate = (dateString) => {
 
   return `${formattedDate} | ${formattedTime}`
 }
+
+//      2024-08-13T05:49:03.073Z  ----->   August 13, 2024 | 11:19 AM
