@@ -172,6 +172,16 @@ exports.login = async (req, res) => {
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
+    console.log(email);
+
+    // // Basic email validation (optional)
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!email || !emailRegex.test(email)) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: 'Invalid email address',
+    //   });
+    // }
 
     const checkUserPresent = await User.findOne({ email })
     
@@ -182,36 +192,15 @@ exports.sendotp = async (req, res) => {
       });
     }
 
-    // var otp = otpGenerator.generate(6, {
-    //   upperCaseAlphabets: false,
-    //   lowerCaseAlphabets: false,
-    //   specialChars: false
-    // });
-
-    // const result = await OTP.findOne({ otp: otp });
-    // // console.log("Result is Generate OTP Func");
-    // // console.log("OTP", otp)
-    // // console.log("Result", result)
-    // while (result) {
-    //   otp = otpGenerator.generate(6, {
-    //     upperCaseAlphabets: false,
-    //     lowerCaseAlphabets: false,
-    //     specialChars: false
-    //   })
-    //   result = await OTP.findOne({ otp: otp });
-    // }
-
     let otp;
     let result;
-
     do {
       otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
         lowerCaseAlphabets: false,
-        specialChars: false
+        specialChars: false,
       });
-
-      result = await OTP.findOne({ otp: otp });
+      result = await OTP.findOne({ otp });
     } while (result);
 
     const otpPayload = { email, otp };//for storing in db
