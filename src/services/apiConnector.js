@@ -1,15 +1,21 @@
-import {log} from './log'
-export const apiConnector = (method, url, bodyData, headers, params) => {
+import { log } from './log';
+
+export const apiConnector = (method, url, bodyData, headers = {}, params = {}) => {
+  // Ensure Content-Type header is set if not provided
+  headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+
   // Construct options object for fetch
   const options = {
     method: method.toUpperCase(),
-    headers: headers || {},
+    headers: headers,
     body: bodyData ? JSON.stringify(bodyData) : undefined,
   };
-  log("Api connector : ", method, url, bodyData, headers, params)
+  
   // Append query parameters to URL if present
   const queryString = params ? `?${new URLSearchParams(params)}` : '';
   const requestUrl = `${url}${queryString}`;
+
+  log("Request URL and Options:", requestUrl, options);
 
   // Make fetch request
   return fetch(requestUrl, options)
@@ -18,7 +24,6 @@ export const apiConnector = (method, url, bodyData, headers, params) => {
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
       }
-      // Parse JSON response
       return response.json();
     })
     .catch(error => {
@@ -26,5 +31,3 @@ export const apiConnector = (method, url, bodyData, headers, params) => {
       throw new Error(`Network Error: ${error.message}`);
     });
 };
-
-

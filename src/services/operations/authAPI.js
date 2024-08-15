@@ -25,10 +25,10 @@ export function sendOtp(email, navigate) {
       })
       console.log("SENDOTP API RESPONSE............", response)
 
-      console.log(response.data.success)
+      console.log(response.success)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
 
       toast.success("OTP Sent Successfully")
@@ -68,8 +68,8 @@ export function signUp(
 
       console.log("SIGNUP API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
       toast.success("Signup Successful")
       navigate("/login")
@@ -83,7 +83,11 @@ export function signUp(
   }
 }
 
-export function login(email, password, navigate) {
+export function login(
+  email, 
+  password, 
+  navigate
+) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
@@ -95,17 +99,18 @@ export function login(email, password, navigate) {
 
       console.log("LOGIN API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
 
       toast.success("Login Successful")
-      dispatch(setToken(response.data.token))
-      const userImage = response.data?.user?.image
-        ? response.data.user.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.firstName} ${response.data.user.lastName}`
-      dispatch(setUser({ ...response.data.user, image: userImage }))
-      localStorage.setItem("token", JSON.stringify(response.data.token))
+      dispatch(setToken(response.token))
+      const userImage = response?.user?.image
+        ? response.user.image
+        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.user.firstName} ${response.user.lastName}`
+      
+      dispatch(setUser({ ...response.user, image: userImage }))
+      localStorage.setItem("token", JSON.stringify(response.token))
       navigate("/dashboard/my-profile")
     } catch (error) {
       console.log("LOGIN API ERROR............", error)
@@ -116,7 +121,10 @@ export function login(email, password, navigate) {
   }
 }
 
-export function getPasswordResetToken(email, setEmailSent) {
+export function getPasswordResetToken(
+  email, 
+  setEmailSent
+) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
@@ -127,8 +135,8 @@ export function getPasswordResetToken(email, setEmailSent) {
 
       console.log("RESETPASSTOKEN RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
 
       toast.success("Reset Email Sent")
@@ -142,7 +150,12 @@ export function getPasswordResetToken(email, setEmailSent) {
   }
 }
 
-export function resetPassword(password, confirmPassword, token, navigate) {
+export function resetPassword(
+  password, 
+  confirmPassword, 
+  token, 
+  navigate
+) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
@@ -155,8 +168,8 @@ export function resetPassword(password, confirmPassword, token, navigate) {
 
       console.log("RESETPASSWORD RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
 
       toast.success("Password Reset Successfully")
