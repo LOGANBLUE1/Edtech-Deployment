@@ -5,6 +5,7 @@ import { resetCart } from "../../slices/cartSlice"
 import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiConnector"
 import { endpoints } from "../apis"
+import { log } from "../log"
 
 const {
   SENDOTP_API,
@@ -19,6 +20,7 @@ export function sendOtp(email, navigate) {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
+      log('Before going to apiCaller')
       const response = await apiConnector("POST", SENDOTP_API, {
         email,
         checkUserPresent: true,
