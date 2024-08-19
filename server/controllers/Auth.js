@@ -230,12 +230,13 @@ exports.changePassword = async (req, res) => {
     // Get old password, new password, and confirm new password from req.body***
     // conf newPass ??????????????????????????????
     const { oldPassword, newPassword } = req.body
-
+    console.log(oldPassword, newPassword);
     // Validate old password
     const isPasswordMatch = await bcrypt.compare(
       oldPassword,
       userDetails.password
     )
+
     if (!isPasswordMatch) {
       // If old password does not match, return a 401 (Unauthorized) error
       return res
