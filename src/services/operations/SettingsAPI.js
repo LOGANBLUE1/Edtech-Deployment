@@ -30,11 +30,11 @@ export function updateDisplayPicture(token, formData) {
         response
       )
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
       toast.success("Display Picture Updated Successfully")
-      dispatch(setUser(response.data.data))
+      dispatch(setUser(response.data))
     } catch (error) {
       console.log("UPDATE_DISPLAY_PICTURE_API API ERROR............", error)
       toast.error("Could Not Update Display Picture")
@@ -52,14 +52,14 @@ export function updateProfile(token, formData) {
       })
       console.log("UPDATE_PROFILE_API API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
-      const userImage = response.data.updatedUserDetails.image
-        ? response.data.updatedUserDetails.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.updatedUserDetails.firstName} ${response.data.updatedUserDetails.lastName}`
+      const userImage = response.updatedUserDetails.image
+        ? response.updatedUserDetails.image
+        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.updatedUserDetails.firstName} ${response.updatedUserDetails.lastName}`
       dispatch(
-        setUser({ ...response.data.updatedUserDetails, image: userImage })
+        setUser({ ...response.updatedUserDetails, image: userImage })
       )
       toast.success("Profile Updated Successfully")
     } catch (error) {
@@ -78,13 +78,13 @@ export async function changePassword(token, formData) {
     })
     console.log("CHANGE_PASSWORD_API API RESPONSE............", response)
 
-    if (!response.data.success) {
-      throw new Error(response.data.message)
+    if (!response.success) {
+      throw new Error(response.message)
     }
     toast.success("Password Changed Successfully")
   } catch (error) {
     console.log("CHANGE_PASSWORD_API API ERROR............", error)
-    toast.error(error.response.data.message)
+    toast.error(error.response.message)
   }
   toast.dismiss(toastId)
 }
@@ -98,8 +98,8 @@ export function deleteProfile(token, navigate) {
       })
       console.log("DELETE_PROFILE_API API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
       toast.success("Profile Deleted Successfully")
       dispatch(logout(navigate))
