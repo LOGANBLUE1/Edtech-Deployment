@@ -70,7 +70,7 @@ function CourseDetails() {
   const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
   useEffect(() => {
     let lectures = 0
-    response?.data?.courseDetails?.courseContent?.forEach((sec) => {
+    response?.courseDetails?.courseContent?.forEach((sec) => {
       lectures += sec.subSection.length || 0
     })
     setTotalNoOfLectures(lectures)
@@ -99,7 +99,7 @@ function CourseDetails() {
     instructor,
     studentsEnroled,
     createdAt,
-  } = response.data?.courseDetails
+  } = response.courseDetails
 
   const handleBuyCourse = () => {
     if (token) {
@@ -212,7 +212,7 @@ function CourseDetails() {
                   <span>
                     {totalNoOfLectures} {`lecture(s)`}
                   </span>
-                  <span>{response.data?.totalDuration} total length</span>
+                  <span>{response.totalDuration} total length</span>
                 </div>
                 <div>
                   <button

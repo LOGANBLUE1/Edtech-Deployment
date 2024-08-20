@@ -21,13 +21,13 @@ export function getUserDetails(token, navigate) {
       })
       console.log("GET_USER_DETAILS API RESPONSE............", response)
 
-      if (!response.data.success) {
-        throw new Error(response.data.message)
+      if (!response.success) {
+        throw new Error(response.message)
       }
-      const userImage = response.data.data.image
-        ? response.data.data.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.data.firstName} ${response.data.data.lastName}`
-      dispatch(setUser({ ...response.data.data, image: userImage }))
+      const userImage = response.data.image
+        ? response.data.image
+        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.firstName} ${response.data.lastName}`
+      dispatch(setUser({ ...response.data, image: userImage }))
     } catch (error) {
       dispatch(logout(navigate))
       console.log("GET_USER_DETAILS API ERROR............", error)
@@ -55,10 +55,10 @@ export async function getUserEnrolledCourses(token) {
     //   response
     // )
 
-    if (!response.data.success) {
-      throw new Error(response.data.message)
+    if (!response.success) {
+      throw new Error(response.message)
     }
-    result = response.data.data
+    result = response.data
   } catch (error) {
     console.log("GET_USER_ENROLLED_COURSES_API API ERROR............", error)
     toast.error("Could Not Get Enrolled Courses")
@@ -75,7 +75,7 @@ export async function getInstructorData(token) {
       Authorization: `Bearer ${token}`,
     })
     console.log("GET_INSTRUCTOR_DATA_API API RESPONSE............", response)
-    result = response?.data?.courses
+    result = response?.courses
   } catch (error) {
     console.log("GET_INSTRUCTOR_DATA_API API ERROR............", error)
     toast.error("Could Not Get Instructor Data")

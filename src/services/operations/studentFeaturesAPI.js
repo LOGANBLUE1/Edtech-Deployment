@@ -59,17 +59,17 @@ export async function BuyCourse(
       }
     )
 
-    if (!orderResponse.data.success) {
-      throw new Error(orderResponse.data.message)
+    if (!orderResponse.success) {
+      throw new Error(orderResponse.message)
     }
-    console.log("PAYMENT RESPONSE FROM BACKEND............", orderResponse.data)
+    console.log("PAYMENT RESPONSE FROM BACKEND............", orderResponse)
 
     // Opening the Razorpay SDK
     const options = {
       key: process.env.RAZORPAY_KEY,
-      currency: orderResponse.data.data.currency,
-      amount: `${orderResponse.data.data.amount}`,
-      order_id: orderResponse.data.data.id,
+      currency: orderResponse.data.currency,
+      amount: `${orderResponse.data.amount}`,
+      order_id: orderResponse.data.id,
       name: "StudyNotion",
       description: "Thank you for Purchasing the Course.",
       image: rzpLogo,
@@ -78,7 +78,7 @@ export async function BuyCourse(
         email: user_details.email,
       },
       handler: function (response) {
-        sendPaymentSuccessEmail(response, orderResponse.data.data.amount, token)
+        sendPaymentSuccessEmail(response, orderResponse.data.amount, token)
         verifyPayment({ ...response, courses }, token, navigate, dispatch)
       },
     }
@@ -107,8 +107,8 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
 
     console.log("VERIFY PAYMENT RESPONSE FROM BACKEND............", response)
 
-    if (!response.data.success) {
-      throw new Error(response.data.message)
+    if (!response.success) {
+      throw new Error(response.message)
     }
 
     toast.success("Payment Successful. You are Added to the course ")
