@@ -10,6 +10,7 @@ import { apiConnector } from "../../services/apiConnector"
 import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropdown"
+import { log } from "../../services/log"
 
 const subLinks = [
   {
@@ -46,13 +47,13 @@ function Navbar() {
         const res = await apiConnector("GET", categories.CATEGORIES_API)
         setSubLinks(res.data)
       } catch (error) {
-        console.log("Could not fetch Categories.", error)
+        log("Could not fetch Categories.", error)
       }
       setLoading(false)
     })()
   }, [])
 
-  console.log("sub links", subLinks)
+  log("sub links", subLinks)
 
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname)

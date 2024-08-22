@@ -16,6 +16,7 @@ import { Autoplay, FreeMode, Pagination } from "swiper"
 // Get apiFunction and the endpoint
 import { apiConnector } from "../../services/apiConnector"
 import { ratingsEndpoints } from "../../services/apis"
+import { log } from "../../services/log"
 
 function ReviewSlider() {
   const [reviews, setReviews] = useState([])
@@ -33,7 +34,7 @@ function ReviewSlider() {
     })()
   }, [])
 
-  // console.log(reviews)
+  log(reviews)
 
   return (
     <div className="text-white">

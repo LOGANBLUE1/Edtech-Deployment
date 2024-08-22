@@ -11,6 +11,7 @@ import {
 import { setCourse } from "../../../../../slices/courseSlice"
 import IconBtn from "../../../../Common/IconBtn"
 import Upload from "../Upload"
+import { log } from "../../../../../services/log"
 
 export default function SubSectionModal({
   modalData,
@@ -27,9 +28,9 @@ export default function SubSectionModal({
     getValues,
   } = useForm()
 
-  // console.log("view", view)
-  // console.log("edit", edit)
-  // console.log("add", add)
+  // log("view", view)
+  // log("edit", edit)
+  // log("add", add)
 
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -38,7 +39,7 @@ export default function SubSectionModal({
 
   useEffect(() => {
     if (view || edit) {
-      // console.log("modalData", modalData)
+      // log("modalData", modalData)
       setValue("lectureTitle", modalData.title)
       setValue("lectureDesc", modalData.description)
       setValue("lectureVideo", modalData.videoUrl)
@@ -48,7 +49,7 @@ export default function SubSectionModal({
   // detect whether form is updated or not
   const isFormUpdated = () => {
     const currentValues = getValues()
-    // console.log("changes after editing form values:", currentValues)
+    // log("changes after editing form values:", currentValues)
     if (
       currentValues.lectureTitle !== modalData.title ||
       currentValues.lectureDesc !== modalData.description ||
@@ -62,9 +63,9 @@ export default function SubSectionModal({
   // handle the editing of subsection
   const handleEditSubsection = async () => {
     const currentValues = getValues()
-    // console.log("changes after editing form values:", currentValues)
+    // log("changes after editing form values:", currentValues)
     const formData = new FormData()
-    // console.log("Values After Editing form values:", currentValues)
+    // log("Values After Editing form values:", currentValues)
     formData.append("sectionId", modalData.sectionId)
     formData.append("subSectionId", modalData._id)
     if (currentValues.lectureTitle !== modalData.title) {
@@ -79,7 +80,7 @@ export default function SubSectionModal({
     setLoading(true)
     const result = await updateSubSection(formData, token)
     if (result) {
-      // console.log("result", result)
+      // log("result", result)
       // update the structure of course
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData.sectionId ? result : section
@@ -92,7 +93,7 @@ export default function SubSectionModal({
   }
 
   const onSubmit = async (data) => {
-    // console.log(data)
+    // log(data)
     if (view) return
 
     if (edit) {

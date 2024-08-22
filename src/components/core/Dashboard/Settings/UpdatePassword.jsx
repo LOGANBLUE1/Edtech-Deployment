@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 import { changePassword } from "../../../../services/operations/SettingsAPI"
 import IconBtn from "../../../Common/IconBtn"
+import { log } from "../../../../services/log"
 
 export default function UpdatePassword() {
   const { token } = useSelector((state) => state.auth)
@@ -21,11 +22,11 @@ export default function UpdatePassword() {
   } = useForm()
 
   const submitPasswordForm = async (data) => {
-    // console.log("password Data - ", data)
+    // log("password Data - ", data)
     try {
       await changePassword(token, data)
     } catch (error) {
-      console.log("ERROR MESSAGE - ", error.message)
+      log("ERROR MESSAGE - ", error.message)
     }
   }
 

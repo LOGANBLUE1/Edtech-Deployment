@@ -17,6 +17,7 @@ import {
 } from "../../../../services/operations/courseDetailsAPI"
 import { COURSE_STATUS } from "../../../../utils/constants"
 import ConfirmationModal from "../../../Common/ConfirmationModal"
+import { log } from "../../../../services/log"
 
 export default function CoursesTable({ courses, setCourses }) {
   // const dispatch = useDispatch()
@@ -37,7 +38,7 @@ export default function CoursesTable({ courses, setCourses }) {
     setLoading(false)
   }
 
-  // console.log("All Course ", courses)
+  // log("All Course ", courses)
 
   return (
     <>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { deleteProfile } from "../../../../services/operations/SettingsAPI"
+import { log } from "../../../../services/log"
 
 export default function DeleteAccount() {
   const { token } = useSelector((state) => state.auth)
@@ -13,7 +14,7 @@ export default function DeleteAccount() {
     try {
       dispatch(deleteProfile(token, navigate))
     } catch (error) {
-      console.log("ERROR MESSAGE - ", error.message)
+      log("ERROR MESSAGE - ", error.message)
     }
   }
 

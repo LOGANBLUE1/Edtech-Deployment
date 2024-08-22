@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 
 import { addToCart } from "../../../slices/cartSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
+import { log } from "../../../services/log"
 
 // const CourseIncludes = [
 //   "8 hours on-demand video",
@@ -52,7 +53,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
     })
   }
 
-  // console.log("Student already enrolled ", course?.studentsEnroled, user?._id)
+  // log("Student already enrolled ", course?.studentsEnroled, user?._id)
 
   return (
     <>
