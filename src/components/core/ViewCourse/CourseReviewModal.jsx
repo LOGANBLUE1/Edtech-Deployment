@@ -6,7 +6,6 @@ import { useSelector } from "react-redux"
 
 import { createRating } from "../../../services/operations/courseDetailsAPI"
 import IconBtn from "../../Common/IconBtn"
-import { log } from "../../../services/log"
 
 export default function CourseReviewModal({ setReviewModal }) {
   const { user } = useSelector((state) => state.profile)
@@ -27,7 +26,7 @@ export default function CourseReviewModal({ setReviewModal }) {
   }, [])
 
   const ratingChanged = (newRating) => {
-    log(newRating)
+    // console.log(newRating)
     setValue("courseRating", newRating)
   }
 

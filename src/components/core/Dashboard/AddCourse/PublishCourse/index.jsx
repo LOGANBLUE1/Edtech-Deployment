@@ -7,7 +7,6 @@ import { editCourseDetails } from "../../../../../services/operations/courseDeta
 import { resetCourseState, setStep } from "../../../../../slices/courseSlice"
 import { COURSE_STATUS } from "../../../../../utils/constants"
 import IconBtn from "../../../../Common/IconBtn"
-import { log } from "../../../../../services/log"
 
 export default function PublishCourse() {
   const { register, handleSubmit, setValue, getValues } = useForm()
@@ -60,7 +59,7 @@ export default function PublishCourse() {
   }
 
   const onSubmit = (data) => {
-    // log(data)
+    // console.log(data)
     handleCoursePublish()
   }
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 // Importing React icon component
 import { MdClose } from "react-icons/md"
 import { useSelector } from "react-redux"
-import { log } from "../../../../../services/log"
 
 // Defining a functional component ChipInput
 export default function ChipInput({
@@ -23,7 +22,7 @@ export default function ChipInput({
 
   useEffect(() => {
     if (editCourse) {
-      log(course)
+      // console.log(course)
       setChips(course?.tag)
     }
     register(name, { required: true, validate: (value) => value.length > 0 })

@@ -5,7 +5,6 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI"
-import { log } from "../../../services/log"
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth)
@@ -20,14 +19,14 @@ export default function EnrolledCourses() {
 
         // Filtering the published course out
         const filterPublishCourse = res.filter((ele) => ele.status !== "Draft")
-        // log(
+        // console.log(
         //   "Viewing all the couse that is Published",
         //   filterPublishCourse
         // )
 
         setEnrolledCourses(filterPublishCourse)
       } catch (error) {
-        log("Could not fetch enrolled courses.")
+        console.log("Could not fetch enrolled courses.")
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps

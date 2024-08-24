@@ -2,7 +2,6 @@ import { toast } from "react-hot-toast"
 
 import { apiConnector } from "../apiConnector"
 import { catalogData } from "../apis"
-import { log } from "../log"
 
 export const getCatalogPageData = async (categoryId) => {
   const toastId = toast.loading("Loading...")
@@ -20,7 +19,7 @@ export const getCatalogPageData = async (categoryId) => {
     }
     result = response?.data
   } catch (error) {
-    log("CATALOGPAGEDATA_API API ERROR............", error)
+    console.log("CATALOGPAGEDATA_API API ERROR............", error)
     toast.error(error.message)
     result = error.response?.data
   }

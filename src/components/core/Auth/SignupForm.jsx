@@ -8,7 +8,6 @@ import { sendOtp } from "../../../services/operations/authAPI"
 import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 import Tab from "../../Common/Tab"
-import { log } from "../../../services/log"
 
 function SignupForm() {
   const navigate = useNavigate()
@@ -40,7 +39,7 @@ function SignupForm() {
 
   // Handle Form Submission
   const handleOnSubmit = (e) => {
-    log("Clicked create account")
+    console.log("Clicked create account")
     e.preventDefault()
 
     if (password !== confirmPassword) {

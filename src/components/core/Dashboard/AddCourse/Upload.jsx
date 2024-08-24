@@ -5,7 +5,6 @@ import { useSelector } from "react-redux"
 
 import "video-react/dist/video-react.css"
 import { Player } from "video-react"
-import { log } from "../../../../services/log"
 
 export default function Upload({
   name,
@@ -40,7 +39,7 @@ export default function Upload({
   })
 
   const previewFile = (file) => {
-    // log(file)
+    // console.log(file)
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onloadend = () => {

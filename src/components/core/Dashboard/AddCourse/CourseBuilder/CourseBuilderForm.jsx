@@ -16,7 +16,6 @@ import {
 } from "../../../../../slices/courseSlice"
 import IconBtn from "../../../../Common/IconBtn"
 import NestedView from "./NestedView"
-import { log } from "../../../../../services/log"
 
 export default function CourseBuilderForm() {
   const {
@@ -34,7 +33,7 @@ export default function CourseBuilderForm() {
 
   // handle form submission
   const onSubmit = async (data) => {
-    log(data)
+    // console.log(data)
     setLoading(true)
 
     let result
@@ -48,7 +47,7 @@ export default function CourseBuilderForm() {
         },
         token
       )
-      // log("edit", result)
+      // console.log("edit", result)
     } else {
       result = await createSection(
         {
@@ -59,7 +58,7 @@ export default function CourseBuilderForm() {
       )
     }
     if (result) {
-      // log("section result", result)
+      // console.log("section result", result)
       dispatch(setCourse(result))
       setEditSectionName(null)
       setValue("sectionName", "")

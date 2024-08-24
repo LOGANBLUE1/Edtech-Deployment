@@ -6,17 +6,16 @@ import { Link } from "react-router-dom"
 
 import GetAvgRating from "../../../utils/avgRating"
 import RatingStars from "../../Common/RatingStars"
-import { log } from "../../../services/log"
 
 function Course_Card({ course, Height }) {
   // const avgReviewCount = GetAvgRating(course.ratingAndReviews)
-  // log(course.ratingAndReviews)
+  // console.log(course.ratingAndReviews)
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
     const count = GetAvgRating(course.ratingAndReviews)
     setAvgReviewCount(count)
   }, [course])
-  // log("count............", avgReviewCount)
+  // console.log("count............", avgReviewCount)
 
   return (
     <>

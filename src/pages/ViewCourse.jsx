@@ -11,7 +11,6 @@ import {
   setEntireCourseData,
   setTotalNoOfLectures,
 } from "../slices/viewCourseSlice"
-import { log } from "../services/log"
 
 export default function ViewCourse() {
   const { courseId } = useParams()
@@ -22,7 +21,7 @@ export default function ViewCourse() {
   useEffect(() => {
     ;(async () => {
       const courseData = await getFullDetailsOfCourse(courseId, token)
-      // log("Course Data here... ", courseData.courseDetails)
+      // console.log("Course Data here... ", courseData.courseDetails)
       dispatch(setCourseSectionData(courseData.courseDetails.courseContent))
       dispatch(setEntireCourseData(courseData.courseDetails))
       dispatch(setCompletedLectures(courseData.completedVideos))

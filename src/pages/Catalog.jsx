@@ -11,7 +11,6 @@ import { apiConnector } from "../services/apiConnector"
 import { categories } from "../services/apis"
 import { getCatalogPageData } from "../services/operations/pageAndComponntDatas"
 import Error from "./Error"
-import { log } from "../services/log"
 
 function Catalog() {
   const { loading } = useSelector((state) => state.profile)
@@ -29,7 +28,7 @@ function Catalog() {
         )[0]._id
         setCategoryId(category_id)
       } catch (error) {
-        log("Could not fetch Categories.", error)
+        console.log("Could not fetch Categories.", error)
       }
     })()
   }, [catalogName])
@@ -40,7 +39,7 @@ function Catalog() {
           const res = await getCatalogPageData(categoryId)
           setCatalogPageData(res)
         } catch (error) {
-          log(error)
+          console.log(error)
         }
       })()
     }

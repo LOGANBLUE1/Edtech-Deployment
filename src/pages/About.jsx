@@ -28,7 +28,7 @@ const About = () => {
             </p>
           </header>
           <div className="sm:h-[70px] lg:h-[150px]"></div>
-          <div className="absolute bottom-0 grid grid-cols-3 gap-3 w-[100%] translate-y-[30%] lg:gap-5">
+          <div className="absolute bottom-0 left-[50%] grid w-[100%] translate-x-[-50%] translate-y-[30%] grid-cols-3 gap-3 lg:gap-5">
             <img src={BannerImage1} alt="" />
             <img src={BannerImage2} alt="" />
             <img src={BannerImage3} alt="" />
@@ -44,7 +44,6 @@ const About = () => {
       </section>
 
       <section>
-        {/* Our founding story */}
         <div className="mx-auto flex w-11/12 max-w-maxContent flex-col justify-between gap-10 text-richblack-500">
           <div className="flex flex-col items-center gap-10 lg:flex-row justify-between">
             <div className="my-24 flex lg:w-[50%] flex-col gap-10">
@@ -77,8 +76,6 @@ const About = () => {
               />
             </div>
           </div>
-
-          {/* Our vision */}
           <div className="flex flex-col items-center lg:gap-10 lg:flex-row justify-between">
             <div className="my-24 flex lg:w-[40%] flex-col gap-10">
               <h1 className="bg-gradient-to-b from-[#FF512F] to-[#F09819] bg-clip-text text-4xl font-semibold text-transparent lg:w-[70%] ">

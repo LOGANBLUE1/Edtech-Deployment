@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux"
 
 import { updateDisplayPicture } from "../../../../services/operations/SettingsAPI"
 import IconBtn from "../../../Common/IconBtn"
-import { log } from "../../../../services/log"
 
 export default function ChangeProfilePicture() {
   const { token } = useSelector((state) => state.auth)
@@ -23,7 +22,7 @@ export default function ChangeProfilePicture() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
-    // log(file)
+    // console.log(file)
     if (file) {
       setImageFile(file)
       previewFile(file)
@@ -40,16 +39,16 @@ export default function ChangeProfilePicture() {
 
   const handleFileUpload = () => {
     try {
-      log("uploading...")
+      console.log("uploading...")
       setLoading(true)
       const formData = new FormData()
       formData.append("displayPicture", imageFile)
-      // log("formdata", formData)
+      // console.log("formdata", formData)
       dispatch(updateDisplayPicture(token, formData)).then(() => {
         setLoading(false)
       })
     } catch (error) {
-      log("ERROR MESSAGE - ", error.message)
+      console.log("ERROR MESSAGE - ", error.message)
     }
   }
 
