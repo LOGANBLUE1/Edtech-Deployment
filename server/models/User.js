@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
       enum: ["Admin", "Student", "Instructor"],
       required: true,
     },
-    active: {                          //???
+    active: {                          //disable it instead of deleting account
       type: Boolean,
       default: true,
     },

@@ -38,18 +38,18 @@ exports.signup = async (req, res) => {
     }
 
     // recent OTP for the email
-    const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-    // const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
+    // const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
     // console.log(recentOtp)
 
-    if (recentOtp.length === 0) {
+    if (!recentOtp) {
       return res.status(400).json({
         success: false,
         message: "The OTP did not found"
       });
     } 
 
-    else if (otp !== recentOtp[0].otp) {
+    else if (otp !== recentOtp.otp) {
       return res.status(400).json({
         success: false,
         message: "The OTP is not valid"
@@ -61,7 +61,7 @@ exports.signup = async (req, res) => {
 
     // Create the user
     let approved = ""
-    approved = approved === "Instructor" ? false : true;  //  ??????????????????????
+    // approved = approved === "Instructor" ? false : true;  //  ??????????????????????
     // let approved = ""
     // approved = accountType === "Instructor" ? false : true;
 
@@ -203,8 +203,8 @@ exports.sendotp = async (req, res) => {
       result = await OTP.findOne({ otp });
     } while (result);
 
-    const otpPayload = { email, otp };//for storing in db
-    const otpBody = await OTP.create(otpPayload);
+    // const otpPayload = { email, otp };//for storing in db
+    const otpBody = await OTP.create({ email, otp });
     console.log("OTP Body", otpBody)
 
     res.status(200).json({
