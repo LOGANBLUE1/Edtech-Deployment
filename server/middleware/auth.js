@@ -1,9 +1,6 @@
-// Importing required modules
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 const User = require("../models/User");
-// Configuring dotenv to load environment variables from .env file
-dotenv.config();
+require("dotenv").config();
 
 // This function is used as middleware to authenticate user requests
 exports.auth = async (req, res, next) => {
@@ -27,9 +24,10 @@ exports.auth = async (req, res, next) => {
 			req.user = decode;
 		} catch (error) {
 			// If JWT verification fails, return 401 Unauthorized response
-			return res
-				.status(401)
-				.json({ success: false, message: "token is invalid" });
+			return res.status(401).json({ 
+				success: false,
+				message: "token is invalid"
+			});
 		}
 
 		// If JWT is valid, move on to the next middleware or request handler

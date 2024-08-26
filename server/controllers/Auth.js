@@ -101,12 +101,10 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    // Get email and password from request body
+
     const { email, password } = req.body;
 
-    // Check if email or password is missing
     if (!email || !password) {
-      // Return 400 Bad Request status code with error message
       return res.status(400).json({
         success: false,
         message: `Please Fill up All the Required Fields`
@@ -114,7 +112,7 @@ exports.login = async (req, res) => {
     }
 
     // Find user with provided email
-    const user = await User.findOne({ email }).populate("additionalDetails")
+    const user = await User.findOne({ email })
 
     // If user not found with provided email
     if (!user) {
@@ -128,7 +126,7 @@ exports.login = async (req, res) => {
     // Generate JWT token and Compare Password
     if (await bcrypt.compare(password, user.password)) {
 
-      const payload = { email: user.email, id: user._id, role: user.role };
+      const payload = { email: user.email, id: user._id, role: user.accountType };
       const token = jwt.sign( payload,
           process.env.JWT_SECRET,
           {expiresIn: "24h"}
@@ -136,12 +134,12 @@ exports.login = async (req, res) => {
 
       // Save token to user document in database
       user.token = token;
-      // await user.save(); **
+      // await user.save(); ** 
       user.password = undefined;   // returning empty pass in response
     
 
       const options = {
-        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),// 3 days
         httpOnly: true
         // sameSite: 'Strict'
       }
@@ -168,7 +166,7 @@ exports.login = async (req, res) => {
 }
 
 
-
+// checks if email is already registered and if not then creates and store otp in db
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
