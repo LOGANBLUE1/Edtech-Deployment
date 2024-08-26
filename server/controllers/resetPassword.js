@@ -48,7 +48,7 @@ exports.resetPasswordToken = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
   try {
-    const { password, confirmPassword, token } = req.body
+    const { password, confirmPassword, token } = req.body;// get request from front-end
 
     if (confirmPassword !== password) {
       return res.json({
@@ -75,7 +75,7 @@ exports.resetPassword = async (req, res) => {
       { password: encryptedPassword },
       { new: true }
     )
-    res.json({
+    return res.status(200).json({
       success: true,
       message: `Password Reset Successful`,
     })
