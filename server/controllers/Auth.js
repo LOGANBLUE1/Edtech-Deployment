@@ -37,7 +37,6 @@ exports.signup = async (req, res) => {
       });
     }
 
-    // recent OTP for the email
     // const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
     const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
     // console.log("Recent otp: ",recentOtp)
