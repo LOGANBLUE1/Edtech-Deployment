@@ -14,11 +14,11 @@ exports.createCourse = async (req, res) => {
 
     // Get all required fields from request body
     let {
-      courseName,
+      courseName, 
       courseDescription,
-      whatYouWillLearn,
+      whatYouWillLearn, 
       price,
-      tag: _tag,
+      tag: _tag, 
       category,
       status,
       instructions: _instructions,

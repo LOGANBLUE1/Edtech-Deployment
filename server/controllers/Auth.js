@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
     // recent OTP for the email
     // const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
     const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
-    // console.log(recentOtp)
+    // console.log("Recent otp: ",recentOtp)
 
     if (!recentOtp) {
       return res.status(400).json({
@@ -60,7 +60,7 @@ exports.signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create the user
-    let approved = ""
+    let approved;
     // approved = approved === "Instructor" ? false : true;  //  ??????????????????????
     // let approved = ""
     // approved = accountType === "Instructor" ? false : true;
@@ -282,6 +282,29 @@ exports.changePassword = async (req, res) => {
       success: false,
       message: "Error occurred while updating password",
       error: error.message,
+    })
+  }
+}
+
+// no use in front-end ******************
+exports.getAllEmails = async (req, res) => {
+  try {
+    let Emails = await User.find().select("email")
+    // Emails = Emails.map(email => email.email);// to get array of emails
+    if (Emails.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Emails not found",
+      })
+    }
+    res.status(200).json({
+      success: true,
+      Emails,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
     })
   }
 }

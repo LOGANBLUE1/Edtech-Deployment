@@ -60,7 +60,7 @@ exports.updateProfile = async (req, res) => {
 exports.deleteAccount = async (req, res) => {
   try {
     const id = req.user.id
-    console.log(id)
+    console.log("Printing id to be deleted: ",id)
     const user = await User.findById({ _id: id })
     if (!user) {
       return res.status(404).json({
@@ -88,9 +88,10 @@ exports.deleteAccount = async (req, res) => {
     await CourseProgress.deleteMany({ userId: id })
   } catch (error) {
     console.log(error)
-    res
-      .status(500)
-      .json({ success: false, message: "User Cannot be deleted successfully" })
+    res.status(500).json({ 
+      success: false, 
+      message: "User Cannot be deleted successfully" 
+    })
   }
 }
 
