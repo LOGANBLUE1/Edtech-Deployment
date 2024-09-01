@@ -170,7 +170,7 @@ exports.login = async (req, res) => {
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email);
+    // console.log(email);
 
     // // Basic email validation (optional)
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -211,10 +211,10 @@ exports.sendotp = async (req, res) => {
       otp
     });
   } catch (error) {
-    console.log("Problem with otp sending ", error.message)
+    console.log("Problem with otp sending", error.message)
     return res.status(500).json({
       success: false,
-      error: error.message 
+      error: error.message
     });
   }
 }

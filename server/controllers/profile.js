@@ -118,6 +118,12 @@ exports.getAllUserDetails = async (req, res) => {
 exports.updateDisplayPicture = async (req, res) => {
   try {
     const displayPicture = req.files.displayPicture
+    if(!displayPicture){
+      return res.status(400).json({
+        success: false,
+        message: "Please upload an image",
+      })
+    }
     const userId = req.user.id
     const image = await uploadImageToCloudinary(
       displayPicture,
