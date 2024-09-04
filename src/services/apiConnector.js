@@ -62,6 +62,7 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
     const data = await response.json();
     // data.status = response.status
     if(response.status === 500) {
+      log(data.message)
       data.message = "Server is down, please try again later"
     }
 
