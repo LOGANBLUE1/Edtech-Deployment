@@ -1,56 +1,23 @@
 import { log } from './log';
 
-// export const apiConnector = async (method, url, bodyData, headers = {}, params = {}) => {
-//   headers['Content-Type'] = headers['Content-Type'] || 'application/json';
-
-//   const options = {
-//     method: method.toUpperCase(),
-//     headers: headers,
-//     body: bodyData ? JSON.stringify(bodyData) : undefined,
-//   };
-  
-//   const queryString = params ? `?${new URLSearchParams(params)}` : '';
-//   const requestUrl = `${url}${queryString}`;
-
-//   log(`${requestUrl} \n`,`Options:`, options);
-
-  // try {
-  //   const response = await fetch(requestUrl, options);
-
-  //   if (!response.ok) {
-  //     console.log("Response not ok", response);
-  //     throw new Error(`Request failed with status ${response.status}`);
-  //   }
-
-  //   const contentType = response.headers.get("content-type");
-  //   if (contentType && contentType.includes("application/json")) {
-  //     return await response.json();
-  //   } else {
-  //     const text = await response.text();
-  //     throw new Error(`Unexpected content-type: ${contentType}, Response: ${text}`);
-  //   }
-  // } catch (error) {
-  //   throw new Error(`Network Error: ${error.message}`);
-  // }
-// };
-
-
-
-
-
-
 export const apiConnector = async (method, url, bodyData = null, headers = {}, params = {}) => {
   try {
-    headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+    if (!headers['Content-Type']) {
+      headers['Content-Type'] = bodyData instanceof FormData ? 'multipart/form-data' : 'application/json';
+    }
     
     const options = {
       method: method.toUpperCase(),
       headers: headers,
-      body: bodyData ? JSON.stringify(bodyData) : undefined,
     };
 
-    // const queryString = params ? `?${new URLSearchParams(params).toString()}` : '';
-    // const requestUrl = `${url}${queryString}`;
+    if (bodyData) {
+      if (headers['Content-Type'] === 'multipart/form-data') {
+        options.body = bodyData;
+      } else {
+        options.body = JSON.stringify(bodyData);
+      }
+    }
 
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
     const requestUrl = `${url}${queryString}`;
@@ -59,21 +26,22 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
     
     const response = await fetch(requestUrl, options);
 
-    const data = await response.json();
+    let data;
     // data.status = response.status
+    
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } 
+    else {
+      const text = await response.text();
+      throw new Error(`Unexpected content-type: ${contentType}, Response: ${text}`);
+    }
     if(response.status === 500) {
       log(data.message)
       data.message = "Server is down, please try again later"
     }
-
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-        return data;
-    } 
-    else {
-        const text = await response.text();
-        throw new Error(`Unexpected content-type: ${contentType}, Response: ${text}`);
-    }
+    return data;
   } catch (error) {
     return {
       success: false,

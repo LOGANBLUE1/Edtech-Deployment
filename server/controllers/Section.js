@@ -52,10 +52,19 @@ exports.createSection = async (req, res) => {
   }
 }
 
+
+
 // UPDATE a section
 exports.updateSection = async (req, res) => {
   try {
     const { sectionName, sectionId, courseId } = req.body
+    if (!sectionName || !sectionId || !courseId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required properties",
+      })
+    }
+    
     const section = await Section.findByIdAndUpdate(
       sectionId,
       { sectionName },
@@ -84,6 +93,8 @@ exports.updateSection = async (req, res) => {
     })
   }
 }
+
+
 
 // DELETE a section
 exports.deleteSection = async (req, res) => {
