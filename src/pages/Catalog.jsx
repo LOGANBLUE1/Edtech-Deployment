@@ -9,7 +9,7 @@ import Course_Card from "../components/core/Catalog/Course_Card"
 import Course_Slider from "../components/core/Catalog/Course_Slider"
 import { apiConnector } from "../services/apiConnector"
 import { categories } from "../services/apis"
-import { getCatalogPageData } from "../services/operations/pageAndComponntDatas"
+import { getCatalogPageData, getAllCategories } from "../services/operations/pageAndComponntDatas"
 import Error from "./Error"
 
 function Catalog() {
@@ -22,8 +22,8 @@ function Catalog() {
   useEffect(() => {
     ;(async () => {
       try {
-        const res = await apiConnector("GET", categories.CATEGORIES_API)
-        const category_id = res?.data?.data?.filter(
+        const res = await getAllCategories()
+        const category_id = res?.data?.filter(
           (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
         )[0]._id
         setCategoryId(category_id)
@@ -32,6 +32,7 @@ function Catalog() {
       }
     })()
   }, [catalogName])
+
   useEffect(() => {
     if (categoryId) {
       ;(async () => {
