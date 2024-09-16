@@ -16,7 +16,7 @@ export default function Upload({
   viewData = null,
   editData = null,
 }) {
-  const { course } = useSelector((state) => state.course)
+  // const { course } = useSelector((state) => state.course)
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewSource, setPreviewSource] = useState(
     viewData ? viewData : editData ? editData : ""
@@ -25,17 +25,21 @@ export default function Upload({
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0]
+    if (file && file.size > 1024 * 1024 * 5) {
+      alert("File size exceeds the 5MB limit.")
+      return
+    }
     if (file) {
       previewFile(file)
       setSelectedFile(file)
     }
   }
+  
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: !video
-      ? { "image/*": [".jpeg", ".jpg", ".png"] }
-      : { "video/*": [".mp4"] },
-    onDrop,
+    accept: video ? { "video/*": [".mp4", ".avi", ".mov"] } :
+      { "image/*": [".jpeg", ".jpg", ".png"] },
+    onDrop
   })
 
   const previewFile = (file) => {

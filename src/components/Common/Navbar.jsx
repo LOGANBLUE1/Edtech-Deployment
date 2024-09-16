@@ -12,8 +12,8 @@ import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropdown"
 
 function Navbar() {
-  const { token } = useSelector((state) => state.auth)
-  const { user } = useSelector((state) => state.profile)
+  const { token } = useSelector((state) => state.auth)// if logged in
+  const { user } = useSelector((state) => state.profile)// if student
   const { totalItems } = useSelector((state) => state.cart)
   const location = useLocation()
 

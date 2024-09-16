@@ -92,8 +92,8 @@ export const fetchCourseCategories = async () => {
 export const addCourseDetails = async (data, token) => {
   let result = null
   // for (let [key, value] of data.entries()) {
-  //   console.log(key, value);
-  // }  
+  //   console.log("in addCourseDetails: ",key, value);
+  // }
   const toastId = toast.loading("Loading...")
   try {
     const response = await apiConnector("POST", CREATE_COURSE_API, data, {
