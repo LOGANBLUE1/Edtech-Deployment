@@ -28,13 +28,13 @@ app.use(cookieParser());
 app.use(
 	cors({
 		origin: "*",
-		credentials: true,
+		credentials: true
 	})
 );
 app.use(
 	fileUpload({
 		useTempFiles: true,
-		tempFileDir: "/tmp/",
+		tempFileDir: "/tmp/"
 	})
 );
 
@@ -56,9 +56,6 @@ app.get("/", (req, res) => {
 	});
 });
 
-// Listening to the server
 app.listen(PORT, () => {
 	console.log(`App is listening at ${PORT}`);
 });
-
-// End of code.

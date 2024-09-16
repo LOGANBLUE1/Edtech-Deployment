@@ -124,7 +124,7 @@ exports.login = async (req, res) => {
     // Generate JWT token and Compare Password
     if (await bcrypt.compare(password, user.password)) {
 
-      const payload = { email: user.email, id: user._id, role: user.accountType };
+      const payload = { email: user.email, id: user._id, accountType: user.accountType };
       const token = jwt.sign( payload,
           process.env.JWT_SECRET,
           {expiresIn: "24h"}
@@ -168,7 +168,7 @@ exports.login = async (req, res) => {
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email);
+    // console.log(email);
 
     // // Basic email validation (optional)
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -209,10 +209,10 @@ exports.sendotp = async (req, res) => {
       otp
     });
   } catch (error) {
-    console.log("Problem with otp sending ", error.message)
+    console.log("Problem with otp sending", error.message)
     return res.status(500).json({
       success: false,
-      error: error.message 
+      error: error.message
     });
   }
 }

@@ -6,56 +6,63 @@ const User = require("../models/User")
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const mongoose = require("mongoose")
 const { convertSecondsToDuration } = require("../utils/secToDuration")
-// Method for updating a profile
+
+
+
 exports.updateProfile = async (req, res) => {
   try {
-    const {
-      firstName = "",
-      lastName = "",
-      dateOfBirth = "",
-      about = "",
-      contactNumber = "",
-      gender = "",
-    } = req.body
-    const id = req.user.id
+    const { firstName, lastName, dateOfBirth, about, contactNumber, gender } = req.body;
+    const id = req.user.id;
 
-    // Find the profile by id
-    const userDetails = await User.findById(id)
-    const profile = await Profile.findById(userDetails.additionalDetails)
+    // Find the user by id
+    const userDetails = await User.findById(id);
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    const user = await User.findByIdAndUpdate(id, {
-      firstName,
-      lastName,
-    })
-    await user.save()
+    // Find the profile associated with the user
+    const profile = await Profile.findById(userDetails.additionalDetails);
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: "Profile not found for this user",
+      });
+    }
 
-    // Update the profile fields
-    profile.dateOfBirth = dateOfBirth
-    profile.about = about
-    profile.contactNumber = contactNumber
-    profile.gender = gender
+    if (firstName !== undefined) userDetails.firstName = firstName;
+    if (lastName !== undefined) userDetails.lastName = lastName;
 
-    // Save the updated profile
-    await profile.save()
+    await userDetails.save();
+
+    if (dateOfBirth !== undefined) profile.dateOfBirth = dateOfBirth;
+    if (about !== undefined) profile.about = about;
+    if (contactNumber !== undefined) profile.contactNumber = contactNumber;
+    if (gender !== undefined) profile.gender = gender;
+    await profile.save();
 
     // Find the updated user details
     const updatedUserDetails = await User.findById(id)
       .populate("additionalDetails")
-      .exec()
+      .exec();
 
     return res.json({
       success: true,
       message: "Profile updated successfully",
       updatedUserDetails,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       success: false,
       error: error.message,
-    })
+    });
   }
-}
+};
+
+
 
 exports.deleteAccount = async (req, res) => {
   try {
@@ -72,6 +79,8 @@ exports.deleteAccount = async (req, res) => {
     await Profile.findByIdAndDelete({
       _id: new mongoose.Types.ObjectId(user.additionalDetails),
     })
+    // await Profile.findByIdAndDelete(user.additionalDetails); is this works?..................
+
     for (const courseId of user.courses) {
       await Course.findByIdAndUpdate(
         courseId,
@@ -118,6 +127,12 @@ exports.getAllUserDetails = async (req, res) => {
 exports.updateDisplayPicture = async (req, res) => {
   try {
     const displayPicture = req.files.displayPicture
+    if(!displayPicture){
+      return res.status(400).json({
+        success: false,
+        message: "Please upload an image",
+      })
+    }
     const userId = req.user.id
     const image = await uploadImageToCloudinary(
       displayPicture,

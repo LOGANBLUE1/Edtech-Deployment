@@ -11,28 +11,9 @@ import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropdown"
 
-const subLinks = [
-  {
-    title: "Python",
-    link: "/catalog/python",
-  },
-  {
-    title: "javascript",
-    link: "/catalog/javascript",
-  },
-  {
-    title: "web-development",
-    link: "/catalog/web-development",
-  },
-  {
-    title: "Android Development",
-    link: "/catalog/Android Development",
-  },
-];
-
 function Navbar() {
-  const { token } = useSelector((state) => state.auth)
-  const { user } = useSelector((state) => state.profile)
+  const { token } = useSelector((state) => state.auth)// if logged in
+  const { user } = useSelector((state) => state.profile)// if student
   const { totalItems } = useSelector((state) => state.cart)
   const location = useLocation()
 
@@ -52,7 +33,7 @@ function Navbar() {
     })()
   }, [])
 
-  console.log("sub links", subLinks)
+  // console.log("sub links", subLinks)
 
   const matchRoute = (route) => {
     return matchPath({ path: route }, location.pathname)
@@ -89,12 +70,9 @@ function Navbar() {
                         <div className="absolute left-[50%] top-0 -z-10 h-6 w-6 translate-x-[80%] translate-y-[-40%] rotate-45 select-none rounded bg-richblack-5"></div>
                         {loading ? (
                           <p className="text-center">Loading...</p>
-                        ) : subLinks.length ? (
+                        ) : subLinks?.length ? (
                           <>
                             {subLinks
-                              ?.filter(
-                                (subLink) => subLink?.courses?.length > 0
-                              )
                               ?.map((subLink, i) => (
                                 <Link
                                   to={`/catalog/${subLink.name
@@ -131,9 +109,11 @@ function Navbar() {
             ))}
           </ul>
         </nav>
+
+
         {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
-          {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (
+          {user && user?.accountType !== ACCOUNT_TYPE.INSTRUCTOR && (// Cart
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
               {totalItems > 0 && (
@@ -143,22 +123,23 @@ function Navbar() {
               )}
             </Link>
           )}
-          {token === null && (
+          {!token && (
             <Link to="/login">
               <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
                 Log in
               </button>
             </Link>
           )}
-          {token === null && (
+          {!token && (
             <Link to="/signup">
               <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
                 Sign up
               </button>
             </Link>
           )}
-          {token !== null && <ProfileDropdown />}
+          {token && <ProfileDropdown />}
         </div>
+        {/* TODO: Show login and pass */}
         <button className="mr-4 md:hidden">
           <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
         </button>

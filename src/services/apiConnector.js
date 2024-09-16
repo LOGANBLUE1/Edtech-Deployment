@@ -1,35 +1,54 @@
-import { log } from './log';
-
-export const apiConnector = async (method, url, bodyData, headers = {}, params = {}) => {
-  headers['Content-Type'] = headers['Content-Type'] || 'application/json';
-
-  const options = {
-    method: method.toUpperCase(),
-    headers: headers,
-    body: bodyData ? JSON.stringify(bodyData) : undefined,
-  };
-  
-  const queryString = params ? `?${new URLSearchParams(params)}` : '';
-  const requestUrl = `${url}${queryString}`;
-
-  log("Request URL and Options:", requestUrl, options);
-
+export const apiConnector = async (method, url, bodyData = null, headers = {}, params = {}) => {
   try {
-    const response = await fetch(requestUrl, options);
+    // Remove Content-Type if bodyData is FormData, let fetch handle it
+    if (bodyData instanceof FormData) {
+      delete headers['Content-Type'];
+    } else {
+      headers['Content-Type'] = 'application/json';
+    }
+    
+    const options = {
+      method: method.toUpperCase(),
+      headers: headers,
+    };
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
+    // Set the body to bodyData (either FormData or JSON string)
+    if (bodyData) {
+      options.body = bodyData instanceof FormData ? bodyData : JSON.stringify(bodyData);
     }
 
+    // Handle query parameters
+    const queryString = params ? `?${new URLSearchParams(params)}` : '';
+    const requestUrl = `${url}${queryString}`;
+
+    // Log the full request details
+    console.log("Request URL:", requestUrl);
+    console.log("Request Options:", options);
+
+    // Make the fetch request
+    const response = await fetch(requestUrl, options);
+
+    let data;
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return await response.json();
+      data = await response.json();
     } else {
       const text = await response.text();
       throw new Error(`Unexpected content-type: ${contentType}, Response: ${text}`);
     }
+
+    // Handle server errors gracefully
+    if (response.status === 500) {
+      data.message = "Server is down, please try again later";
+    }
+    
+    return data;
   } catch (error) {
-    log("Fetch error:", error);
-    throw new Error(`Network Error: ${error.message}`);
+    console.error("API Connector Error:", error);
+    return {
+      success: false,
+      message: 'Server Error occurred',
+      status: null,
+    };
   }
 };

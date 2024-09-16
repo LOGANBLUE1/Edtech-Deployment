@@ -12,11 +12,11 @@ exports.createCategory = async (req, res) => {
         message: "All fields are required"
       });
     }
-    const CategorysDetails = await Category.create({
+    const CategoryDetails = await Category.create({
       name: name,
       description: description,
     })
-    // console.log(CategorysDetails)
+    // console.log(CategoryDetails)
     return res.status(200).json({
       success: true,
       message: "Categorys Created Successfully",
@@ -89,7 +89,6 @@ exports.categoryPageDetails = async (req, res) => {
         match: { status: "Published" },
       })
       .exec()
-    console.log()
     // Get top-selling courses across all categories
     const allCategories = await Category.find()
       .populate({
