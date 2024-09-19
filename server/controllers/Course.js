@@ -117,11 +117,10 @@ exports.createCourse = async (req, res) => {
       },
       { new: true }
     )
-    console.log("HEREEEEEEEE", categoryDetails2)
     // Return the new course and a success message
     res.status(200).json({
       success: true,
-      data: newCourse,
+      newCourse,
       message: "Course Created Successfully",
     })
   } catch (error) {

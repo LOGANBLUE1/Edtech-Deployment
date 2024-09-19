@@ -7,7 +7,7 @@ export default function RequirementsField({
   register,
   setValue,
   errors,
-  getValues,
+  getValues
 }) {
   const { editCourse, course } = useSelector((state) => state.course)
   const [requirement, setRequirement] = useState("")
