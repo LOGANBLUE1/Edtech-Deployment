@@ -7,9 +7,7 @@ import { useParams } from "react-router-dom"
 import Footer from "../components/Common/Footer"
 import Course_Card from "../components/core/Catalog/Course_Card"
 import Course_Slider from "../components/core/Catalog/Course_Slider"
-import { apiConnector } from "../services/apiConnector"
-import { categories } from "../services/apis"
-import { getCatalogPageData, getAllCategories } from "../services/operations/pageAndComponntDatas"
+import { getCatalogPageData, getAllCategories } from "../services/operations/pageAndComponentDatas"
 import Error from "./Error"
 
 function Catalog() {
