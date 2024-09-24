@@ -27,7 +27,7 @@ export default function SidebarLink({ link, iconName }) {
         className={`absolute left-0 top-0 h-full w-[0.15rem] bg-yellow-50 ${
           matchRoute(link.path) ? "opacity-100" : "opacity-0"
         }`}
-      ></span>
+      />
       <div className="flex items-center gap-x-2">
         {/* Icon Goes Here */}
         <Icon className="text-lg" />

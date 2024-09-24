@@ -137,7 +137,9 @@ function Navbar() {
               </button>
             </Link>
           )}
+
           {token && <ProfileDropdown />}
+          
         </div>
         {/* TODO: Show login and pass */}
         <button className="mr-4 md:hidden">

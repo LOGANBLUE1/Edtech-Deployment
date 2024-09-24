@@ -160,7 +160,6 @@ export default function CourseInformationForm() {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="space-y-8 rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-6"
     >
       {/* Course Title */}
@@ -197,6 +196,7 @@ export default function CourseInformationForm() {
           </span>
         )}
       </div>
+
       {/* Course Price */}
       <div className="flex flex-col space-y-2">
         <label className="text-sm text-richblack-5" htmlFor="coursePrice">
@@ -223,6 +223,7 @@ export default function CourseInformationForm() {
           </span>
         )}
       </div>
+
       {/* Course Category */}
       <div className="flex flex-col space-y-2">
         <label className="text-sm text-richblack-5" htmlFor="courseCategory">
@@ -250,6 +251,7 @@ export default function CourseInformationForm() {
           </span>
         )}
       </div>
+
       {/* Course Tags */}
       <ChipInput
         label="Tags"
@@ -260,6 +262,7 @@ export default function CourseInformationForm() {
         setValue={setValue}
         getValues={getValues}
       />
+
       {/* Course Thumbnail Image */}
       <Upload
         name="courseImage"
@@ -269,6 +272,7 @@ export default function CourseInformationForm() {
         errors={errors}
         editData={editCourse ? course?.thumbnail : null}
       />
+
       {/* Benefits of the course */}
       <div className="flex flex-col space-y-2">
         <label className="text-sm text-richblack-5" htmlFor="courseBenefits">
@@ -286,6 +290,7 @@ export default function CourseInformationForm() {
           </span>
         )}
       </div>
+      
       {/* Requirements/Instructions */}
       <RequirementsField
         name="courseRequirements"
@@ -295,6 +300,7 @@ export default function CourseInformationForm() {
         errors={errors}
         getValues={getValues}
       />
+
       {/* Next Button */}
       <div className="flex justify-end gap-x-2">
         {editCourse && (
@@ -303,12 +309,13 @@ export default function CourseInformationForm() {
             disabled={loading}
             className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
           >
-            Continue Wihout Saving
+            Continue Without Saving
           </button>
         )}
-        <IconBtn
+        <IconBtn 
           disabled={loading}
           text={!editCourse ? "Next" : "Save Changes"}
+          onclick={handleSubmit(onSubmit)}
         >
           <MdNavigateNext />
         </IconBtn>

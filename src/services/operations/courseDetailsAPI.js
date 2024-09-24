@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast"
 // import { setLoading } from "../../slices/profileSlice";
 import { apiConnector } from "../apiConnector"
 import { courseEndpoints } from "../apis"
-import e from "cors"
 
 const {
   COURSE_DETAILS_API,
