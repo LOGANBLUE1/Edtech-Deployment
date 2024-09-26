@@ -12,24 +12,15 @@ import { setCourse } from "../../../../../slices/courseSlice"
 import IconBtn from "../../../../Common/IconBtn"
 import Upload from "../Upload"
 
-export default function SubSectionModal({
-  modalData,
-  setModalData,
-  add = false,
-  view = false,
-  edit = false,
-}) {
-  const {
-    register,
-    handleSubmit,
+export default function SubSectionModal({modalData, setModalData, add = false, view = false, edit = false}) {
+  
+  const { register,
+  handleSubmit,
     setValue,
     formState: { errors },
     getValues,
   } = useForm()
 
-  // console.log("view", view)
-  // console.log("edit", edit)
-  // console.log("add", add)
 
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
@@ -38,7 +29,6 @@ export default function SubSectionModal({
 
   useEffect(() => {
     if (view || edit) {
-      // console.log("modalData", modalData)
       setValue("lectureTitle", modalData.title)
       setValue("lectureDesc", modalData.description)
       setValue("lectureVideo", modalData.videoUrl)
@@ -76,19 +66,23 @@ export default function SubSectionModal({
     if (currentValues.lectureVideo !== modalData.videoUrl) {
       formData.append("video", currentValues.lectureVideo)
     }
+
     setLoading(true)
-    const result = await updateSubSection(formData, token)
-    if (result) {
-      // console.log("result", result)
-      // update the structure of course
-      const updatedCourseContent = course.courseContent.map((section) =>
-        section._id === modalData.sectionId ? result : section
-      )
-      const updatedCourse = { ...course, courseContent: updatedCourseContent }
-      dispatch(setCourse(updatedCourse))
+    try {
+      const result = await updateSubSection(formData, token);
+      if (result) {
+        const updatedCourseContent = course.courseContent.map((section) =>
+          section._id === modalData.sectionId ? result : section
+        )
+        const updatedCourse = { ...course, courseContent: updatedCourseContent }
+        dispatch(setCourse(updatedCourse))
+      }
+    } catch (error) {
+      toast.error("Failed to update subsection");
+    } finally {
+      setLoading(false);
+      setModalData(null);
     }
-    setModalData(null)
-    setLoading(false)
   }
 
   const onSubmit = async (data) => {
@@ -110,9 +104,9 @@ export default function SubSectionModal({
     formData.append("description", data.lectureDesc)
     formData.append("video", data.lectureVideo)
     setLoading(true)
+
     const result = await createSubSection(formData, token)
     if (result) {
-      // update the structure of course
       const updatedCourseContent = course.courseContent.map((section) =>
         section._id === modalData ? result : section
       )
@@ -122,7 +116,6 @@ export default function SubSectionModal({
     setModalData(null)
     setLoading(false)
   }
-
   return (
     <div className="fixed inset-0 z-[1000] !mt-0 grid h-screen w-screen place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
       <div className="my-10 w-11/12 max-w-[700px] rounded-lg border border-richblack-400 bg-richblack-800">

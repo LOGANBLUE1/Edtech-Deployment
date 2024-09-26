@@ -5,15 +5,8 @@ import { IoAddCircleOutline } from "react-icons/io5"
 import { MdNavigateNext } from "react-icons/md"
 import { useDispatch, useSelector } from "react-redux"
 
-import {
-  createSection,
-  updateSection,
-} from "../../../../../services/operations/courseDetailsAPI"
-import {
-  setCourse,
-  setEditCourse,
-  setStep,
-} from "../../../../../slices/courseSlice"
+import { createSection, updateSection} from "../../../../../services/operations/courseDetailsAPI"
+import { setCourse, setEditCourse, setStep,} from "../../../../../slices/courseSlice"
 import IconBtn from "../../../../Common/IconBtn"
 import NestedView from "./NestedView"
 
@@ -22,7 +15,7 @@ export default function CourseBuilderForm() {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors }
   } = useForm()
 
   const { course } = useSelector((state) => state.course)
@@ -31,7 +24,6 @@ export default function CourseBuilderForm() {
   const [editSectionName, setEditSectionName] = useState(null)
   const dispatch = useDispatch()
 
-  // handle form submission
   const onSubmit = async (data) => {
     // console.log(data)
     setLoading(true)
@@ -120,6 +112,7 @@ export default function CourseBuilderForm() {
             </span>
           )}
         </div>
+
         <div className="flex items-end gap-x-4">
           <IconBtn
             type="submit"
@@ -140,9 +133,11 @@ export default function CourseBuilderForm() {
           )}
         </div>
       </form>
+
       {course.courseContent.length > 0 && (
         <NestedView handleChangeEditSectionName={handleChangeEditSectionName} />
       )}
+
       {/* Next Prev Button */}
       <div className="flex justify-end gap-x-3">
         <button

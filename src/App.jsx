@@ -59,7 +59,7 @@ function App() {
         <Route path="catalog/:catalogName" element={<Catalog />} />
         {/* Open Route - for Only Non Logged in User */}
         <Route
-          path="login"
+          path="/login"
           element={
             <OpenRoute>
               <Login />
@@ -83,7 +83,7 @@ function App() {
           }
         />
         <Route
-          path="signup"
+          path="/signup"
           element={
             <OpenRoute>
               <Signup />

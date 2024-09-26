@@ -5,7 +5,9 @@ const SubSection = require("../models/Subsection")
 const User = require("../models/User")
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const CourseProgress = require("../models/CourseProgress")
-const setToDuration = require("../utils/secToDuration")
+const convertSecondsToDuration = require("../utils/secToDuration")
+
+
 // Function to create a new course
 exports.createCourse = async (req, res) => {
   try {
@@ -284,8 +286,7 @@ exports.getCourseDetails = async (req, res) => {
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
-
-    const totalDuration = setToDuration(totalDurationInSeconds)
+    const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
 
     return res.status(200).json({
       success: true,
@@ -330,8 +331,6 @@ exports.getFullCourseDetails = async (req, res) => {
       userId: userId,
     })
 
-    console.log("courseProgressCount : ", courseProgressCount)
-
     if (!courseDetails) {
       return res.status(400).json({
         success: false,
@@ -345,7 +344,6 @@ exports.getFullCourseDetails = async (req, res) => {
     //     message: `Accessing a draft course is forbidden`,
     //   });
     // }
-
     let totalDurationInSeconds = 0
     courseDetails.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
@@ -353,7 +351,6 @@ exports.getFullCourseDetails = async (req, res) => {
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
-
     const totalDuration = convertSecondsToDuration(totalDurationInSeconds)
 
     return res.status(200).json({

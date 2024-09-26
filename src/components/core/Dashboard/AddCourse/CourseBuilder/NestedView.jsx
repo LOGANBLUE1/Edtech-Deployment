@@ -78,6 +78,7 @@ export default function NestedView({ handleChangeEditSectionName }) {
                 >
                   <MdEdit className="text-xl text-richblack-300" />
                 </button>
+
                 <button
                   onClick={() =>
                     setConfirmationModal({
@@ -92,10 +93,12 @@ export default function NestedView({ handleChangeEditSectionName }) {
                 >
                   <RiDeleteBin6Line className="text-xl text-richblack-300" />
                 </button>
+
                 <span className="font-medium text-richblack-300">|</span>
                 <AiFillCaretDown className={`text-xl text-richblack-300`} />
               </div>
             </summary>
+            
             <div className="px-6 pb-4">
               {/* Render All Sub Sections Within a Section */}
               {section.subSection.map((data) => (
