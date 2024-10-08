@@ -50,10 +50,10 @@ export async function getUserEnrolledCourses(token) {
         Authorization: `Bearer ${token}`,
       }
     )
-    // console.log(
-    //   "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
-    //   response
-    // )
+    console.log(
+      "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
+      response
+    )
 
     if (!response.success) {
       throw new Error(response.message)
