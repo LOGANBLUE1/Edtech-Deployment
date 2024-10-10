@@ -4,9 +4,7 @@ const crypto = require("crypto")
 const User = require("../models/User")
 const mailSender = require("../utils/mailSender")
 const mongoose = require("mongoose")
-const {
-  courseEnrollmentEmail,
-} = require("../mail/templates/courseEnrollmentEmail")
+const {courseEnrollmentEmail,} = require("../mail/templates/courseEnrollmentEmail")
 const { paymentSuccessEmail } = require("../mail/templates/paymentSuccessEmail")
 const CourseProgress = require("../models/CourseProgress")
 
@@ -38,9 +36,9 @@ exports.capturePayment = async (req, res) => {
       }
 
       // Check if the user is already enrolled in the course
-      const uid = new mongoose.Schema.Types.ObjectId(userId)
+      const uid = new mongoose.Types.ObjectId(userId)
       if (course.studentsEnroled.includes(uid)) {
-        return res.status(200).json({ 
+        return res.status(400).json({ 
           success: false, 
           message: "Student is already Enrolled" 
         })
@@ -56,21 +54,23 @@ exports.capturePayment = async (req, res) => {
       })
     }
   }
+  console.log("Total amount: ", total_amount)
 
   const options = {
     amount: total_amount * 100,
     currency: "INR",
-    receipt: Math.random(Date.now()).toString(),
+    receipt: `${Date.now()}${Math.floor(Math.random() * 1000)}`,
     notes:{
       userId,
-      courses: courses
+      courses
     }
   }
+  console.log("Options: ", options)
 
   try {
     // Initiate the payment using Razorpay
     const paymentResponse = await instance.orders.create(options)
-    console.log("Payment response: ",paymentResponse)
+    console.log("Payment response: ", paymentResponse)
     res.status(200).json({
       success: true,
       paymentResponse,
@@ -103,7 +103,7 @@ exports.verifyPayment = async (req, res) => {
     !courses ||
     !userId
   ) {
-    return res.status(200).json({ 
+    return res.status(400).json({ 
       success: false, 
       message: "Payment Failed" 
     })
@@ -124,7 +124,7 @@ exports.verifyPayment = async (req, res) => {
     })
   }
 
-  return res.status(200).json({ 
+  return res.status(400).json({ 
     success: false, 
     message: "Payment Failed" 
   })
@@ -195,7 +195,7 @@ const enrollStudents = async (courses, userId, res) => {
           error: "Course not found" 
         })
       }
-      console.log("Updated course: ", enrolledCourse)
+      console.log("Updated course: ", enrolledCourse.courseName)
 
       const courseProgress = await CourseProgress.create({
         courseID: courseId,
@@ -213,6 +213,7 @@ const enrollStudents = async (courses, userId, res) => {
         },
         { new: true }
       )
+      
 
       console.log("Enrolled student: ", enrolledStudent)
       // Send an email notification to the enrolled student

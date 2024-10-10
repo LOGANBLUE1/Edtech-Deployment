@@ -22,8 +22,6 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
     const requestUrl = `${url}${queryString}`;
 
     // Log the full request details
-    console.log("Request URL:", requestUrl);
-    console.log("Request Options:", options);
 
     // Make the fetch request
     const response = await fetch(requestUrl, options);
