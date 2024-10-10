@@ -23,12 +23,12 @@ function ReviewSlider() {
 
   useEffect(() => {
     ;(async () => {
-      const { data } = await apiConnector(
+      const res = await apiConnector(
         "GET",
         ratingsEndpoints.REVIEWS_DETAILS_API
       )
-      if (data?.success) {
-        setReviews(data?.data)
+      if (res.success) {
+        setReviews(res.data)
       }
     })()
   }, [])
@@ -36,7 +36,7 @@ function ReviewSlider() {
   // console.log(reviews)
 
   return (
-    <div className="text-white">
+    <div className="text-white w-full">
       <div className="my-[50px] h-[184px] max-w-maxContentTab lg:max-w-maxContent">
         <Swiper
           slidesPerView={4}
