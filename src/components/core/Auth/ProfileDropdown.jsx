@@ -3,6 +3,7 @@ import { AiOutlineCaretDown } from "react-icons/ai"
 import { VscDashboard, VscSignOut } from "react-icons/vsc"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
+import ConfirmationModal from "../../Common/ConfirmationModal"
 
 import useOnClickOutside from "../../../hooks/useOnClickOutside"
 import { logout } from "../../../services/operations/authAPI"
@@ -12,6 +13,7 @@ export default function ProfileDropdown() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
+  const [confirmationModal, setConfirmationModal] = useState(null)
   const ref = useRef(null)
 
   useOnClickOutside(ref, () => setOpen(false))
@@ -44,7 +46,14 @@ export default function ProfileDropdown() {
           
           <div
             onClick={() => {
-              dispatch(logout(navigate))
+              setConfirmationModal({
+                text1: "Are you sure?",
+                text2: "You will be logged out of your account.",
+                btn1Text: "Logout",
+                btn2Text: "Cancel",
+                btn1Handler: () => dispatch(logout(navigate)),
+                btn2Handler: () => setConfirmationModal(null),
+              })
               setOpen(false)
             }}
             className="flex w-full items-center gap-x-1 py-[10px] px-[12px] text-sm text-richblack-100 hover:bg-richblack-700 hover:text-richblack-25"
@@ -54,6 +63,7 @@ export default function ProfileDropdown() {
           </div>
         </div>
       )}
+      {confirmationModal && <ConfirmationModal modalData={confirmationModal} />}
     </button>
   )
 }
