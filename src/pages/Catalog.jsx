@@ -24,7 +24,7 @@ function Catalog() {
       try {
         const res = await apiConnector("GET", categories.CATEGORIES_API)
         const category_id = res?.data?.filter(
-          (ct) => ct.name.split(" ").join("-").toLowerCase() === catalogName
+          (ct) => ct.name.split(" ").join("-").replace("/", ".").toLowerCase() === catalogName
         )[0]._id
         setCategoryId(category_id)
       } catch (error) {

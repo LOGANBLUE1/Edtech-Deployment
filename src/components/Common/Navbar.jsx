@@ -77,6 +77,7 @@ function Navbar() {
                                     to={`/catalog/${subLink?.name
                                       .split(" ")
                                       .join("-")
+                                      .replace("/", ".")
                                       .toLowerCase()}`}
                                     className="rounded-lg bg-transparent py-4 pl-4 hover:bg-richblack-50"
                                     key={i}
