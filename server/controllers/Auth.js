@@ -20,6 +20,23 @@ exports.signup = async (req, res) => {
         message: "All Fields are required"
       });
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email address',
+      });
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
+      });
+    }
+
     
     if (password !== confirmPassword) {
       return res.status(400).json({
@@ -36,9 +53,8 @@ exports.signup = async (req, res) => {
         message: "User already exists. Please sign in to continue."
       });
     }
-    // const recentOtp = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+
     const recentOtp = await OTP.findOne({ email }).sort({ createdAt: -1 });
-    // console.log("Recent otp: ",recentOtp)
 
     if (!recentOtp) {
       return res.status(400).json({
@@ -53,15 +69,10 @@ exports.signup = async (req, res) => {
         message: "The OTP is not valid"
       });
     }
-
     
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
-    let approved;
-    // approved = approved === "Instructor" ? false : true;  //  ??????????????????????
-    // let approved = ""
-    // approved = accountType === "Instructor" ? false : true;
+    let approved = accountType === "Instructor";
 
     // Create the Additional Profile For User
     const profileDetails = await Profile.create({
@@ -70,13 +81,14 @@ exports.signup = async (req, res) => {
       about: null,
       contactNumber: null
     })
+
     const user = await User.create({
       firstName,
       lastName,
       email,
       password: hashedPassword,
-      accountType: accountType,
-      approved: approved,
+      accountType,
+      approved,
       additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
     })
@@ -99,7 +111,6 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -109,19 +120,15 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Find user with provided email
     const user = await User.findOne({ email })
 
-    // If user not found with provided email
     if (!user) {
-      // Return 401 Unauthorized status code with error message
       return res.status(401).json({
         success: false,
         message: `User is not Registered with Us Please SignUp to Continue`
       })
     }
 
-    // Generate JWT token and Compare Password
     if (await bcrypt.compare(password, user.password)) {
 
       const payload = { email: user.email, id: user._id, accountType: user.accountType };
@@ -129,13 +136,13 @@ exports.login = async (req, res) => {
           process.env.JWT_SECRET,
           {expiresIn: "24h"}
       );
-
       // Save token to user document in database
       user.token = token;
-      // await user.save(); ** 
+      // await user.save();
+
       user.password = undefined;   // returning empty pass in response
     
-
+      //creating cookie
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),// 3 days
         httpOnly: true
@@ -163,21 +170,18 @@ exports.login = async (req, res) => {
   }
 }
 
-
-// checks if email is already registered and if not then creates and store otp in db
 exports.sendotp = async (req, res) => {
   try {
     const { email } = req.body;
-    // console.log(email);
 
-    // // Basic email validation (optional)
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!email || !emailRegex.test(email)) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: 'Invalid email address',
-    //   });
-    // }
+    // Basic email validation (optional)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email address',
+      });
+    }
 
     const checkUserPresent = await User.findOne({ email })
     
@@ -201,7 +205,6 @@ exports.sendotp = async (req, res) => {
 
     // const otpPayload = { email, otp };//for storing in db
     const otpBody = await OTP.create({ email, otp });
-    console.log("OTP Body", otpBody)
 
     res.status(200).json({
       success: true,
@@ -220,7 +223,6 @@ exports.sendotp = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    // Get user data from req.user
     const userDetails = await User.findById(req.user.id)
 
     const { oldPassword, newPassword } = req.body
@@ -253,7 +255,7 @@ exports.changePassword = async (req, res) => {
 
     // Send notification email
     try {
-      const emailResponse = await mailSender(
+        const emailResponse = await mailSender(
         updatedUserDetails.email,
         "Password for your account has been updated",
         passwordUpdated(
@@ -261,7 +263,7 @@ exports.changePassword = async (req, res) => {
           `Password updated successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`
         )
       )
-      console.log("Email sent successfully:", emailResponse.response)
+      // console.log("Email sent successfully:", emailResponse.response)
     } catch (error) {
       console.error("Error occurred while sending email:", error)
       return res.status(500).json({

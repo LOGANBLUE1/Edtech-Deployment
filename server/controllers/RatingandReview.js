@@ -69,7 +69,16 @@ exports.createRating = async (req, res) => {
 // Get the average rating for a course
 exports.getAverageRating = async (req, res) => {
   try {
-    const courseId = req.body.courseId
+    const courseId = req.body.courseId;
+
+    // Verify if the course exists
+    const courseExists = await Course.exists({ _id: courseId });
+    if (!courseExists) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
 
     // Calculate the average rating using the MongoDB aggregation pipeline
     const result = await RatingAndReview.aggregate([
@@ -84,26 +93,23 @@ exports.getAverageRating = async (req, res) => {
           averageRating: { $avg: "$rating" },
         },
       },
-    ])
+    ]);
 
-    if (result.length > 0) {
-      return res.status(200).json({
-        success: true,
-        averageRating: result[0].averageRating,
-      })
-    }
-
-    // If no ratings are found, return 0 as the default rating
-    return res.status(200).json({ success: true, averageRating: 0 })
+    // Return the average rating if available, otherwise return 0
+    return res.status(200).json({
+      success: true,
+      averageRating: result.length > 0 ? result[0].averageRating : 0,
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to retrieve the rating for the course",
       error: error.message,
-    })
+    });
   }
-}
+};
+
 
 // Get all rating and reviews
 exports.getAllRatingReview = async (req, res) => {

@@ -6,7 +6,7 @@ function getRandomInt(max) {
 exports.createCategory = async (req, res) => {
   try {
     const { name, description } = req.body
-    if (!name) {
+    if (!name || !description) {
       return res.status(400).json({ 
         success: false,
         message: "All fields are required"
@@ -69,19 +69,13 @@ exports.categoryPageDetails = async (req, res) => {
         message: "Category not found" 
       })
     }
-    // Handle the case when there are no courses
-    if (selectedCategory.courses.length === 0) {
-      console.log("No courses found for the selected category.")
-      return res.status(404).json({
-        success: false,
-        message: "No courses found for the selected category.",
-      })
-    }
+    
 
     // Get courses for other categories
     const categoriesExceptSelected = await Category.find({
       _id: { $ne: categoryId },
     })
+
     let differentCategory = await Category.findOne(
       categoriesExceptSelected[getRandomInt(categoriesExceptSelected.length)]
         ._id
@@ -92,6 +86,7 @@ exports.categoryPageDetails = async (req, res) => {
         populate: "instructor"
       })
       .exec()
+
     // Get top-selling courses across all categories
     const allCategories = await Category.find()
       .populate({
@@ -105,6 +100,19 @@ exports.categoryPageDetails = async (req, res) => {
       .sort((a, b) => b.sold - a.sold)
       .slice(0, 10)
 
+      // Handle the case when there are no courses
+    if (selectedCategory.courses.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          selectedCategory,
+          differentCategory,
+          mostSellingCourses,
+        },
+        message: "No courses found for the selected category.",
+      })
+    }
+
     res.status(200).json({
       success: true,
       data: {
@@ -112,6 +120,7 @@ exports.categoryPageDetails = async (req, res) => {
         differentCategory,
         mostSellingCourses,
       },
+      message: "Category page details fetched successfully.",
     })
   } catch (error) {
     return res.status(500).json({

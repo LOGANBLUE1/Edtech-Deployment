@@ -35,9 +35,6 @@ exports.createCourse = async (req, res) => {
     const tag = _tag ? JSON.parse(_tag) : [];
     const instructions = _instructions ? JSON.parse(_instructions) : [];
 
-    // console.log("tag", tag)
-    // console.log("instructions", instructions)
-
     // Check if any of the required fields are missing
     if (
       !courseName ||
@@ -82,18 +79,18 @@ exports.createCourse = async (req, res) => {
       thumbnail,
       process.env.FOLDER_NAME
     )
-    console.log(thumbnailImage)
+    console.log("Uploaded image to cloudinary: ",thumbnailImage)
     // Create a new course with the given details
     const newCourse = await Course.create({
       courseName,
       courseDescription,
       instructor: instructorDetails._id,
-      whatYouWillLearn: whatYouWillLearn,
+      whatYouWillLearn,
       price,
       tag,
       category: categoryDetails._id,
       thumbnail: thumbnailImage.secure_url,
-      status: status,
+      status,
       instructions,
     })
 
@@ -146,12 +143,15 @@ exports.editCourse = async (req, res) => {
     const course = await Course.findById(courseId)
 
     if (!course) {
-      return res.status(404).json({ error: "Course not found" })
+      return res.status(404).json({ 
+        success: false,
+        error: "Course not found"
+      })
     }
 
     // If Thumbnail Image is found, update it
     if (req.files) {
-      console.log("thumbnail update")
+      console.log("thumbnail updating::")
       const thumbnail = req.files.thumbnailImage
       const thumbnailImage = await uploadImageToCloudinary(
         thumbnail,
@@ -183,7 +183,6 @@ exports.editCourse = async (req, res) => {
         },
       })
       .populate("category")
-      .populate("ratingAndReviews")
       .populate({
         path: "courseContent",
         populate: {
