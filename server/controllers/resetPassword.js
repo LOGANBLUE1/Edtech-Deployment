@@ -71,6 +71,12 @@ exports.resetPassword = async (req, res) => {
       })
     }
     const encryptedPassword = await bcrypt.hash(password, 10)
+    if(encryptedPassword === userDetails.password){
+      return res.status(403).json({
+        success: false,
+        message: "Password cannot be same as previous Password",
+      })
+    }
     await User.findOneAndUpdate(
       { token: token },
       { password: encryptedPassword },
