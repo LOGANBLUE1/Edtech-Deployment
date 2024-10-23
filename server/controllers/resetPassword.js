@@ -24,8 +24,8 @@ exports.resetPasswordToken = async (req, res) => {
     )
     console.log("DETAILS", updatedDetails)
 
-    // const url = `http://localhost:3000/update-password/${token}`
-    const url = `https://edtech-website-tau.vercel.app/update-password/${token}`
+    const url = `http://localhost:3000/update-password/${token}`
+    // const url = `https://edtech-website-tau.vercel.app/update-password/${token}`
 
     await mailSender(
       email,
@@ -71,6 +71,8 @@ exports.resetPassword = async (req, res) => {
       })
     }
     const encryptedPassword = await bcrypt.hash(password, 10)
+    console.log("ENCRYPTED PASSWORD: ", encryptedPassword)
+    console.log("OLD PASSWORD: ",userDetails.password)
     if(encryptedPassword === userDetails.password){
       return res.status(403).json({
         success: false,

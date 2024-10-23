@@ -1,3 +1,4 @@
+const redisClient = require('../config/redis');
 const Category = require("../models/Category")
 
 function getRandomInt(max) {
@@ -30,20 +31,62 @@ exports.createCategory = async (req, res) => {
   }
 }
 
+// exports.showAllCategories = async (req, res) => {
+//   try {
+//     const allCategorys = await Category.find()
+//     res.status(200).json({
+//       success: true,
+//       data: allCategorys,
+//     })
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     })
+//   }
+// }
+
 exports.showAllCategories = async (req, res) => {
   try {
-    const allCategorys = await Category.find()
-    res.status(200).json({
+    if (!redisClient.isOpen) {
+      await redisClient.connect();
+    }
+
+    const cachedCategories = await redisClient.get('showAllCategories');
+    
+    // if found in redis cache, return the data
+    if (cachedCategories) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedCategories),
+      });
+    }
+
+    const allCategories = await Category.find();
+    if (!allCategories) {
+      return res.status(404).json({
+        success: false,
+        message: "No categories found",
+      });
+    }
+    await redisClient.set('showAllCategories', JSON.stringify(allCategories), {
+      EX: 3600,
+    });
+
+    return res.status(200).json({
       success: true,
-      data: allCategorys,
-    })
+      data: allCategories,
+    });
+
   } catch (error) {
+    // Catch any errors and return a 500 response
     return res.status(500).json({
       success: false,
-      message: error.message,
-    })
+      message: error.message || "Internal server error",
+    });
   }
-}
+};
+
 
 exports.categoryPageDetails = async (req, res) => {
   try {
