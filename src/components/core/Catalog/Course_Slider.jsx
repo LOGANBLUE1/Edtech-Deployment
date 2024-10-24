@@ -13,10 +13,10 @@ import { FreeMode, Pagination } from "swiper"
 // import { getAllCourses } from "../../services/operations/courseDetailsAPI"
 import Course_Card from "./Course_Card"
 
-function Course_Slider({ Courses }) {
+function Course_Slider({ courses }) {
   return (
     <>
-      {Courses?.length ? (
+      {courses?.length ? (
         <Swiper
           slidesPerView={1}
           spaceBetween={25}
@@ -29,7 +29,7 @@ function Course_Slider({ Courses }) {
           }}
           className="max-h-[30rem]"
         >
-          {Courses?.map((course, i) => (
+          {courses?.map((course, i) => (
             <SwiperSlide key={i}>
               <Course_Card course={course} Height={"h-[250px]"} />
             </SwiperSlide>

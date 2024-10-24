@@ -104,7 +104,7 @@ function Catalog() {
         </div>
         <div>
           <Course_Slider
-            Courses={catalogPageData?.selectedCategory?.courses}
+            courses={catalogPageData?.selectedCategory?.courses}
           />
         </div>
       </div>
@@ -116,7 +116,7 @@ function Catalog() {
         </div>
         <div className="py-8">
           <Course_Slider
-            Courses={catalogPageData?.differentCategory?.courses}
+            courses={catalogPageData?.differentCategory?.courses}
           />
         </div>
       </div>

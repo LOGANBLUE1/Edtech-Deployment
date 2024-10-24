@@ -92,7 +92,7 @@ router.delete("/deleteCourse", deleteCourse)
 
 router.post("/createCategory", auth, isAdmin, createCategory)
 router.get("/showAllCategories", showAllCategories)
-router.post("/getCategoryPageDetails", categoryPageDetails)
+router.post("/getCategoryPageDetails", categoryPageDetails)// changed to post
 
 
 // ********************************************************************************************************

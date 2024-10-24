@@ -24,19 +24,14 @@ function CourseDetails() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  // Getting courseId from url parameter
   const { courseId } = useParams()
-  // console.log(`course id: ${courseId}`)
 
-  // Declear a state to save the course details
   const [response, setResponse] = useState(null)
   const [confirmationModal, setConfirmationModal] = useState(null)
   useEffect(() => {
-    // Calling fetchCourseDetails fucntion to fetch the details
     ;(async () => {
       try {
         const res = await fetchCourseDetails(courseId)
-        console.log("course details res: ", res)
         setResponse(res)
       } catch (error) {
         console.log("Could not fetch Course Details")
@@ -44,16 +39,12 @@ function CourseDetails() {
     })()
   }, [courseId])
 
-  // console.log("response: ", response)
-
-  // Calculating Avg Review count
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
     const count = GetAvgRating(response?.courseDetails.ratingAndReviews)
     setAvgReviewCount(count)
   }, [response])
-  // console.log("avgReviewCount: ", avgReviewCount)
-
+  
   // // Collapse all
   // const [collapse, setCollapse] = useState("")
   const [isActive, setIsActive] = useState(Array(0))
@@ -117,7 +108,6 @@ function CourseDetails() {
   }
 
   if (paymentLoading) {
-    // console.log("payment loading")
     return (
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
         <div className="spinner"></div>
