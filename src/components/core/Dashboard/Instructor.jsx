@@ -51,7 +51,7 @@ export default function Instructor() {
         <div className="spinner"></div>
       ) : courses.length > 0 ? (
         <div>
-          <div className="my-4 flex h-[450px] space-x-4">
+          <div className="my-4 flex h-[500px] space-x-4">
             {/* Render chart / graph */}
             {totalAmount > 0 || totalStudents > 0 ? (
               <InstructorChart courses={instructorData} />
@@ -63,6 +63,7 @@ export default function Instructor() {
                 </p>
               </div>
             )}
+            
             {/* Total Statistics */}
             <div className="flex min-w-[250px] flex-col rounded-md bg-richblack-800 p-6">
               <p className="text-lg font-bold text-richblack-5">Statistics</p>
@@ -88,6 +89,7 @@ export default function Instructor() {
               </div>
             </div>
           </div>
+
           <div className="rounded-md bg-richblack-800 p-6">
             {/* Render 3 courses */}
             <div className="flex items-center justify-between">
@@ -125,6 +127,7 @@ export default function Instructor() {
             </div>
           </div>
         </div>
+        
       ) : (
         <div className="mt-20 rounded-md bg-richblack-800 p-6 py-20">
           <p className="text-center text-2xl font-bold text-richblack-5">
