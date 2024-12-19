@@ -111,7 +111,7 @@ export async function BuyCourse(
     if (!orderResponse.success) {
       throw new Error(orderResponse.message)
     }
-    console.log("PAYMENT RESPONSE FROM BACKEND............", orderResponse)
+    // console.log("PAYMENT RESPONSE FROM BACKEND............", orderResponse)
     const mockResponse = {
       razorpay_payment_id: "pay_" + Math.random().toString(36).substring(2, 15), // Random payment ID
       razorpay_order_id: "order_" + Math.random().toString(36).substring(2, 15), // Random order ID
@@ -139,7 +139,7 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
       { Authorization: `Bearer ${token}`}
     )
 
-    console.log("VERIFY PAYMENT RESPONSE FROM BACKEND............", response)
+    // console.log("VERIFY PAYMENT RESPONSE FROM BACKEND............", response)
 
     if (!response.success) {
       throw new Error(response.message)

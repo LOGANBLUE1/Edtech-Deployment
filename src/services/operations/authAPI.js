@@ -24,7 +24,7 @@ export function sendOtp(email, navigate) {
         email,
         // checkUserPresent: true,
       })
-      console.log("SENDOTP API RESPONSE............", response)
+      // console.log("SENDOTP API RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message)
@@ -67,7 +67,7 @@ export function signUp(
         otp,
       })
 
-      console.log("SIGNUP API RESPONSE............", response)
+      // console.log("SIGNUP API RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message);
@@ -101,7 +101,7 @@ export function login(
         password,
       })
 
-      console.log("LOGIN API RESPONSE............", response)
+      // console.log("LOGIN API RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message);
@@ -139,7 +139,7 @@ export function getPasswordResetToken(
         email,
       })
 
-      console.log("RESETPASSTOKEN RESPONSE............", response)
+      // console.log("RESETPASSTOKEN RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message);
@@ -174,7 +174,7 @@ export function resetPassword(
         token,
       })
 
-      console.log("RESETPASSWORD RESPONSE............", response)
+      // console.log("RESETPASSWORD RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message);

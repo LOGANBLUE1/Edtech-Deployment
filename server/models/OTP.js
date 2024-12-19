@@ -26,7 +26,7 @@ async function sendVerificationEmail(email, otp) {
 			"Verification Email",
 			emailTemplate(otp)
 		);
-		console.log("OTP Email sent successfully: ", mailResponse.response);
+		// console.log("OTP Email sent successfully: ", mailResponse.response);
 	} catch (error) {
 		console.log("Error occurred while sending OTP email: ", error);
 		throw error;
@@ -35,7 +35,7 @@ async function sendVerificationEmail(email, otp) {
 
 // Define a pre-save hook to send email before the document has been saved
 OTPSchema.pre("save", async function (next) {
-	console.log("New document saved to database");
+	// console.log("New document saved to database");
 
 	// Only send an email when a new document is created
 	if (this.isNew) {

@@ -51,7 +51,7 @@ exports.capturePayment = async (req, res) => {
         })
       }
     }
-    console.log("Total amount: ", total_amount)
+    // console.log("Total amount: ", total_amount)
   
     res.status(200).json({
         success: true,
@@ -144,7 +144,7 @@ const enrollStudents = async (courses, userId, res) => {
             error: "Course not found" 
           })
         }
-        console.log("Updated course: ", enrolledCourse.courseName)
+        // console.log("Updated course: ", enrolledCourse.courseName)
   
         const courseProgress = await CourseProgress.create({
           courseID: courseId,
@@ -164,7 +164,7 @@ const enrollStudents = async (courses, userId, res) => {
         )
         
   
-        console.log("Enrolled student: ", enrolledStudent)
+        // console.log("Enrolled student: ", enrolledStudent)
         // Send an email notification to the enrolled student
         const emailResponse = await mailSender(
           enrolledStudent.email,
@@ -175,7 +175,7 @@ const enrollStudents = async (courses, userId, res) => {
           )
         )
   
-        console.log("Email sent successfully: ", emailResponse.response)
+        // console.log("Email sent successfully: ", emailResponse.response)
       } catch (error) {
         console.log(error)
         return res.status(400).json({ 

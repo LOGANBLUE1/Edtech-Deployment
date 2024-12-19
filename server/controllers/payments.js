@@ -54,7 +54,7 @@ exports.capturePayment = async (req, res) => {
       })
     }
   }
-  console.log("Total amount: ", total_amount)
+  // console.log("Total amount: ", total_amount)
 
   const options = {
     amount: total_amount * 100,
@@ -65,12 +65,12 @@ exports.capturePayment = async (req, res) => {
       courses
     }
   }
-  console.log("Options: ", options)
+  // console.log("Options: ", options)
 
   try {
     // Initiate the payment using Razorpay
     const paymentResponse = await instance.orders.create(options)
-    console.log("Payment response: ", paymentResponse)
+    // console.log("Payment response: ", paymentResponse)
     res.status(200).json({
       success: true,
       paymentResponse,
@@ -160,7 +160,7 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
       )
     )
   } catch (error) {
-    console.log("error in sending mail", error)
+    // console.log("error in sending mail", error)
     return res.status(400).json({ 
       success: false, 
       message: "Could not send email" 
@@ -195,7 +195,7 @@ const enrollStudents = async (courses, userId, res) => {
           error: "Course not found" 
         })
       }
-      console.log("Updated course: ", enrolledCourse.courseName)
+      // console.log("Updated course: ", enrolledCourse.courseName)
 
       const courseProgress = await CourseProgress.create({
         courseID: courseId,
@@ -215,7 +215,7 @@ const enrollStudents = async (courses, userId, res) => {
       )
       
 
-      console.log("Enrolled student: ", enrolledStudent)
+      // console.log("Enrolled student: ", enrolledStudent)
       // Send an email notification to the enrolled student
       const emailResponse = await mailSender(
         enrolledStudent.email,
@@ -226,7 +226,7 @@ const enrollStudents = async (courses, userId, res) => {
         )
       )
 
-      console.log("Email sent successfully: ", emailResponse.response)
+      // console.log("Email sent successfully: ", emailResponse.response)
     } catch (error) {
       console.log(error)
       return res.status(400).json({ 

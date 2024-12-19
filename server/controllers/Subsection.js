@@ -89,7 +89,7 @@ exports.updateSubSection = async (req, res) => {
       "subSection"
     )
 
-    console.log("updated section", updatedSection)
+    // console.log("updated section", updatedSection)
 
     return res.json({
       success: true,

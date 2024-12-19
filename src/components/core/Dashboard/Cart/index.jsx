@@ -26,9 +26,12 @@ export default function Cart() {
           <RenderTotalAmount />
         </div>
       ) : (
-        <p className="mt-14 text-center text-3xl text-richblack-100">
-          Your cart is empty
-        </p>
+        <div className="flex flex-col items-center">
+          <p className="mt-14 text-center text-3xl text-richblack-100">
+            Your cart is empty
+          </p>
+          <div className="text-richblack-100">Add</div>
+        </div>
       )}
     </>
   )
