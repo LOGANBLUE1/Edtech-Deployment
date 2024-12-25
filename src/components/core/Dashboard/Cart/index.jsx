@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-
+import { Link } from "react-router-dom"
 import RenderCartCourses from "./RenderCartCourses"
 import RenderTotalAmount from "./RenderTotalAmount"
 
@@ -30,7 +30,10 @@ export default function Cart() {
           <p className="mt-14 text-center text-3xl text-richblack-100">
             Your cart is empty
           </p>
-          <div className="text-richblack-100">Add</div>
+          <Link to={`/catalog/all`}
+            className="rounded-lg bg-transparent p-2 text-richblack-100 hover:bg-richblack-50">
+              <p>Add</p>
+          </Link>
         </div>
       )}
     </>

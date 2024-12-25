@@ -1,7 +1,6 @@
 import { toast } from "react-hot-toast"
-import { categories } from "../apis"
+import { categories, catalogData } from "../apis"
 import { apiConnector } from "../apiConnector"
-import { catalogData } from "../apis"
 
 export const getCatalogPageData = async (categoryId) => {
   const toastId = toast.loading("Loading...")
@@ -26,19 +25,18 @@ export const getCatalogPageData = async (categoryId) => {
 }
 
 
-// export const getAllCategories = async () => {
-//   let result = null;
-//   try {
-//     const response = apiConnector("GET", categories.CATEGORIES_API)
-//     console.log("All Categories: ", result)
-//     if (!response?.success) {
-//       throw new Error("Could Not get All categories data.")
-//     }
-//     result = response?.data
-//   } catch (error) {
-//     console.log("CATEGORIES_API API ERROR............", error)
-//     toast.error(error.message)
-//     result = error.response
-//   }
-//   return result
-// }
+export const getAllCategories = async () => {
+  let result = null;
+  try {
+    const response = await apiConnector("GET", categories.CATEGORIES_API)
+    if (!response?.success) {
+      throw new Error("Could Not get All categories data.")
+    }
+    result = response?.data
+  } catch (error) {
+    console.log("CATEGORIES_API API ERROR............", error)
+    toast.error(error.message)
+    result = error.response
+  }
+  return result
+}

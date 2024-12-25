@@ -7,11 +7,8 @@ import { useParams } from "react-router-dom"
 import Footer from "../components/Common/Footer"
 import Course_Card from "../components/core/Catalog/Course_Card"
 import Course_Slider from "../components/core/Catalog/Course_Slider"
-import { apiConnector } from "../services/apiConnector"
-import { categories } from "../services/apis"
 import { getCatalogPageData, getAllCategories } from "../services/operations/pageAndComponentDatas"
 import Error from "./Error"
-
 function Catalog() {
   const { loading } = useSelector((state) => state.profile)
   const { catalogName } = useParams()
@@ -21,14 +18,19 @@ function Catalog() {
 
   useEffect(() => {
     ;(async () => {
-      try {
-        const res = await apiConnector("GET", categories.CATEGORIES_API)
-        const category_id = res?.data?.filter(
-          (ct) => ct.name.split(" ").join("-").replace("/", ".").toLowerCase() === catalogName
-        )[0]._id
-        setCategoryId(category_id)
-      } catch (error) {
-        console.log("Could not fetch Categories.", error)
+      if(catalogName === 'all'){
+        setCategoryId('all')
+      }
+      else{
+        try {
+          const res = await getAllCategories()
+          const category_id = res?.filter(
+            (ct) => ct.name.split(" ").join("-").replace("/", ".").toLowerCase() === catalogName
+          )[0]._id
+          setCategoryId(category_id)
+        } catch (error) {
+          console.log("Could not fetch Categories.", error)
+        }
       }
     })()
   }, [catalogName])
@@ -60,7 +62,7 @@ function Catalog() {
   return (
     <>
       {/* Hero Section */}
-      <div className=" box-content bg-richblack-800 px-4">
+      <div className="box-content bg-richblack-800 px-4">
         <div className="mx-auto flex min-h-[260px] max-w-maxContentTab flex-col justify-center gap-4 lg:max-w-maxContent ">
           <p className="text-sm text-richblack-300">
             {`Home / Catalog / `}
@@ -79,7 +81,10 @@ function Catalog() {
 
       {/* Section 1 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
-        <div className="section_heading">Courses to get you started</div>
+        {catalogName === 'all' ? 
+          (<div className="section_heading">All courses from a category</div>):
+          (<div className="section_heading">Courses to get you started</div>)
+        }
         <div className="my-4 flex border-b border-b-richblack-600 text-sm">
           <p
             className={`px-4 py-2 ${
@@ -104,22 +109,22 @@ function Catalog() {
         </div>
         <div>
           <Course_Slider
-            courses={catalogPageData?.selectedCategory?.courses}
+            courses={active === 1 ? catalogPageData?.selectedCategory?.courses : null}
           />
         </div>
       </div>
       
       {/* Section 2 */}
-      <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
+      {catalogName !== 'all' && (<div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
         <div className="section_heading">
           Top courses in {catalogPageData?.differentCategory?.name}
         </div>
         <div className="py-8">
           <Course_Slider
-            courses={catalogPageData?.differentCategory?.courses}
+            courses= {catalogPageData?.differentCategory?.courses}
           />
         </div>
-      </div>
+      </div>)}
 
       {/* Section 3 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
