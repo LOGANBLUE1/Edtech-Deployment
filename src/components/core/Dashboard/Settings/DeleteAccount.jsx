@@ -45,7 +45,7 @@ export default function DeleteAccount() {
                 text2: "You're account will be deleted forever.",
                 btn1Text: "Delete",
                 btn2Text: "Cancel",
-                btn1Handler: () => handleDeleteAccount,
+                btn1Handler: () => handleDeleteAccount(),
                 btn2Handler: () => setConfirmationModal(null),
               })
             }
