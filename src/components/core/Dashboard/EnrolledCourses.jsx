@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import ProgressBar from "@ramonak/react-progress-bar"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI"
 
@@ -41,6 +41,10 @@ export default function EnrolledCourses() {
         <p className="grid h-[10vh] w-full place-content-center text-richblack-5">
           You have not enrolled in any course yet.
           {/* TODO: Modify this Empty State */}
+          <Link to={`/catalog/all`}
+              className="rounded-lg w-12 bg-transparent p-2 text-richblack-100 hover:bg-richblack-50">
+                <p>Add</p>
+            </Link>
         </p>
       ) : (
         <div className="my-8 text-richblack-5">
