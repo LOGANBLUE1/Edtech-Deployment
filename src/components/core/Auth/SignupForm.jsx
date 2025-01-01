@@ -9,11 +9,11 @@ import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 import Tab from "../../Common/Tab"
 
-function SignupForm() {
+function SignupForm({userType}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const [accountType, setAccountType] = useState(ACCOUNT_TYPE.STUDENT);
+  
+  const [accountType, setAccountType] = useState(userType ?? ACCOUNT_TYPE.STUDENT);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
