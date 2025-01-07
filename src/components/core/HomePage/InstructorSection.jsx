@@ -3,6 +3,7 @@ import CTAButton from "../../../components/core/HomePage/Button";
 import { FaArrowRight } from "react-icons/fa";
 import Instructor from "../../../assets/Images/Instructor.png";
 import HighlightText from './HighlightText';
+import { ACCOUNT_TYPE } from "../../../utils/constants";
 
 const InstructorSection = () => {
   return (
@@ -28,7 +29,7 @@ const InstructorSection = () => {
             </p>
 
             <div className="w-fit">
-              <CTAButton active={true} linkto={"/signup"}>
+              <CTAButton active={true} linkto={`/signup?user=${ACCOUNT_TYPE.INSTRUCTOR}`}>
                 <div className="flex items-center gap-3">
                   Start Teaching Today
                   <FaArrowRight />
