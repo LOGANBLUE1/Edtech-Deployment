@@ -22,11 +22,19 @@ database.connect();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = ["https://edtech-website-tau.vercel.app", "http://localhost:3000/"];
 app.use(
-	cors({
-		origin: "*",
-		credentials: true
-	})
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
+  })
 );
 app.use(
 	fileUpload({
