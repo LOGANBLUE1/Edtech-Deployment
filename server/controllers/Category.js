@@ -13,16 +13,26 @@ exports.createCategory = async (req, res) => {
         message: "All fields are required"
       });
     }
-    const CategoryDetails = await Category.create({
-      name: name,
-      description: description,
-    })
-    // console.log(CategoryDetails)
-    return res.status(200).json({
-      success: true,
-      message: "Categorys Created Successfully",
-    })
 
+    const existingCategory = await Category.findOne({ name: name });
+
+    if (!existingCategory) {
+      const CategoryDetails = await Category.create({
+        name: name,
+        description: description,
+      });
+      return res.status(200).json({
+        success: true,
+        CategoryDetails,
+        message: "Categorys Created Successfully",
+      })
+    } else {
+      return res.status(409).json({
+        success: false,
+        message: "Category already exists",
+      });
+    }
+    
   } catch (error) {
     return res.status(500).json({
       success: true,

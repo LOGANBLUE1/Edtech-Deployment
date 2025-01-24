@@ -1,10 +1,13 @@
+require("dotenv").config()
+
 exports.contactUsEmail = (
   email,
   firstname,
   lastname,
   message,
   phoneNo,
-  countrycode
+  countrycode,
+  baseurl=process.env.FRONTEND_URL
 ) => {
   return `<!DOCTYPE html>
   <html>
@@ -74,7 +77,7 @@ exports.contactUsEmail = (
   
   <body>
       <div class="container">
-          <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
+          <a href="${baseurl}"><img class="logo"
                   src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
           <div class="message">Contact Form Confirmation</div>
           <div class="body">
@@ -84,7 +87,7 @@ exports.contactUsEmail = (
               <p>Here are the details you provided:</p>
               <p>Name: ${firstname} ${lastname}</p>
               <p>Email: ${email}</p>
-              <p>Phone Number: ${phoneNo}</p>
+              <p>Phone Number:${countrycode} ${phoneNo}</p>
               <p>Message: ${message}</p>
               <p>We appreciate your interest and will get back to you shortly. </p>
           </div>

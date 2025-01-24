@@ -1,4 +1,6 @@
-exports.passwordUpdated = (email, name) => {
+require("dotenv").config()
+
+exports.passwordUpdated = (email, name, baseurl=process.env.FRONTEND_URL) => {
 	return `<!DOCTYPE html>
     <html>
     
@@ -55,7 +57,7 @@ exports.passwordUpdated = (email, name) => {
     
     <body>
         <div class="container">
-            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
+            <a href="${baseurl}"><img class="logo"
                     src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">

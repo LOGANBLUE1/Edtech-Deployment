@@ -8,7 +8,6 @@ const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
 require("dotenv").config()
 
-
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email,
