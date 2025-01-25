@@ -26,7 +26,7 @@ exports.resetPasswordToken = async (req, res) => {
     )
     // console.log("DETAILS", updatedDetails)
 
-    const url = `${process.env.FRONTEND_URL}/update-password/${token}`
+    const url = `${process.env.FRONTEND_URL ?? 'https://edtech-website-tau.vercel.app'}/update-password/${token}`
 
     await mailSender(
       email,
@@ -51,7 +51,7 @@ exports.resetPasswordToken = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const { password, confirmPassword, token } = req.body;// get request from front-end
-    
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({

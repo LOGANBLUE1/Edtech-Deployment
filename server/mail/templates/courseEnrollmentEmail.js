@@ -1,6 +1,8 @@
 require("dotenv").config()
 
-exports.courseEnrollmentEmail = (courseName, name, baseurl=process.env.FRONTEND_URL) => {
+exports.courseEnrollmentEmail = (courseName, name, baseurl=process.env.FRONTEND_URL??
+    'https://edtech-website-tau.vercel.app'
+) => {
   return `<!DOCTYPE html>
   <html>
   
