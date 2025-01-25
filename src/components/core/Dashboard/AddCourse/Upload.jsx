@@ -70,6 +70,8 @@ export default function Upload({
         className={`${
           isDragActive ? "bg-richblack-600" : "bg-richblack-700"
         } flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-richblack-500`}
+        {...getRootProps()}
+        onClick={() => inputRef.current && inputRef.current.click()} // Add this line
       >
         {previewSource ? (
           <div className="flex w-full flex-col p-6">
@@ -82,19 +84,17 @@ export default function Upload({
             ) : (
               <Player aspectRatio="16:9" playsInline src={previewSource} />
             )}
-            {!viewMode && (
-              <button
-                type="button"
-                onClick={() => {
-                  setPreviewSource("")
-                  setSelectedFile(null)
-                  setValue(name, null)
-                }}
-                className="mt-3 text-richblack-400 underline"
-              >
-                Cancel
-              </button>
-            )}
+            {!viewMode && <button
+                            type="button"
+                            onClick={() => {
+                              setPreviewSource("")
+                              setSelectedFile(null)
+                              setValue(name, null)
+                            }}
+                            className="mt-3 text-richblack-400 underline"
+                          > Cancel 
+                          </button>
+            }
           </div>
         ) : (
           <div
@@ -117,12 +117,6 @@ export default function Upload({
           </div>
         )}
       </div>
-      <button
-        onClick={() => inputRef.current && inputRef.current.click()}
-        className="text-richblack-300"
-      >
-        Open File Dialog
-      </button>
       {errors[name] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">
           {label} is required
