@@ -141,8 +141,8 @@ export default function SubSectionModal({modalData, setModalData, add = false, v
             setValue={setValue}
             errors={errors}
             video={true}
-            viewData={view ? modalData.videoUrl : null}
-            editData={edit ? modalData.videoUrl : null}
+            viewMode={view ? modalData.videoUrl : null}
+            editMode={edit ? modalData.videoUrl : null}
           />
           {/* Lecture Title */}
           <div className="flex flex-col space-y-2">

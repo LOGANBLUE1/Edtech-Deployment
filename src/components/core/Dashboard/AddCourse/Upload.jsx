@@ -12,13 +12,13 @@ export default function Upload({
   setValue,
   errors,
   video = false,
-  viewData = null,
-  editData = null,
+  viewMode = null,
+  editMode = null,
 }) {
   // const { course } = useSelector((state) => state.course)
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewSource, setPreviewSource] = useState(
-    viewData ? viewData : editData ? editData : ""
+    viewMode ?? editMode ?? ""
   )
   const inputRef = useRef(null)
 
@@ -51,6 +51,7 @@ export default function Upload({
 
   useEffect(() => {
     register(name)
+    register(name, { required: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [register])
 
@@ -62,7 +63,8 @@ export default function Upload({
   return (
     <div className="flex flex-col space-y-2">
       <label className="text-sm text-richblack-5" htmlFor={name}>
-        {label} {!viewData && <sup className="text-pink-200">*</sup>}
+        {/* In view mode don't show star */}
+        {label} {!viewMode && <sup className="text-pink-200">*</sup>}
       </label>
       <div
         className={`${
@@ -80,7 +82,7 @@ export default function Upload({
             ) : (
               <Player aspectRatio="16:9" playsInline src={previewSource} />
             )}
-            {!viewData && (
+            {!viewMode && (
               <button
                 type="button"
                 onClick={() => {
@@ -100,13 +102,13 @@ export default function Upload({
             {...getRootProps()}
           >
             <input {...getInputProps()} ref={inputRef} />
+
             <div className="grid aspect-square w-14 place-items-center rounded-full bg-pure-greys-800">
               <FiUploadCloud className="text-2xl text-yellow-50" />
             </div>
             <p className="mt-2 max-w-[200px] text-center text-sm text-richblack-200">
               Drag and drop an {!video ? "image" : "video"}, or click to{" "}
-              <span className="font-semibold text-yellow-50">Browse</span> a
-              file
+              <span className="font-semibold text-yellow-50">Browse</span> a file
             </p>
             <ul className="mt-10 flex list-disc justify-between space-x-12 text-center  text-xs text-richblack-200">
               <li>Aspect ratio 16:9</li>
@@ -115,6 +117,12 @@ export default function Upload({
           </div>
         )}
       </div>
+      <button
+        onClick={() => inputRef.current && inputRef.current.click()}
+        className="text-richblack-300"
+      >
+        Open File Dialog
+      </button>
       {errors[name] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">
           {label} is required
