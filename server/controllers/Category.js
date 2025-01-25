@@ -220,3 +220,49 @@ exports.categoryPageDetails = async (req, res) => {
     })
   }
 }
+
+exports.getCategoryCourses = async (req, res) => {
+  try {
+    const { categoryId } = req.body
+
+    const category = await Category.findById(categoryId)
+    .populate({
+      path: "courses",
+      match: { status: "Published" },
+      populate: [
+        { path: "instructor" },
+        { path: "ratingAndReviews" }
+      ]
+    })
+    .exec()
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    if (category.courses.length === 0) {
+      return res.status(200).json({
+        success: true,
+        name: category.name,
+        courses: [],
+        message: "No courses found for the selected category.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      name: category.name,
+      courses: category.courses,
+      message: "Courses fetched successfully for the selected category.",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};

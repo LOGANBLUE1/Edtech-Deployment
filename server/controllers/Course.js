@@ -19,21 +19,18 @@ exports.createCourse = async (req, res) => {
       courseDescription,
       whatYouWillLearn, 
       price,
-      tag: _tag, 
+      tag,
       category,
       status,
-      instructions: _instructions,
+      instructions
     } = req.body
-
-    // console.log("Body: ",req.body); // For normal form fields
-    // console.log("Files: ",req.files); // For file uploads (like `thumbnailImage`)
 
     // Get thumbnail image from request files
     const thumbnail = req.files?.thumbnailImage
 
     // Convert the tag and instructions from stringified Array to Array
-    const tag = _tag ? JSON.parse(_tag) : [];
-    const instructions = _instructions ? JSON.parse(_instructions) : [];
+    tag = tag ? JSON.parse(tag) : [];
+    instructions = instructions ? JSON.parse(instructions) : [];
 
     // Check if any of the required fields are missing
     if (
@@ -42,7 +39,7 @@ exports.createCourse = async (req, res) => {
       !whatYouWillLearn ||
       !price ||
       !tag.length ||
-      // !thumbnail ||
+      !thumbnail ||
       !category ||
       !instructions.length
     ) {
@@ -75,14 +72,11 @@ exports.createCourse = async (req, res) => {
       })
     }
     // Upload the Thumbnail to Cloudinary
-    let thumbnailImage
-    if(thumbnail){
-      thumbnailImage = await uploadImageToCloudinary(
-        thumbnail,
-        process.env.FOLDER_NAME
-      )
-      console.log("Uploaded image to cloudinary: ",thumbnailImage)
-    }
+    const thumbnailImage = await uploadImageToCloudinary(
+      thumbnail,
+      process.env.FOLDER_NAME
+    )
+    // console.log("Uploaded image to cloudinary: ",thumbnailImage)
     // Create a new course with the given details
     const newCourse = await Course.create({
       courseName,
@@ -92,7 +86,7 @@ exports.createCourse = async (req, res) => {
       price,
       tag,
       category: categoryDetails._id,
-      thumbnail: thumbnailImage?.secure_url,
+      thumbnail: thumbnailImage.secure_url,
       status,
       instructions,
     })
@@ -152,6 +146,8 @@ exports.editCourse = async (req, res) => {
       })
     }
 
+    let previousCategory;
+
     // If Thumbnail Image is found, update it
     if (req.files) {
       // console.log("thumbnail updating::")
@@ -169,12 +165,25 @@ exports.editCourse = async (req, res) => {
         if (key === "tag" || key === "instructions") {
           course[key] = JSON.parse(updates[key])
         } else {
+          if(key === "category")
+            previousCategory = course.category
           course[key] = updates[key]
         }
       }
     }
 
     await course.save()
+
+    // if category is changed change in Category Schema is needed
+    if (previousCategory) {
+      await Category.findByIdAndUpdate(previousCategory, {
+        $pull: { courses: course._id },
+      });
+
+      await Category.findByIdAndUpdate(course.category, {
+        $push: { courses: course._id },
+      });
+    }
 
     const updatedCourse = await Course.findOne({
       _id: courseId,
