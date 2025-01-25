@@ -51,7 +51,14 @@ exports.resetPasswordToken = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const { password, confirmPassword, token } = req.body;// get request from front-end
-
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
+      });
+    }
     if (confirmPassword !== password) {
       return res.json({
         success: false,
@@ -71,9 +78,8 @@ exports.resetPassword = async (req, res) => {
         message: `Token is Expired, Please Regenerate Your Token`,
       })
     }
+    
     const encryptedPassword = await bcrypt.hash(password, 10)
-    // console.log("ENCRYPTED PASSWORD: ", encryptedPassword)
-    // console.log("OLD PASSWORD: ",userDetails.password)
     if(encryptedPassword === userDetails.password){
       return res.status(403).json({
         success: false,
