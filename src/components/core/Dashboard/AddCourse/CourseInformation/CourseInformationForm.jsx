@@ -28,68 +28,65 @@ export default function CourseInformationForm() {
 
   const dispatch = useDispatch()
   const { token } = useSelector((state) => state.auth)
+  // only for editing course
   const { course, editCourse } = useSelector((state) => state.course)
   const [loading, setLoading] = useState(false)
   const [courseCategories, setCourseCategories] = useState([])
+  const [courseFree, setCourseFree] = useState(false);
+  const handleToggle = () => {
+    setCourseFree((prev) => !prev);
+    if (!courseFree) {
+      setValue("coursePrice", "0");
+    }
+  };
 
   useEffect(() => {
-    const getCategories = async () => {
+    //self invoking async function
+    (async () => {
       setLoading(true)
       const categories = await fetchCourseCategories()
       if (categories.length > 0) {
-        // console.log("categories", categories)
         setCourseCategories(categories)
       }
       setLoading(false)
-    }
-    // if form is in edit mode
+    })();
+
     if (editCourse) {
-      // console.log("data populated", editCourse)
       setValue("courseTitle", course.courseName)
       setValue("courseShortDesc", course.courseDescription)
       setValue("coursePrice", course.price)
       setValue("courseTags", course.tag)
       setValue("courseBenefits", course.whatYouWillLearn)
-      setValue("courseCategory", course.category)
+      setValue("courseCategory", course.category._id)
+    
       setValue("courseRequirements", course.instructions)
       setValue("courseImage", course.thumbnail)
     }
-    getCategories()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [])// on first render set the values from the
 
   const isFormUpdated = () => {
     const currentValues = getValues()
     // console.log("changes after editing form values:", currentValues)
-    if (
+    return (
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDesc !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
       currentValues.courseTags.toString() !== course.tag.toString() ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
       currentValues.courseCategory._id !== course.category._id ||
-      currentValues.courseRequirements.toString() !==
-        course.instructions.toString() ||
-      currentValues.courseImage !== course.thumbnail
-    ) {
-      return true
-    }
-    return false
+      currentValues.courseRequirements.toString() !== course.instructions.toString() ||
+      currentValues.courseImage !== course.thumbnail ||
+      currentValues.courseFree !== course.courseFree
+    )
   }
 
   //   handle next button click
   const onSubmit = async (data) => {
 
       if (editCourse) {
-          // const currentValues = getValues()
-          // console.log("changes after editing form values:", currentValues)
-          // console.log("now course:", course)
-          // console.log("Has Form Changed:", isFormUpdated())
           if (isFormUpdated()) {
               const currentValues = getValues()
               const formData = new FormData()
-              // console.log(data)
               formData.append("courseId", course._id)
               if (currentValues.courseTitle !== course.courseName) {
                 formData.append("courseName", data.courseTitle)
@@ -197,32 +194,49 @@ export default function CourseInformationForm() {
         )}
       </div>
 
-      {/* Course Price */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="coursePrice">
-          Course Price <sup className="text-pink-200">*</sup>
-        </label>
-        <div className="relative">
-          <input
-            id="coursePrice"
-            placeholder="Enter Course Price"
-            {...register("coursePrice", {
-              required: true,
-              valueAsNumber: true,
-              pattern: {
-                value: /^(0|[1-9]\d*)(\.\d+)?$/,
-              },
-            })}
-            className="form-style w-full !pl-12"
-          />
-          <HiOutlineCurrencyRupee className="absolute left-3 top-1/2 inline-block -translate-y-1/2 text-2xl text-richblack-400" />
+      <div className="flex items-center mb-4">
+        <label className="text-sm text-richblack-5 mr-2">Course Free:</label>
+        <div
+          className={`relative w-12 h-6 rounded-full cursor-pointer ${
+            courseFree ? "bg-green-500" : "bg-gray-400"
+          }`}
+          onClick={() => handleToggle()}
+        >
+          <div
+            className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${
+              courseFree ? "transform translate-x-6" : ""
+            }`}
+          ></div>
         </div>
-        {errors.coursePrice && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Course Price is required
-          </span>
-        )}
       </div>
+
+      {/* Course Price */}
+      { !courseFree && <div className="flex flex-col space-y-2">
+          <label className="text-sm text-richblack-5" htmlFor="coursePrice">
+            Course Price <sup className="text-pink-200">*</sup>
+          </label>
+          <div className="relative">
+            <input
+              id="coursePrice"
+              placeholder="Enter Course Price"
+              {...register("coursePrice", {
+                required: true,
+                valueAsNumber: true,
+                pattern: {
+                  value: /^(0|[1-9]\d*)(\.\d+)?$/,
+                },
+              })}
+              className="form-style w-full !pl-12"
+            />
+            <HiOutlineCurrencyRupee className="absolute left-3 top-1/2 inline-block -translate-y-1/2 text-2xl text-richblack-400" />
+          </div>
+          {errors.coursePrice && (
+            <span className="ml-2 text-xs tracking-wide text-pink-200">
+              Course Price is required
+            </span>
+          )}
+        </div>
+      }
 
       {/* Course Category */}
       <div className="flex flex-col space-y-2">
@@ -231,7 +245,7 @@ export default function CourseInformationForm() {
         </label>
         <select
           {...register("courseCategory", { required: true })}
-          defaultValue=""
+          value={getValues("courseCategory") || ""}
           id="courseCategory"
           className="form-style w-full"
         >
@@ -270,7 +284,7 @@ export default function CourseInformationForm() {
         register={register}
         setValue={setValue}
         errors={errors}
-        editData={editCourse ? course?.thumbnail : null}
+        editMode={editCourse ? course?.thumbnail : null}
       />
 
       {/* Benefits of the course */}

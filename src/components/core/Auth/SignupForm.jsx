@@ -85,7 +85,7 @@ function SignupForm({userType}) {
       id: 2,
       tabName: "Instructor",
       type: ACCOUNT_TYPE.INSTRUCTOR,
-    },
+    }
   ]
 
   return (
