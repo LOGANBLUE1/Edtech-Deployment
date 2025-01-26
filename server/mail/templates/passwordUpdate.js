@@ -1,6 +1,8 @@
 require("dotenv").config()
 
-exports.passwordUpdated = (email, name, baseurl=process.env.FRONTEND_URL??'https://edtech-website-tau.vercel.app') => {
+exports.passwordUpdated = (email, name, baseurl=process.env.FRONTEND_URL
+    // ??'https://edtech-website-tau.vercel.app'
+    ) => {
 	return `<!DOCTYPE html>
     <html>
     

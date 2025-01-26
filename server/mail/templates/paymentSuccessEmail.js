@@ -1,6 +1,8 @@
 require("dotenv").config()
 
-exports.paymentSuccessEmail = (name, amount, orderId, paymentId, baseurl=process.env.FRONTEND_URL??'https://edtech-website-tau.vercel.app') => {
+exports.paymentSuccessEmail = (name, amount, orderId, paymentId, baseurl=process.env.FRONTEND_URL
+    // ??'https://edtech-website-tau.vercel.app' 
+    ) => {
   return `<!DOCTYPE html>
     <html>
     

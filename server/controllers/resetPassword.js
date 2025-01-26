@@ -26,7 +26,7 @@ exports.resetPasswordToken = async (req, res) => {
     )
     // console.log("DETAILS", updatedDetails)
 
-    const url = `${process.env.FRONTEND_URL ?? 'https://edtech-website-tau.vercel.app'}/update-password/${token}`
+    const url = `${process.env.FRONTEND_URL}/update-password/${token}`
 
     await mailSender(
       email,
