@@ -19,7 +19,7 @@ exports.updateCourseProgress = async (req, res) => {
 
     // Find the course progress document for the user and course
     let courseProgress = await CourseProgress.findOne({
-      courseID: courseId,
+      courseId: courseId,
       userId: userId,
     })
 
@@ -66,11 +66,11 @@ exports.getProgressPercentage = async (req, res) => {
   try {
     // Find the course progress document for the user and course
     let courseProgress = await CourseProgress.findOne({
-      courseID: courseId,
+      courseId: courseId,
       userId: userId,
     })
       .populate({
-        path: "courseID",
+        path: "courseId",
         populate: {
           path: "courseContent",
         },

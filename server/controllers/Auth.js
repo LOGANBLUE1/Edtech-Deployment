@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
 const User = require("../models/User")
 const OTP = require("../models/OTP")
+const CourseProgress = require("../models/CourseProgress")
 const jwt = require("jsonwebtoken")
 const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
@@ -139,6 +140,18 @@ exports.login = async (req, res) => {
         else{
           //reactivate again
           user.active = true;
+          //create course progress for all courses
+          const courseProgressIds = await Promise.all(
+            user.courses.map(async (course) => {
+              const courseProgress = await CourseProgress.create({
+                userId: user._id,
+                courseId: course._id,
+                completedVideos: [],
+              });
+              return courseProgress._id;
+            })
+          )
+          user.courseProgress = courseProgressIds;
           await user.save();
         }
       }

@@ -3,6 +3,7 @@ const Category = require("../models/Category")
 const Section = require("../models/Section")
 const SubSection = require("../models/Subsection")
 const User = require("../models/User")
+const RatingAndReview = require('../models/RatingandReview')
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const CourseProgress = require("../models/CourseProgress")
 const convertSecondsToDuration = require("../utils/secToDuration")
@@ -338,7 +339,7 @@ exports.getFullCourseDetails = async (req, res) => {
       .exec()
 
     let courseProgressCount = await CourseProgress.findOne({
-      courseID: courseId,
+      courseId: courseId,
       userId: userId,
     })
 
@@ -423,13 +424,33 @@ exports.deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" })
     }
 
-    // Unenroll students from the course
-    const studentsEnrolled = course.studentsEnroled
+    // Unenroll students from the course and delete their progress
+    const studentsEnrolled = course.studentsEnrolled
     for (const studentId of studentsEnrolled) {
+      // Pulling the course from each user courses arr
       await User.findByIdAndUpdate(studentId, {
         $pull: { courses: courseId },
       })
+      // Remove the course progress of each user
+      const deletedProgress = await CourseProgress.findOneAndDelete({
+        userId: studentId,
+        courseId,
+      })
+      // pulling the course progress from  the user's courseProgress arr
+      if (deletedProgress) {
+        await User.findByIdAndUpdate(studentId, {
+          $pull: { courseProgress: deletedProgress._id }
+        })
+      }
+        
+      // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
     }
+    await RatingAndReview.deleteMany({course: courseId });
+
+    // Remove the course from the instructor
+    await User.findByIdAndUpdate(course.instructor, {
+      $pull: { courses: courseId },
+    })
 
     // Delete sections and sub-sections
     const courseSections = course.courseContent

@@ -9,6 +9,7 @@ const CourseProgress = require("../models/CourseProgress")
 exports.capturePayment = async (req, res) => {
     const { courses } = req.body
     const userId = req.user.id
+    const user = await User.findById(userId)
     if (!courses || courses.length === 0) {
       return res.json({ 
         success: false, 
@@ -33,8 +34,8 @@ exports.capturePayment = async (req, res) => {
         }
   
         // Check if the user is already enrolled in the course
-        const uid = new mongoose.Types.ObjectId(userId)
-        if (course.studentsEnroled.includes(uid)) {
+        // const uid = new mongoose.Types.ObjectId(userId)
+        if (user.courses.includes(course_id)) {
           return res.status(400).json({ 
             success: false, 
             message: "Student is already Enrolled" 
@@ -134,7 +135,7 @@ const enrollStudents = async (courses, userId, res) => {
         // Find the course and enroll the student in it
         const enrolledCourse = await Course.findOneAndUpdate(
           { _id: courseId },
-          { $push: { studentsEnroled: userId } },
+          { $push: { studentsEnrolled: userId } },
           { new: true }
         )
   
@@ -147,7 +148,7 @@ const enrollStudents = async (courses, userId, res) => {
         // console.log("Updated course: ", enrolledCourse.courseName)
   
         const courseProgress = await CourseProgress.create({
-          courseID: courseId,
+          courseId: courseId,
           userId: userId,
           completedVideos: [],
         })

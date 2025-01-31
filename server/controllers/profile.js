@@ -76,7 +76,10 @@ exports.deleteAccount = async (req, res) => {
       })
     }
     // makes user inactive
-    await User.findByIdAndUpdate(id, { active: false }, { new: true });
+    user.active = false
+    user.courseProgress = []
+    await user.save()
+    
     // deletes course progress of user
     await CourseProgress.deleteMany({ userId: id })
 
@@ -187,7 +190,7 @@ exports.getEnrolledCourses = async (req, res) => {
           userDetails.courses[i].courseContent[j].subSection.length
       }
       let courseProgressCount = await CourseProgress.findOne({
-        courseID: userDetails.courses[i]._id,
+        courseId: userDetails.courses[i]._id,
         userId: userId,
       })
       courseProgressCount = courseProgressCount?.completedVideos.length
@@ -220,7 +223,7 @@ exports.instructorDashboard = async (req, res) => {
     const courseDetails = await Course.find({ instructor: req.user.id })
 
     const courseData = courseDetails.map((course) => {
-      const totalStudentsEnrolled = course.studentsEnroled.length
+      const totalStudentsEnrolled = course.studentsEnrolled.length
       const totalAmountGenerated = totalStudentsEnrolled * course.price
 
       // Create a new object with the additional fields
