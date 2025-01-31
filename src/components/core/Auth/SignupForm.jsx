@@ -8,6 +8,7 @@ import { sendOtp } from "../../../services/operations/authAPI"
 import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 import Tab from "../../Common/Tab"
+import google from "../../../assets/Logo/gogole.png";
 
 function SignupForm({userType}) {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ function SignupForm({userType}) {
       {/* Form */}
       <form onSubmit={handleOnSubmit} className="flex w-full flex-col gap-y-4">
         <div className="flex gap-x-4">
-          <label>
+          <label className="w-full">
             <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
               First Name <sup className="text-pink-200">*</sup>
             </p>
@@ -109,7 +110,7 @@ function SignupForm({userType}) {
               className="form-style w-full"
             />
           </label>
-          <label>
+          <label className="w-full">
             <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
               Last Name <sup className="text-pink-200">*</sup>
             </p>
@@ -188,6 +189,15 @@ function SignupForm({userType}) {
             </span>
           </label>
         </div>
+
+        <button
+          type="submit"
+          className="flex justify-center items-center mt-6 rounded-[8px] py-[8px] px-[12px] font-medium text-richblack-5 border border-richblack-500"
+        >
+          <img src={google} alt="google logo" className="h-7 px-2"/>
+          Continue with Google
+        </button>
+
         <button
           type="submit"
           className="mt-6 rounded-[8px] bg-yellow-50 py-[8px] px-[12px] font-medium text-richblack-900"

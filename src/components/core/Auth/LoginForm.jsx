@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 
 import { login } from "../../../services/operations/authAPI"
+import google from "../../../assets/Logo/gogole.png";
 
 function LoginForm() {
   const navigate = useNavigate()
@@ -77,6 +78,13 @@ function LoginForm() {
           </p>
         </Link>
       </label>
+      <button
+          type="submit"
+          className="flex justify-center items-center mt-6 rounded-[8px] py-[8px] px-[12px] font-medium text-richblack-5 border border-richblack-500"
+        >
+          <img src={google} alt="google logo" className="h-7 px-2"/>
+          Continue with Google
+        </button>
       <button
         type="submit"
         className="mt-6 rounded-[8px] bg-yellow-50 py-[8px] px-[12px] font-medium text-richblack-900"

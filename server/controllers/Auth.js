@@ -6,6 +6,7 @@ const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
 const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
+const { use } = require("react")
 require("dotenv").config()
 
 exports.signup = async (req, res) => {
@@ -71,9 +72,6 @@ exports.signup = async (req, res) => {
     
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let approved = accountType === "Instructor";
-
-    // Create the Additional Profile For User
     const profileDetails = await Profile.create({
       gender: null,
       dateOfBirth: null,
@@ -87,7 +85,8 @@ exports.signup = async (req, res) => {
       email,
       password: hashedPassword,
       accountType,
-      approved,
+      active:true,
+      approved:false,
       additionalDetails: profileDetails._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
     })
@@ -129,17 +128,26 @@ exports.login = async (req, res) => {
     }
 
     if (await bcrypt.compare(password, user.password)) {
+      // check if user is inactive
+      if (!user.active) {
+        if (Date.now() - new Date(user.updatedAt).getTime() > 30 * 24 * 60 * 60 * 1000) {
+          return res.status(401).json({
+            success: false,
+            message: `User is Inactive for more than 30 days. Please contact Admin`
+          });
+        }
+        else{
+          //reactivate again
+          user.active = true;
+          await user.save();
+        }
+      }
 
       const payload = { email: user.email, id: user._id, accountType: user.accountType };
       const token = jwt.sign( payload,
           process.env.JWT_SECRET,
           {expiresIn: "24h"}
       );
-      // Save token to user document in database
-      user.token = token;
-      // await user.save();
-
-      user.password = undefined;   // returning empty pass in response
     
       //creating cookie
       const options = {
@@ -202,7 +210,7 @@ exports.sendotp = async (req, res) => {
       result = await OTP.findOne({ otp });
     } while (result);
 
-    // const otpPayload = { email, otp };//for storing in db
+    //for storing in db
     const otpBody = await OTP.create({ email, otp });
 
     res.status(200).json({

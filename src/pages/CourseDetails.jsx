@@ -12,7 +12,7 @@ import CourseAccordionBar from "../components/core/Course/CourseAccordionBar"
 import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import { formatDate } from "../services/formatDate"
 import { fetchCourseDetails } from "../services/operations/courseDetailsAPI"
-import { BuyCourse } from "../services/operations/studentFeaturesAPI"
+import { BuyCourse, BuyFreeCourse } from "../services/operations/studentFeaturesAPI"
 import GetAvgRating from "../utils/avgRating"
 import Error from "./Error"
 
@@ -94,7 +94,7 @@ function CourseDetails() {
 
   const handleBuyCourse = () => {
     if (token) {
-      BuyCourse(token, [courseId], user, navigate, dispatch)
+      BuyFreeCourse(token, [courseId], user, navigate, dispatch)
       return
     }
     setConfirmationModal({

@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-    token: {                           //for resetting password
+    token: {                           
       type: String,
     },
     resetPasswordExpires: {                 //token expiry time
@@ -60,7 +60,6 @@ const userSchema = new mongoose.Schema(
         ref: "courseProgress",
       },
     ],
-
     // Add timestamps for when the document is created and last modified
   },
   { timestamps: true }

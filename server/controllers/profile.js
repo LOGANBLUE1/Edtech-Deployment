@@ -75,26 +75,15 @@ exports.deleteAccount = async (req, res) => {
         message: "User not found",
       })
     }
-    // Delete Assosiated Profile with the User
-    await Profile.findByIdAndDelete({
-      _id: new mongoose.Types.ObjectId(user.additionalDetails),
-    })
-    // await Profile.findByIdAndDelete(user.additionalDetails); is this works?..................
+    // makes user inactive
+    await User.findByIdAndUpdate(id, { active: false }, { new: true });
+    // deletes course progress of user
+    await CourseProgress.deleteMany({ userId: id })
 
-    for (const courseId of user.courses) {
-      await Course.findByIdAndUpdate(
-        courseId,
-        { $pull: { studentsEnroled: id } },
-        { new: true }
-      )
-    }
-    // Now Delete User
-    await User.findByIdAndDelete({ _id: id })
     res.status(200).json({
       success: true,
       message: "User deleted successfully",
     })
-    await CourseProgress.deleteMany({ userId: id })
   } catch (error) {
     console.log(error)
     res.status(500).json({ 
@@ -174,7 +163,15 @@ exports.getEnrolledCourses = async (req, res) => {
         },
       })
       .exec()
+
+    if (!userDetails) {
+      return res.status(400).json({
+        success: false,
+        message: `Could not find user with id: ${userDetails}`,
+      })
+    }
     userDetails = userDetails.toObject()
+
     var SubsectionLength = 0
     for (var i = 0; i < userDetails.courses.length; i++) {
       let totalDurationInSeconds = 0
@@ -206,12 +203,6 @@ exports.getEnrolledCourses = async (req, res) => {
       }
     }
 
-    if (!userDetails) {
-      return res.status(400).json({
-        success: false,
-        message: `Could not find user with id: ${userDetails}`,
-      })
-    }
     return res.status(200).json({
       success: true,
       data: userDetails.courses,

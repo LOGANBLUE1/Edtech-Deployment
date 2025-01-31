@@ -39,6 +39,7 @@ function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.profile)
+  const {mode} = useSelector((state) => state.mode)
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -49,7 +50,7 @@ function App() {
   }, [])
 
   return (
-    <div className="flex min-h-screen w-screen flex-col bg-richblack-900 font-inter">
+    <div className={`flex min-h-screen w-screen flex-col ${mode?`bg-richblack-900`:`bg-richwhite-900`} font-inter`}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -100,8 +101,7 @@ function App() {
         />
 
         {/* Private Route - for Only Logged in User */}
-        <Route
-          element={
+        <Route element={
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>

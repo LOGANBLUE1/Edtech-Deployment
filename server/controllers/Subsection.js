@@ -119,9 +119,10 @@ exports.deleteSubSection = async (req, res) => {
     const subSection = await SubSection.findByIdAndDelete({ _id: subSectionId })
 
     if (!subSection) {
-      return res
-        .status(404)
-        .json({ success: false, message: "SubSection not found" })
+      return res.status(404).json({ 
+        success: false,
+        message: "SubSection not found"
+      })
     }
 
     // find updated section and return it

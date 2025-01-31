@@ -13,7 +13,10 @@ exports.auth = async (req, res, next) => {
 
 		// If JWT is missing, return 401 Unauthorized response
 		if (!token) {
-			return res.status(401).json({ success: false, message: `Token Missing unable to authenticate` });
+			return res.status(401).json({ 
+				success: false,
+				message: `Token Missing unable to authenticate` 
+			});
 		}
 
 		try {
@@ -54,9 +57,10 @@ exports.isStudent = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ success: false, message: `User Role Can't be Verified` });
+		return res.status(500).json({ 
+			success: false, 
+			message: `User Role Can't be Verified` 
+		});
 	}
 };
 
@@ -72,9 +76,10 @@ exports.isAdmin = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ success: false, message: `User Role Can't be Verified` });
+		return res.status(500).json({ 
+			success: false, 
+			message: `User Role Can't be Verified` 
+		});
 	}
 };
 
@@ -93,8 +98,9 @@ exports.isInstructor = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ success: false, message: `User Role Can't be Verified` });
+		return res.status(500).json({ 
+			success: false, 
+			message: `User Role Can't be Verified` 
+		});
 	}
 };
