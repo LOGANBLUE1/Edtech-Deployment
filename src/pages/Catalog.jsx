@@ -13,39 +13,19 @@ function Catalog() {
   const [active, setActive] = useState(1)
   
   const [catalogPageData, setCatalogPageData] = useState(null)
-  const [categoryId, setCategoryId] = useState("")
 
   useEffect(() => {
-    ;(async () => {
-      if(catalogName === 'all'){
-        setCategoryId('all')
-      }
-      else{
-        try {
-          const categories = await getAllCategories()
-          const category_id = categories?.find(
-            (ct) => ct._id === catalogName
-          )._id || 'all'
-          setCategoryId(category_id)
-        } catch (error) {
-          console.log("Could not fetch Categories.", error)
-        }
-      }
-    })()
-  }, [catalogName])
-
-  useEffect(() => {
-    if (categoryId) {
+    if (catalogName) {
       ;(async () => {
         try {
-          const res = await getCatalogPageData(categoryId)
+          const res = await getCatalogPageData(catalogName)
           setCatalogPageData(res)
         } catch (error) {
           console.log(error)
         }
       })()
     }
-  }, [categoryId])
+  }, [catalogName])
 
   if (loading || !catalogPageData) {
     return (
@@ -81,8 +61,8 @@ function Catalog() {
       {/* Section 1 */}
       <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
         {catalogName === 'all' ? 
-          (<div className="section_heading">All courses from a category</div>):
-          (<div className="section_heading">Courses to get you started</div>)
+          <div className="section_heading"> All courses from a category </div> :
+          <div className="section_heading"> Courses to get you started </div>
         }
         <div className="my-4 flex border-b border-b-richblack-600 text-sm">
           <p

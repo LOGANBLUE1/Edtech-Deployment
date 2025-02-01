@@ -48,9 +48,7 @@ export const fetchCourseDetails = async (courseId) => {
   //   dispatch(setLoading(true));
   let result = null
   try {
-    const response = await apiConnector("POST", COURSE_DETAILS_API, {
-      courseId,
-    })
+    const response = await apiConnector("GET", COURSE_DETAILS_API+`/${courseId}`)
     // console.log("COURSE_DETAILS_API API RESPONSE............", response)
 
     if (!response.success) {
@@ -66,24 +64,6 @@ export const fetchCourseDetails = async (courseId) => {
     toast.dismiss(toastId)
   }
   //   dispatch(setLoading(false));
-  return result
-}
-
-// fetching the available course categories
-export const fetchCourseCategories = async () => {
-  let result = []
-  try {
-    const response = await apiConnector("GET", COURSE_CATEGORIES_API)
-    // console.log("COURSE_CATEGORIES_API API RESPONSE............", response)
-    if (!response?.success) {
-      toast.error("Could Not Fetch Course Categories")
-      return
-    }
-    result = response?.data
-  } catch (error) {
-    console.log("COURSE_CATEGORY_API API ERROR............", error)
-    toast.error(error.message)
-  }
   return result
 }
 
@@ -315,6 +295,7 @@ export const fetchInstructorCourses = async (token) => {
 export const deleteCourse = async (data, token) => {
   const toastId = toast.loading("Loading...")
   try {
+    // console.log("delete course data", data, token, DELETE_COURSE_API)
     const response = await apiConnector("DELETE", DELETE_COURSE_API, data, {
       Authorization: `Bearer ${token}`,
     })
