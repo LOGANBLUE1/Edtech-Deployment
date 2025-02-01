@@ -22,10 +22,10 @@ function Catalog() {
       }
       else{
         try {
-          const res = await getAllCategories()
-          const category_id = res?.filter(
-            (ct) => ct.name.split(" ").join("-").replace("/", ".").toLowerCase() === catalogName
-          )[0]._id
+          const categories = await getAllCategories()
+          const category_id = categories?.find(
+            (ct) => ct._id === catalogName
+          )._id || 'all'
           setCategoryId(category_id)
         } catch (error) {
           console.log("Could not fetch Categories.", error)
