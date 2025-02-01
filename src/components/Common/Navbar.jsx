@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsChevronDown } from "react-icons/bs"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import { Link, matchPath, useLocation } from "react-router-dom"
-import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
+
 import logo from "../../assets/Logo/Logo-Full-Light.png"
 import { NavbarLinks } from "../../data/navbar-links"
 import { apiConnector } from "../../services/apiConnector"
 import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
 import ProfileDropdown from "../core/Auth/ProfileDropdown"
-import { setMode } from "../../slices/modeSlice"
-import onClickOutside from "react-onclickoutside"
 
 function Navbar() {
-  const dispatch = useDispatch();
-
   const { token } = useSelector((state) => state.auth)// if logged in
   const { user } = useSelector((state) => state.profile)// if student
-  const darkMode = useSelector((state) => state.mode.mode);
   const { totalItems } = useSelector((state) => state.cart)
   const location = useLocation()
+
   const [subLinks, setSubLinks] = useState([])
   const [loading, setLoading] = useState(false)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const switchModes = () => {
-    dispatch(setMode(!darkMode));
-  };
-
-  Navbar.handleClickOutside = () => setDropdownOpen(false)
 
   useEffect(() => {
     ;(async () => {
@@ -50,11 +40,8 @@ function Navbar() {
   return (
     <div
       className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ${
-        // location.pathname !== "/" ? "bg-richblack-800" : 
-        ""
-      } 
-      ${darkMode ? "" : "bg-white"}
-      transition-all duration-200`}
+        location.pathname !== "/" ? "bg-richblack-800" : ""
+      } transition-all duration-200`}
     >
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
         {/* Logo */}
@@ -121,19 +108,8 @@ function Navbar() {
         </nav>
 
 
-        {/* Dark Mode / Login / Signup / Dashboard */}
+        {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
-          <button
-            className={`h-10 w-10 bg-richblack-800 rounded-full cursor-pointer ${
-              darkMode ? `bg-black` : `bg-white`
-            }`}
-            onClick={() => switchModes(!darkMode)}
-          >
-            <div className="flex items-center justify-center h-full w-full">
-              {darkMode ? <MdOutlineDarkMode className="text-white" /> : <MdOutlineLightMode />}
-            </div>
-          </button>
-
           {user && user?.accountType === ACCOUNT_TYPE.STUDENT && (// Cart
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
@@ -146,14 +122,14 @@ function Navbar() {
           )}
           {!token && (
             <Link to="/login">
-              <button className={`rounded-[8px] border ${matchRoute('/login') ?`border-richblack-200`:`border-richblack-700 `} bg-richblack-800 px-[12px] py-[8px] text-richblack-100`}>
+              <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
                 Log in
               </button>
             </Link>
           )}
           {!token && (
             <Link to="/signup">
-              <button className={`rounded-[8px] border ${matchRoute('/signup') ?`border-richblack-200`:`border-richblack-700`} bg-richblack-800 px-[12px] py-[8px] text-richblack-100`}>
+              <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
                 Sign up
               </button>
             </Link>
@@ -163,8 +139,7 @@ function Navbar() {
           
         </div>
         {/* TODO: Show login and pass */}
-        <button className="mr-4 md:hidden"
-          onClick={() => setDropdownOpen(!dropdownOpen)}>
+        <button className="mr-4 md:hidden">
           <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
         </button>
       </div>
