@@ -22,9 +22,10 @@ database.connect();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(
 	cors({
-		origin: "*",
+		origin: "https://edtech-website-tau.vercel.app",
 		credentials: true
 	})
 );
