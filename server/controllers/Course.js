@@ -257,7 +257,7 @@ exports.getAllCourses = async (req, res) => {
 exports.getCourseDetails = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const courseDetails = await Course.findOne({
+    const course = await Course.findOne({
       _id: courseId,
     })
       .populate({
@@ -277,14 +277,14 @@ exports.getCourseDetails = async (req, res) => {
       })
       .exec()
 
-    if (!courseDetails) {
+    if (!course) {
       return res.status(400).json({
         success: false,
         message: `Could not find course with id: ${courseId}`,
       })
     }
 
-    // if (courseDetails.status === "Draft") {
+    // if (course.status === "Draft") {
     //   return res.status(403).json({
     //     success: false,
     //     message: `Accessing a draft course is forbidden`,
@@ -292,7 +292,7 @@ exports.getCourseDetails = async (req, res) => {
     // }
 
     let totalDurationInSeconds = 0
-    courseDetails.courseContent.forEach((content) => {
+    course.courseContent.forEach((content) => {
       content.subSection.forEach((subSection) => {
         const timeDurationInSeconds = parseInt(subSection.timeDuration)
         totalDurationInSeconds += timeDurationInSeconds
@@ -302,7 +302,7 @@ exports.getCourseDetails = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      courseDetails,
+      course,
       totalDuration,
     })
   } catch (error) {

@@ -41,7 +41,7 @@ function CourseDetails() {
 
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
-    const count = GetAvgRating(response?.courseDetails.ratingAndReviews)
+    const count = GetAvgRating(response?.course.ratingAndReviews)
     setAvgReviewCount(count)
   }, [response])
   
@@ -61,7 +61,7 @@ function CourseDetails() {
   const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
   useEffect(() => {
     let lectures = 0
-    response?.courseDetails?.courseContent?.forEach((sec) => {
+    response?.course?.courseContent?.forEach((sec) => {
       lectures += sec.subSection.length || 0
     })
     setTotalNoOfLectures(lectures)
@@ -90,7 +90,7 @@ function CourseDetails() {
     instructor,
     studentsEnrolled,
     createdAt,
-  } = response.courseDetails
+  } = response.course
 
   const handleBuyCourse = () => {
     if (token) {
@@ -174,7 +174,7 @@ function CourseDetails() {
           {/* Courses Card */}
           <div className="right-[1rem] top-[60px] mx-auto hidden min-h-[600px] w-1/3 max-w-[410px] translate-y-24 md:translate-y-0 lg:absolute  lg:block">
             <CourseDetailsCard
-              course={response?.courseDetails}
+              course={response?.course}
               setConfirmationModal={setConfirmationModal}
               handleBuyCourse={handleBuyCourse}
             />
