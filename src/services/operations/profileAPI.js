@@ -25,8 +25,7 @@ export function getUserDetails(token, navigate) {
         throw new Error(response.message)
       }
       const userImage = response.data.image
-        ? response.data.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.firstName} ${response.data.lastName}`
+        ?? `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.firstName} ${response.data.lastName}`
       dispatch(setUser({ ...response.data, image: userImage }))
     } catch (error) {
       dispatch(logout(navigate))
