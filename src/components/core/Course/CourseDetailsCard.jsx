@@ -10,7 +10,7 @@ import { addToCart } from "../../../slices/cartSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 
 
-function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
+function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse, avgStarsCount }) {
   const { user } = useSelector((state) => state.profile)
   const { token } = useSelector((state) => state.auth)
   const navigate = useNavigate()
@@ -18,8 +18,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
 
   const {
     thumbnail: ThumbnailImage,
-    price: CurrentPrice,
-    _id: courseId,
+    price: CurrentPrice
   } = course
 
   const handleShare = () => {
@@ -33,6 +32,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
       return
     }
     if (token) {
+      course.avgStarsCount = avgStarsCount
       dispatch(addToCart(course))
       return
     }
@@ -77,6 +77,7 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
                 ? "Go To Course"
                 : "Buy Now"}
             </button>
+
             {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
               <button onClick={handleAddToCart} className="blackButton">
                 Add to Cart

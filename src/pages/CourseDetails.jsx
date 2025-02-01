@@ -39,10 +39,10 @@ function CourseDetails() {
     })()
   }, [courseId])
 
-  const [avgReviewCount, setAvgReviewCount] = useState(0)
+  const [avgStarsCount, setavgStarsCount] = useState(0)
   useEffect(() => {
     const count = GetAvgRating(response?.course.ratingAndReviews)
-    setAvgReviewCount(count)
+    setavgStarsCount(count)
   }, [response])
   
   // // Collapse all
@@ -139,8 +139,8 @@ function CourseDetails() {
               </div>
               <p className={`text-richblack-200`}>{courseDescription}</p>
               <div className="text-md flex flex-wrap items-center gap-2">
-                <span className="text-yellow-25">{avgReviewCount}</span>
-                <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
+                <span className="text-yellow-25">{avgStarsCount}</span>
+                <RatingStars Review_Count={avgStarsCount} Star_Size={24} />
                 <span>{`(${ratingAndReviews.length} reviews)`}</span>
                 <span>{`${studentsEnrolled.length} students enrolled`}</span>
               </div>
@@ -177,6 +177,7 @@ function CourseDetails() {
               course={response?.course}
               setConfirmationModal={setConfirmationModal}
               handleBuyCourse={handleBuyCourse}
+              avgStarsCount={avgStarsCount}
             />
           </div>
         </div>
