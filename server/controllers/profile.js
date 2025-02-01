@@ -4,8 +4,8 @@ const CourseProgress = require("../models/CourseProgress")
 const Course = require("../models/Course")
 const User = require("../models/User")
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
-const mongoose = require("mongoose")
 const convertSecondsToDuration = require("../utils/secToDuration")
+const RatingandReview = require("../models/RatingandReview")
 
 
 
@@ -243,5 +243,41 @@ exports.instructorDashboard = async (req, res) => {
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server Error" })
+  }
+}
+
+
+exports.deleteUserPermantly = async (req, res) => {
+  try {
+    const {id} = req.body
+    // console.log("Printing id to be deleted: ",id)
+    const user = await User.findById({ _id: id })
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+    
+    await Profile.findByIdAndDelete(user.additionalDetails)
+    await CourseProgress.deleteMany({ userId: id })
+    await RatingandReview.deleteMany({ user: id })
+    await Course.updateMany(
+      { studentsEnrolled: id },
+      { $pull: { studentsEnrolled: id } }
+    );
+
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ 
+      success: false, 
+      message: "User Cannot be deleted successfully" 
+    })
   }
 }

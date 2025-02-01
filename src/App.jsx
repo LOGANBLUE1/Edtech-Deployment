@@ -40,14 +40,14 @@ function App() {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.profile)
   const {mode} = useSelector((state) => state.mode)
+  const {token} = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = JSON.parse(localStorage.getItem("token"))
+    if (token) {
       dispatch(getUserDetails(token, navigate))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
 
   return (
     <div className={`flex min-h-screen w-screen flex-col ${mode?`bg-richblack-900`:`bg-richwhite-900`} font-inter`}>
