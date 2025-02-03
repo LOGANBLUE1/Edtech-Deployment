@@ -94,7 +94,10 @@ function CourseDetails() {
 
   const handleBuyCourse = () => {
     if (token) {
-      BuyFreeCourse(token, [courseId], user, navigate, dispatch)
+      // if(price > 0)
+      //   BuyCourse(token, [courseId], user, navigate, dispatch)
+      // else
+        BuyFreeCourse(token, [courseId], user, navigate, dispatch)
       return
     }
     setConfirmationModal({
