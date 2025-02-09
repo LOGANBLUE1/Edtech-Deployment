@@ -5,7 +5,7 @@ const Course = require("../models/Course")
 const User = require("../models/User")
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const convertSecondsToDuration = require("../utils/secToDuration")
-const RatingandReview = require("../models/RatingandReview")
+const RatingandReview = require("../models/RatingAndReview")
 
 
 exports.updateProfile = async (req, res) => {
@@ -248,7 +248,6 @@ exports.instructorDashboard = async (req, res) => {
 exports.deleteUserPermantly = async (req, res) => {
   try {
     const {id} = req.body
-    // console.log("Printing id to be deleted: ",id)
     const user = await User.findById({ _id: id })
     if (!user) {
       return res.status(404).json({
@@ -256,17 +255,13 @@ exports.deleteUserPermantly = async (req, res) => {
         message: "User not found",
       })
     }
-    
-    await Profile.findByIdAndDelete(user.additionalDetails)
-    await CourseProgress.deleteMany({ userId: id })
-    await RatingandReview.deleteMany({ user: id })
-    await Course.updateMany(
-      { studentsEnrolled: id },
-      { $pull: { studentsEnrolled: id } }
-    );
+
     await User.findByIdAndDelete(id);
+    // The middleware takes care of cascading deletes for you.
+
     res.status(200).json({
       success: true,
+      email: user.email,
       message: "User deleted successfully",
     })
   } catch (error) {

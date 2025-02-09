@@ -34,16 +34,17 @@ import VerifyEmail from "./pages/VerifyEmail"
 import ViewCourse from "./pages/ViewCourse"
 import { getUserDetails } from "./services/operations/profileAPI"
 import { ACCOUNT_TYPE } from "./utils/constants"
+import Controls from "./components/core/Dashboard/AdminControls"
 
 function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.profile)
   const {mode} = useSelector((state) => state.mode)
+  const {token} = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = JSON.parse(localStorage.getItem("token"))
+    if (token) {
       dispatch(getUserDetails(token, navigate))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +111,7 @@ function App() {
           
             {/* Route for all users */}
             <Route path="dashboard/my-profile" element={<MyProfile />} />
-            <Route path="dashboard/Settings" element={<Settings />} />
+            <Route path="dashboard/settings" element={<Settings />} />
             {/* Route only for Instructors */}
             {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
               <>
@@ -133,7 +134,10 @@ function App() {
                 <Route path="/dashboard/cart" element={<Cart />} />
               </>
             )}
-            <Route path="dashboard/settings" element={<Settings />} />
+            {/* Route only for Admin */}
+            {user?.accountType === ACCOUNT_TYPE.ADMIN && (
+            <Route path="dashboard/controls" element={<Controls />} />)}
+            
         </Route>
 
         {/* For the watching course lectures */}

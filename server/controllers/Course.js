@@ -1,12 +1,13 @@
 const Course = require("../models/Course")
 const Category = require("../models/Category")
 const Section = require("../models/Section")
-const SubSection = require("../models/Subsection")
+const SubSection = require('../models/SubSection')
 const User = require("../models/User")
-const RatingAndReview = require('../models/RatingandReview')
+const RatingAndReview = require('../models/RatingAndReview')
 const { uploadImageToCloudinary } = require("../utils/imageUploader")
 const CourseProgress = require("../models/CourseProgress")
 const convertSecondsToDuration = require("../utils/secToDuration")
+const { COURSE_STATUS } = require("../utils/constants")
 
 
 // Function to create a new course
@@ -284,7 +285,7 @@ exports.getCourseDetails = async (req, res) => {
       })
     }
 
-    // if (course.status === "Draft") {
+    // if (course.status === COURSE_STATUS.DRAFT) {
     //   return res.status(403).json({
     //     success: false,
     //     message: `Accessing a draft course is forbidden`,
@@ -350,7 +351,7 @@ exports.getFullCourseDetails = async (req, res) => {
       })
     }
 
-    // if (courseDetails.status === "Draft") {
+    // if (courseDetails.status === COURSE_STATUS.DRAFT) {
     //   return res.status(403).json({
     //     success: false,
     //     message: `Accessing a draft course is forbidden`,
@@ -425,55 +426,55 @@ exports.deleteCourse = async (req, res) => {
     }
 
     // Unenroll students from the course and delete their progress
-    const studentsEnrolled = course.studentsEnrolled
-    for (const studentId of studentsEnrolled) {
-      // Pulling the course from each user courses arr
-      await User.findByIdAndUpdate(studentId, {
-        $pull: { courses: courseId },
-      })
-      // Remove the course progress of each user
-      const deletedProgress = await CourseProgress.findOneAndDelete({
-        userId: studentId,
-        courseId,
-      })
-      // pulling the course progress from  the user's courseProgress arr
-      if (deletedProgress) {
-        await User.findByIdAndUpdate(studentId, {
-          $pull: { courseProgress: deletedProgress._id }
-        })
-      }
+    // const studentsEnrolled = course.studentsEnrolled
+    // for (const studentId of studentsEnrolled) {
+    //   // Pulling the course from each user courses arr
+    //   await User.findByIdAndUpdate(studentId, {
+    //     $pull: { courses: courseId },
+    //   })
+    //   // Remove the course progress of each user
+    //   const deletedProgress = await CourseProgress.findOneAndDelete({
+    //     userId: studentId,
+    //     courseId,
+    //   })
+    //   // pulling the course progress from  the user's courseProgress arr
+    //   if (deletedProgress) {
+    //     await User.findByIdAndUpdate(studentId, {
+    //       $pull: { courseProgress: deletedProgress._id }
+    //     })
+    //   }
         
-      // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
-    }
-    await RatingAndReview.deleteMany({course: courseId });
+    //   // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
+    // }
+    // await RatingAndReview.deleteMany({course: courseId });
 
-    // Remove the course from the instructor
-    await User.findByIdAndUpdate(course.instructor, {
-      $pull: { courses: courseId },
-    })
+    // // Remove the course from the instructor
+    // await User.findByIdAndUpdate(course.instructor, {
+    //   $pull: { courses: courseId },
+    // })
 
-    // Delete sections and sub-sections
-    const courseSections = course.courseContent
-    for (const sectionId of courseSections) {
-      // Delete sub-sections of the section
-      const section = await Section.findById(sectionId)
-      if (section) {
-        const subSections = section.subSection
-        for (const subSectionId of subSections) {
-          await SubSection.findByIdAndDelete(subSectionId)
-        }
-      }
+    // // Delete sections and sub-sections
+    // const courseSections = course.courseContent
+    // for (const sectionId of courseSections) {
+    //   // Delete sub-sections of the section
+    //   const section = await Section.findById(sectionId)
+    //   if (section) {
+    //     const subSections = section.subSection
+    //     for (const subSectionId of subSections) {
+    //       await SubSection.findByIdAndDelete(subSectionId)
+    //     }
+    //   }
 
-      // Delete the section
-      await Section.findByIdAndDelete(sectionId)
-    }
+    //   // Delete the section
+    //   await Section.findByIdAndDelete(sectionId)
+    // }
+
+    // //remotve the course from the category
+    // await Category.findByIdAndUpdate(course.category, {
+    //   $pull: { courses: courseId}})
 
     // Delete the course
     await Course.findByIdAndDelete(courseId)
-
-    //remotve the course from the category
-    await Category.findByIdAndUpdate(course.category, {
-      $pull: { courses: courseId}})
 
     return res.status(200).json({
       success: true,

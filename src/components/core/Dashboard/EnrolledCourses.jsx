@@ -4,6 +4,7 @@ import { useSelector } from "react-redux"
 import { useNavigate, Link } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI"
+import { COURSE_STATUS } from "../../../../server/utils/constants"
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth)
@@ -16,7 +17,7 @@ export default function EnrolledCourses() {
       try {
         const res = await getUserEnrolledCourses(token) // Getting all the published and the drafted courses
         // Filtering the published course out
-        const filterPublishCourse = res.filter((ele) => ele.status !== "Draft")
+        const filterPublishCourse = res.filter((ele) => ele.status !== COURSE_STATUS.DRAFT)
         // console.log(
         //   "Viewing all the couse that is Published",
         //   filterPublishCourse

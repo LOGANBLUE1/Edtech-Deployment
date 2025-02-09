@@ -110,9 +110,8 @@ export function login(
 
       toast.success("Login Successful")
       dispatch(setToken(response.token))
-      const userImage = response?.user?.image
-        ? response.user.image
-        : `https://api.dicebear.com/5.x/initials/svg?seed=${response.user.firstName} ${response.user.lastName}`
+      const userImage = response?.user?.image ??
+        `https://api.dicebear.com/5.x/initials/svg?seed=${response.user.firstName} ${response.user.lastName}`
       
       dispatch(setUser({ ...response.user, image: userImage }))
       localStorage.setItem("token", JSON.stringify(response.token))

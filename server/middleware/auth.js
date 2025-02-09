@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const { ACCOUNT_TYPE } = require("../utils/constants");
 require("dotenv").config();
 
 // This function is used as middleware to authenticate user requests
@@ -49,7 +50,7 @@ exports.isStudent = async (req, res, next) => {
 	try {
 		const userDetails = await User.findOne({ email: req.user.email });
 
-		if (userDetails.accountType !== "Student") {
+		if (userDetails.accountType !== ACCOUNT_TYPE.STUDENT) {
 			return res.status(401).json({
 				success: false,
 				message: "This is a Protected Route for Students",
@@ -68,7 +69,7 @@ exports.isAdmin = async (req, res, next) => {
 	try {
 		const userDetails = await User.findOne({ email: req.user.email });
 
-		if (userDetails.accountType !== "Admin") {
+		if (userDetails.accountType !== ACCOUNT_TYPE.ADMIN) {
 			return res.status(401).json({
 				success: false,
 				message: "This is a Protected Route for Admin",
@@ -90,7 +91,7 @@ exports.isInstructor = async (req, res, next) => {
 
 		// console.log("Account type: "userDetails.accountType);
 
-		if (userDetails.accountType !== "Instructor") {
+		if (userDetails.accountType !== ACCOUNT_TYPE.INSTRUCTOR) {
 			return res.status(401).json({
 				success: false,
 				message: "This is a Protected Route for Instructor",

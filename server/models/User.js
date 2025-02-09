@@ -1,4 +1,8 @@
 const mongoose = require("mongoose")
+const Profile = require('./Profile');
+const CourseProgress = require('./CourseProgress');
+const RatingandReview = require('./RatingAndReview');
+const Course = require('./Course');
 
 const userSchema = new mongoose.Schema(
   {
@@ -64,5 +68,28 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 )
+
+userSchema.pre('findOneAndDelete', async function (next) {
+  try {
+    // 'this' refers to the current query.
+    const user = await this.model.findOne(this.getFilter());
+    if (user) {
+      await Profile.findByIdAndDelete(user.additionalDetails);
+
+      await CourseProgress.deleteMany({ userId: user._id });
+
+      await RatingandReview.deleteMany({ user: user._id });
+
+      // Update courses by removing the user from studentsEnrolled
+      await Course.updateMany(
+        { studentsEnrolled: user._id },
+        { $pull: { studentsEnrolled: user._id } }
+      );
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mongoose.model("user", userSchema);

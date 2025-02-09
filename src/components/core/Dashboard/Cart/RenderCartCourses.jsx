@@ -31,10 +31,8 @@ export default function RenderCartCourses() {
                 {course?.category?.name}
               </p>
               <div className="flex items-center gap-2">
-                <span className="text-yellow-5">4.5</span>
-                <RatingStars
-                  Review_Count={4.5}
-                />
+              <span className="text-yellow-5">{course?.avgStarsCount}</span>
+              <RatingStars Review_Count={course?.avgStarsCount}/>
                 <span className="text-richblack-400">
                   {course?.ratingAndReviews?.length} Ratings
                 </span>
