@@ -113,18 +113,14 @@ exports.deleteSection = async (req, res) => {
         message: "Section not found",
       })
     }
-    // Delete the associated subsections
-    await SubSection.deleteMany({ _id: { $in: section.subSection } })
 
+    //sub section deletion is taken care in cascading
     await Section.findByIdAndDelete(sectionId)
 
     // find the updated course and return it
     const course = await Course.findById(courseId)
       .populate({
         path: "courseContent",
-        populate: {
-          path: "subSection",
-        },
       })
       .exec()
 

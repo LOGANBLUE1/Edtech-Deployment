@@ -1,10 +1,15 @@
-export const ACCOUNT_TYPE = {
-    STUDENT: "Student",
-    INSTRUCTOR: "Instructor",
-    ADMIN: "Admin",
-  }
-  
-  export const COURSE_STATUS = {
-    DRAFT: "Draft",
-    PUBLISHED: "Published",
-  }
+const ACCOUNT_TYPE = {
+  STUDENT: "Student",
+  INSTRUCTOR: "Instructor",
+  ADMIN: "Admin",
+}
+
+const COURSE_STATUS = {
+  DRAFT: "Draft",
+  PUBLISHED: "Published",
+}
+
+module.exports = {
+  ACCOUNT_TYPE,
+  COURSE_STATUS,
+};

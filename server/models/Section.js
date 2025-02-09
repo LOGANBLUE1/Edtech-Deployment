@@ -13,4 +13,16 @@ const sectionSchema = new mongoose.Schema({
 	],
 });
 
+sectionSchema.pre('findOneAndDelete', async function (next) {
+	try {
+	  const section = await this.model.findOne(this.getFilter());
+	  if (section) {
+		await mongoose.model('SubSection').deleteMany({ _id: { $in: section.subSection } });
+	  }
+	  next();
+	} catch (err) {
+	  next(err);
+	}
+});
+
 module.exports = mongoose.model("Section", sectionSchema);

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import { useNavigate, Link } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI"
-import { COURSE_STATUS } from "../../../../server/utils/constants"
+import { COURSE_STATUS } from "../../../utils/constants"
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth)
