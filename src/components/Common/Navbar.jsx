@@ -88,7 +88,7 @@ function Navbar() {
                         </div>
                       </div>
                     </>
-                  ) : (
+                  ) : ((!user || user?.accountType !== ACCOUNT_TYPE.ADMIN) &&
                     <Link to={link?.path}>
                       <p
                         className={`${

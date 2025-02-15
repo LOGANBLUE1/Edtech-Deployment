@@ -1,14 +1,13 @@
 const express = require("express")
 const router = express.Router()
-const { auth, isInstructor, isAdmin } = require("../middleware/auth")
+const { auth, isInstructor } = require("../middleware/auth")
 const {
   deleteAccount,
   updateProfile,
   getAllUserDetails,
   updateDisplayPicture,
   getEnrolledCourses,
-  instructorDashboard,
-  deleteUserPermantly
+  instructorDashboard
 } = require("../controllers/profile")
 
 // ********************************************************************************************************
@@ -22,12 +21,5 @@ router.get("/getUserDetails", auth, getAllUserDetails)
 router.get("/getEnrolledCourses", auth, getEnrolledCourses)
 router.put("/updateDisplayPicture", auth, updateDisplayPicture)
 router.get("/instructorDashboard", auth, isInstructor, instructorDashboard)
-
-
-// ********************************************************************************************************
-//                                      Admin routes
-// ********************************************************************************************************
-// Delet User Account Permanently
-router.delete("/deleteUserPermanently", auth, isAdmin, deleteUserPermantly)
 
 module.exports = router

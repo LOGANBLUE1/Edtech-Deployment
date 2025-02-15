@@ -70,3 +70,7 @@ export const settingsEndpoints = {
   CHANGE_PASSWORD_API: BASE_URL + "/auth/changepassword",
   DELETE_PROFILE_API: BASE_URL + "/profile/deleteProfile",
 }
+
+export const adminEndpoints = {
+  DELETE_PROFILE_PERMANENTLY_API: BASE_URL + "/admin/deleteUserPermanently"
+}

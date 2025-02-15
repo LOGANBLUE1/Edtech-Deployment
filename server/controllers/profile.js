@@ -245,10 +245,10 @@ exports.instructorDashboard = async (req, res) => {
   }
 }
 
-exports.deleteUserPermantly = async (req, res) => {
+exports.deleteUserPermanently = async (req, res) => {
   try {
-    const {id} = req.body
-    const user = await User.findById({ _id: id })
+    const {userId} = req.body
+    const user = await User.findById({ _id: userId })
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -256,7 +256,7 @@ exports.deleteUserPermantly = async (req, res) => {
       })
     }
 
-    await User.findByIdAndDelete(id);
+    await User.findByIdAndDelete(userId);
     // The middleware takes care of cascading deletes for you.
 
     res.status(200).json({
