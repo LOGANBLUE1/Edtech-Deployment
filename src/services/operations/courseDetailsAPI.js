@@ -377,24 +377,24 @@ export const markLectureAsComplete = async (data, token) => {
 // create a rating for course
 export const createRating = async (data, token) => {
   const toastId = toast.loading("Loading...")
-  let success = false
+  // let success = false
   try {
     const response = await apiConnector("POST", CREATE_RATING_API, data, {
       Authorization: `Bearer ${token}`,
     })
     // console.log("CREATE RATING API RESPONSE............", response)
     if (!response?.success) {
-      toast.error(response.message)
+      toast.error(response?.message)
       return
     }
-    toast.success("Rating Created")
-    success = true
+    toast.success(response.message)
+    // success = true
   } catch (error) {
-    success = false
+    // success = false
     console.log("CREATE RATING API ERROR............", error)
     toast.error(error.message)
   } finally {
     toast.dismiss(toastId)
   }
-  return success
+  // return success
 }
