@@ -20,7 +20,6 @@ const {
 // Categories Controllers Import
 const {
   showAllCategories,
-  createCategory,
   categoryPageDetails,
   getCategoryCourses
 } = require("../controllers/caterory")
@@ -50,7 +49,7 @@ const {
   getProgressPercentage,
 } = require("../controllers/courseProgress")
 // Importing Middlewares
-const { auth, isInstructor, isStudent, isAdmin } = require("../middleware/auth")
+const { auth, isInstructor, isStudent } = require("../middleware/auth")
 
 // ********************************************************************************************************
 //                                      Course routes
@@ -91,7 +90,6 @@ router.delete("/deleteCourse", deleteCourse)
 //                                      Category routes (Only by Admin)
 // ********************************************************************************************************
 
-router.post("/createCategory", auth, isAdmin, createCategory)
 router.get("/showAllCategories", showAllCategories)
 router.post("/getCategoryPageDetails", categoryPageDetails)// changed to post
 router.post("/getCategoryCourses", getCategoryCourses)// changed to post

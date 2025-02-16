@@ -31,11 +31,11 @@ export default function DeleteUser() {
                         Delete a User
                     </p>
                     <p className="text-sm text-richblack-300">
-                        /deleteUserPermanently
+                        /admin/deleteUserPermanently
                     </p>
                 </div>
             </div>
-            <div>
+            <div className="flex gap-5">
                 <input
                     required
                     type="text"
@@ -45,11 +45,11 @@ export default function DeleteUser() {
                     placeholder="Enter user ID"
                     className="form-style w-full"
                 />
+                <IconBtn
+                    text="Execute"
+                    onclick={deleteUser}
+                />
             </div>
-            <IconBtn
-                text="Execute"
-                onclick={deleteUser}
-            />
         </div>
     );
 }

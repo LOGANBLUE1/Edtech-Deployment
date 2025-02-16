@@ -72,5 +72,7 @@ export const settingsEndpoints = {
 }
 
 export const adminEndpoints = {
-  DELETE_PROFILE_PERMANENTLY_API: BASE_URL + "/admin/deleteUserPermanently"
+  DELETE_PROFILE_PERMANENTLY_API: BASE_URL + "/admin/deleteUserPermanently",
+  CREATE_CATEGORY_API: BASE_URL + "/admin/createCategory",
+  GET_ALL_USER_EMAILS: BASE_URL + "/admin/users"
 }
