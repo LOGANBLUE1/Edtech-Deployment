@@ -422,58 +422,37 @@ exports.deleteCourse = async (req, res) => {
     // Find the course
     const course = await Course.findById(courseId)
     if (!course) {
-      return res.status(404).json({ message: "Course not found" })
+      return res.status(404).json({ 
+        status:false,
+        message: "Course not found" 
+      })
     }
 
     // Unenroll students from the course and delete their progress
-    // const studentsEnrolled = course.studentsEnrolled
-    // for (const studentId of studentsEnrolled) {
-    //   // Pulling the course from each user courses arr
-    //   await User.findByIdAndUpdate(studentId, {
-    //     $pull: { courses: courseId },
-    //   })
-    //   // Remove the course progress of each user
-    //   const deletedProgress = await CourseProgress.findOneAndDelete({
-    //     userId: studentId,
-    //     courseId,
-    //   })
-    //   // pulling the course progress from  the user's courseProgress arr
-    //   if (deletedProgress) {
-    //     await User.findByIdAndUpdate(studentId, {
-    //       $pull: { courseProgress: deletedProgress._id }
-    //     })
-    //   }
+    for (const studentId of course.studentsEnrolled) {
+      // Pulling the course from each user courses arr
+      await User.findByIdAndUpdate(studentId, {
+        $pull: { courses: courseId },
+      })
+      // Remove the course progress of each user
+      const deletedProgress = await CourseProgress.findOneAndDelete({
+        userId: studentId,
+        courseId,
+      })
+      // pulling the course progress from  the user's courseProgress arr
+      if (deletedProgress) {
+        await User.findByIdAndUpdate(studentId, {
+          $pull: { courseProgress: deletedProgress._id }
+        })
+      }
         
-    //   // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
-    // }
-    // await RatingAndReview.deleteMany({course: courseId });
+      // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
+    }
+    await User.findByIdAndUpdate(course.instructor, {
+      $pull: { courses: courseId },
+    })
 
-    // // Remove the course from the instructor
-    // await User.findByIdAndUpdate(course.instructor, {
-    //   $pull: { courses: courseId },
-    // })
-
-    // // Delete sections and sub-sections
-    // const courseSections = course.courseContent
-    // for (const sectionId of courseSections) {
-    //   // Delete sub-sections of the section
-    //   const section = await Section.findById(sectionId)
-    //   if (section) {
-    //     const subSections = section.subSection
-    //     for (const subSectionId of subSections) {
-    //       await SubSection.findByIdAndDelete(subSectionId)
-    //     }
-    //   }
-
-    //   // Delete the section
-    //   await Section.findByIdAndDelete(sectionId)
-    // }
-
-    // //remotve the course from the category
-    // await Category.findByIdAndUpdate(course.category, {
-    //   $pull: { courses: courseId}})
-
-    // Delete the course
+    // Delete the course and rest will be cascading
     await Course.findByIdAndDelete(courseId)
 
     return res.status(200).json({

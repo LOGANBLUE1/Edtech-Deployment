@@ -48,5 +48,12 @@ export const sidebarLinks = [
     path: "/dashboard/controls",
     type: ACCOUNT_TYPE.ADMIN,
     icon: "VscArchive",
+  },
+  {
+    id: 8,
+    name: "Hit API",
+    path: "/dashboard/hitapi",
+    type: ACCOUNT_TYPE.ADMIN,
+    icon: "VscArchive",
   }
 ]
