@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Profile = require('./Profile');
 const CourseProgress = require('./CourseProgress');
-const RatingandReview = require('./RatingAndReview');
+const RatingAndReview = require('./RatingAndReview');
 const Course = require('./Course');
 
 const userSchema = new mongoose.Schema(
@@ -78,7 +78,7 @@ userSchema.pre('findOneAndDelete', async function (next) {
 
       await CourseProgress.deleteMany({ userId: user._id });
 
-      await RatingandReview.deleteMany({ user: user._id });
+      await RatingAndReview.deleteMany({ user: user._id });
 
       // Update courses by removing the user from studentsEnrolled
       await Course.updateMany(

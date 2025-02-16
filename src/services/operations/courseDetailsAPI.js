@@ -308,9 +308,9 @@ export const deleteCourse = async (data, token) => {
   } catch (error) {
     console.log("DELETE COURSE API ERROR............", error)
     toast.error(error.message)
-    } finally {
-  }toast.dismiss
-  (toastId)
+  } finally {
+    toast.dismiss(toastId)
+  }
 }
 
 // get full details of a course
