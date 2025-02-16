@@ -59,7 +59,7 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
             />
           </div>
           <div className="flex flex-col">
-            <p>{courseEntireData?.courseName}</p>
+            <p className="cursor-pointer" onClick={() => navigate(`/courses/${courseEntireData._id}`)}>{courseEntireData?.courseName}</p>
             <p className="text-sm font-semibold text-richblack-500">
               {completedLectures?.length} / {totalNoOfLectures}
             </p>

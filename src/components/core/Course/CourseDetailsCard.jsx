@@ -28,8 +28,8 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
   }
 
   const handleAddToCart = () => {
-    if (user && user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
-      toast.error("You are an Instructor. You can't buy a course.")
+    if (user && user?.accountType !== ACCOUNT_TYPE.STUDENT) {
+      toast.error(`You are an ${user.accountType}. You can't buy a course.`)
       return
     }
     if (token) {
@@ -65,19 +65,20 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
             Rs. {CurrentPrice}
           </div>
           <div className="flex flex-col gap-4">
-            <button
-              className="yellowButton"
-              onClick={
-                user && course?.studentsEnrolled.includes(user?._id)
-                  ? () => navigate("/dashboard/enrolled-courses")
-                  : handleBuyCourse
-              }
-            >
-              {user && course?.studentsEnrolled.includes(user?._id)
-                ? "Go To Course"
-                : "Buy Now"}
-            </button>
-            {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
+            {user && user.accountType === ACCOUNT_TYPE.STUDENT && 
+              <button
+                className="yellowButton"
+                onClick={user.courses.includes(course?._id)
+                    ? () => navigate("/dashboard/enrolled-courses")
+                    : handleBuyCourse
+                }
+              >
+                {user.courses.includes(course?._id)
+                  ? "Go To Course"
+                  : "Buy Now"}
+              </button>
+            }
+            {user && user.accountType===ACCOUNT_TYPE.STUDENT && !user.courses.includes(course?._id) && (
               <button onClick={handleAddToCart} className="blackButton">
                 Add to Cart
               </button>
