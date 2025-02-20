@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import CTAButton from '../../core/HomePage/Button'
 import ProgressBar from "@ramonak/react-progress-bar"
 import { useSelector } from "react-redux"
 import { useNavigate, Link } from "react-router-dom"
@@ -42,10 +43,12 @@ export default function EnrolledCourses() {
         <p className="grid h-[10vh] w-full place-content-center text-richblack-5">
           You have not enrolled in any course yet.
           {/* TODO: Modify this Empty State */}
-          <Link to={`/catalog/all`}
-              className="rounded-lg w-12 bg-transparent p-2 text-richblack-100 hover:bg-richblack-50">
-                <p>Add</p>
-            </Link>
+          <div className="flex justify-center my-4">
+            <CTAButton active={false} linkto={"/catalog/all"} className>
+              <div className="text-xl">+</div>
+            </CTAButton>
+            <p>Add courses</p>
+          </div>
         </p>
       ) : (
         <div className="my-8 text-richblack-5">
@@ -100,6 +103,12 @@ export default function EnrolledCourses() {
               </div>
             </div>
           ))}
+          <div className="flex flex-col items-center my-4">
+            <CTAButton active={false} linkto={"/catalog/all"} className>
+              <div className="text-xl">+</div>
+            </CTAButton>
+            <p className="text-xs pt-1">Add courses</p>
+          </div>
         </div>
       )}
     </>

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import CTAButton from "../../../core/HomePage/Button"
 import RenderCartCourses from "./RenderCartCourses"
 import RenderTotalAmount from "./RenderTotalAmount"
 
@@ -26,14 +26,13 @@ export default function Cart() {
           <RenderTotalAmount />
         </div>
       ) : (
-        <div className="flex flex-col items-center">
-          <p className="mt-14 text-center text-3xl text-richblack-100">
+        <div className="flex flex-col items-center text-richblack-100 gap-2">
+          <p className="mt-14 text-center text-3xl">
             Your cart is empty
           </p>
-          <Link to={`/catalog/all`}
-            className="rounded-lg bg-transparent p-2 text-richblack-100 hover:bg-richblack-50">
-              <p>Add</p>
-          </Link>
+          <CTAButton active={false} linkto={"/catalog/all"} className>
+            <div className="text-xl">+</div>
+          </CTAButton>
         </div>
       )}
     </>
