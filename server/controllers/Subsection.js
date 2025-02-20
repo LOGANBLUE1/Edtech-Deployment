@@ -40,7 +40,7 @@ exports.createSubSection = async (req, res) => {
     // Return the updated section in the response
     return res.status(200).json({ 
       success: true, 
-      updatedSection 
+      data: updatedSection 
     })
   } catch (error) {
     // Handle any errors that may occur during the process

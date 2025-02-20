@@ -50,7 +50,7 @@ exports.updateProfile = async (req, res) => {
     return res.json({
       success: true,
       message: "Profile updated successfully",
-      updatedUserDetails,
+      data: updatedUserDetails,
     });
   } catch (error) {
     console.log(error);
@@ -95,7 +95,7 @@ exports.deleteAccount = async (req, res) => {
   }
 }
 
-exports.getAllUserDetails = async (req, res) => {
+exports.getCompleteUserDetails = async (req, res) => {
   try {
     const id = req.user.id
     const userDetails = await User.findById(id)
@@ -174,14 +174,14 @@ exports.getEnrolledCourses = async (req, res) => {
     }
     userDetails = userDetails.toObject()
 
-    var SubsectionLength = 0
-    for (var i = 0; i < userDetails.courses.length; i++) {
+
+    let SubsectionLength = 0
+    for (let i = 0; i < userDetails.courses.length; i++) {//All courses
       let totalDurationInSeconds = 0
       SubsectionLength = 0
-      for (var j = 0; j < userDetails.courses[i].courseContent.length; j++) {
-        totalDurationInSeconds += userDetails.courses[i].courseContent[
-          j
-        ].subSection.reduce((acc, curr) => acc + parseInt(curr.timeDuration), 0)
+      for (let j = 0; j < userDetails.courses[i].courseContent.length; j++) {//All sections
+        totalDurationInSeconds += userDetails.courses[i].courseContent[j]
+          .subSection.reduce((acc, curr) => acc + parseInt(curr.timeDuration), 0)
         userDetails.courses[i].totalDuration = convertSecondsToDuration(
           totalDurationInSeconds
         )
@@ -197,11 +197,9 @@ exports.getEnrolledCourses = async (req, res) => {
         userDetails.courses[i].progressPercentage = 100
       } else {
         // To make it up to 2 decimal point
-        const multiplier = Math.pow(10, 2)
-        userDetails.courses[i].progressPercentage =
-          Math.round(
-            (courseProgressCount / SubsectionLength) * 100 * multiplier
-          ) / multiplier
+        const precision = 2;
+        const progressPercentage = (courseProgressCount / SubsectionLength) * 100;
+        userDetails.courses[i].progressPercentage = parseFloat(progressPercentage.toFixed(precision));
       }
     }
 
@@ -238,7 +236,10 @@ exports.instructorDashboard = async (req, res) => {
       return courseDataWithStats
     })
 
-    res.status(200).json({ courses: courseData })
+    res.status(200).json({ 
+      success: true,
+      data: courseData
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Server Error" })

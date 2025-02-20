@@ -4,7 +4,7 @@ const { auth, isInstructor } = require("../middleware/auth")
 const {
   deleteAccount,
   updateProfile,
-  getAllUserDetails,
+  getCompleteUserDetails,
   updateDisplayPicture,
   getEnrolledCourses,
   instructorDashboard
@@ -16,7 +16,7 @@ const {
 // Delet User Account
 router.delete("/deleteProfile", auth, deleteAccount)
 router.put("/updateProfile", auth, updateProfile)
-router.get("/getUserDetails", auth, getAllUserDetails)
+router.get("/getUserDetails", auth, getCompleteUserDetails)
 // Get Enrolled Courses
 router.get("/getEnrolledCourses", auth, getEnrolledCourses)
 router.put("/updateDisplayPicture", auth, updateDisplayPicture)

@@ -58,13 +58,12 @@ export const fetchCourseDetails = async (courseId) => {
     result = response
   } catch (error) {
     console.log("COURSE_DETAILS_API API ERROR............", error)
-    result = error.response
     // toast.error(error.response.message);
   } finally {
     toast.dismiss(toastId)
   }
-  //   dispatch(setLoading(false));
   return result
+  //   dispatch(setLoading(false));
 }
 
 // add the course details
@@ -85,7 +84,7 @@ export const addCourseDetails = async (data, token) => {
       return
     }
     toast.success("Course Details Added Successfully")
-    result = response?.newCourse
+    result = response?.data
   } catch (error) {
     console.log("CREATE COURSE API ERROR............", error)
     toast.error(error.message)
@@ -134,7 +133,7 @@ export const createSection = async (data, token) => {
       return
     }
     toast.success("Course Section Created")
-    result = response?.updatedCourse
+    result = response?.data
   } catch (error) {
     console.log("CREATE SECTION API ERROR............", error)
     toast.error(error.message)
@@ -158,7 +157,7 @@ export const createSubSection = async (data, token) => {
       return
     }
     toast.success("Lecture Added")
-    result = response?.updatedSection
+    result = response?.data
   } catch (error) {
     console.log("CREATE SUB-SECTION API ERROR............", error)
     toast.error(error.message)
@@ -338,7 +337,6 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
     result = response?.data
   } catch (error) {
     console.log("COURSE_FULL_DETAILS_API API ERROR............", error)
-    result = error.response
     // toast.error(error.response.message);
   } finally {
     toast.dismiss(toastId)

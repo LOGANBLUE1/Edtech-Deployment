@@ -223,12 +223,11 @@ exports.sendotp = async (req, res) => {
     } while (result);
 
     //for storing in db
-    const otpBody = await OTP.create({ email, otp });
+    await OTP.create({ email, otp });
 
     res.status(200).json({
       success: true,
       message: `OTP Sent Successfully`,
-      otp
     });
   } catch (error) {
     console.log("Problem with otp sending", error.message)
@@ -327,7 +326,8 @@ exports.getAllEmails = async (req, res) => {
     }
     res.status(200).json({
       success: true,
-      Emails,
+      message: "Emails fetched successfully",
+      data: Emails,
     })
   } catch (error) {
     return res.status(500).json({

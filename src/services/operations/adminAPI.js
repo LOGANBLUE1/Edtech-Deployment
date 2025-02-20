@@ -12,7 +12,7 @@ export const deleteUserPermanently = async (token, userId) => {
         const response = await apiConnector("DELETE", DELETE_PROFILE_PERMANENTLY_API, {userId: userId}, {
             Authorization: `Bearer ${token}`,
         })
-        // console.log("DELETE_PROFILE_API API RESPONSE............", response)
+        // console.log("DELETE_PROFILE_API RESPONSE............", response)
 
         if (!response.success) {
             toast.error(response.message)
@@ -21,7 +21,7 @@ export const deleteUserPermanently = async (token, userId) => {
         toast.success("(A) Profile Deleted Successfully")
         return response
     } catch (error) {
-        console.log("DELETE_PROFILE_API API ERROR............", error)
+        console.log("DELETE_PROFILE_API ERROR............", error)
         toast.error("(A) Could Not Delete Profile")
     } finally {
         toast.dismiss(toastId)
