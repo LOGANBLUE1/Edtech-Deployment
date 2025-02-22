@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import { toast } from "react-hot-toast"
 import IconBtn from "../../../Common/IconBtn";
 import { deleteUserPermanently } from "../../../../services/operations/adminAPI";
+import ControlsTemplate from "./ControlsTemplate";
 
 export default function DeleteUser() {
     const { token } = useSelector((state) => state.auth)
@@ -24,32 +25,19 @@ export default function DeleteUser() {
     }
 
     return (
-        <div className="flex items-center justify-between rounded-md border-[1px] border-richblack-700 bg-richblack-800 p-8 px-12">
-            <div className="flex items-center gap-x-4">
-                <div className="space-y-1">
-                    <p className="text-lg font-semibold text-richblack-5">
-                        Delete a User
-                    </p>
-                    <p className="text-sm text-richblack-300">
-                        /admin/deleteUserPermanently
-                    </p>
-                </div>
-            </div>
-            <div className="flex gap-5">
+        <ControlsTemplate onSubmit={deleteUser} text="Delete a User" url="/admin/deleteUserPermanently">
+            <div className="flex justify-start items-center gap-x-2">
+                <label htmlFor="userId" className="text-richblack-300">User ID:</label>
                 <input
                     required
                     type="text"
                     name="userId"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    placeholder="Enter user ID"
-                    className="form-style w-full"
-                />
-                <IconBtn
-                    text="Execute"
-                    onclick={deleteUser}
+                    placeholder="Enter userId"
+                    className="form-style"
                 />
             </div>
-        </div>
+        </ControlsTemplate>
     );
 }

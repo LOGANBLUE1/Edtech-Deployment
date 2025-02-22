@@ -41,6 +41,46 @@ exports.createCategory = async (req, res) => {
   }
 }
 
+exports.deleteCategory = async (req, res) => {
+  try {
+    const { id, name } = req.body;
+
+    if (!id && !name) {
+      return res.status(400).json({
+        success: false,
+        message: "Category ID or name is required",
+      });
+    }
+
+    let category;
+    if (id) {
+      category = await Category.findById(id);
+    } else if (name) {
+      category = await Category.findOne({ name: name });
+    }
+
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+    }
+
+    await Category.deleteOne({ _id: category._id });
+
+    return res.status(200).json({
+      success: true,
+      message: "Category deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 exports.showAllCategories = async (req, res) => {
   try {
     const allCategorys = await Category.find()
@@ -189,19 +229,7 @@ exports.categoryPageDetails = async (req, res) => {
         })
         .exec()
 
-        // Handle the case when there are no courses
-      if (selectedCategory.courses.length === 0) {
-        return res.status(200).json({
-          success: true,
-          data: {
-            selectedCategory,
-            differentCategory,
-            mostSellingCourses,
-          },
-          message: "No courses found for the selected category.",
-        })
-      }
-
+      // Handle the case when there are no courses
       res.status(200).json({
         success: true,
         data: {
@@ -209,7 +237,9 @@ exports.categoryPageDetails = async (req, res) => {
           differentCategory,
           mostSellingCourses,
         },
-        message: "Category page details fetched successfully.",
+        message: selectedCategory.courses.length === 0 ? 
+          "No courses found for the selected category." :
+          "Category page details fetched successfully."
       })
     }
   } catch (error) {
