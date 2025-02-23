@@ -100,6 +100,7 @@ export function login(
         email,
         password,
       })
+      console.log("Backend Url: ", LOGIN_API);
 
       // console.log("LOGIN API RESPONSE............", response)
 
