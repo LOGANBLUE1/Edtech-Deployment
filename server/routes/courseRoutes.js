@@ -22,7 +22,7 @@ const {
   showAllCategories,
   categoryPageDetails,
   getCategoryCourses
-} = require("../controllers/caterory")
+} = require("../controllers/category")
 
 // Sections Controllers Import
 const {
@@ -36,7 +36,7 @@ const {
   createSubSection,
   updateSubSection,
   deleteSubSection,
-} = require('../controllers/subSection')
+} = require('../controllers/subsection')
 
 // Rating Controllers Import
 const {
