@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Profile = require('./Profile');
 const CourseProgress = require('./CourseProgress');
-const RatingAndReview = require('./RatingAndReview');
+const RatingAndReview = require('./RatingandReview');
 const Course = require('./Course');
 
 const userSchema = new mongoose.Schema(
