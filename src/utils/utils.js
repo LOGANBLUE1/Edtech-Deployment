@@ -11,3 +11,9 @@ export default function GetAvgRating(ratingArr) {
 
   return avgReviewCount
 }
+
+export const allowOnlyAlphabet = (e) => {
+  if (!/[a-zA-Z]/.test(e.key)) {
+    e.preventDefault();
+  }
+};

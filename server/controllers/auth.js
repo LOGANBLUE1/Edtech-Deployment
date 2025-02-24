@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
       });
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         success: false,
@@ -121,7 +121,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(401).json({
+      return res.status(404).json({
         success: false,
         message: `User is not Registered with Us Please SignUp to Continue`
       })
@@ -264,7 +264,7 @@ exports.changePassword = async (req, res) => {
       })
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
     if (!passwordRegex.test(newPassword)) {
       return res.status(400).json({
         success: false,

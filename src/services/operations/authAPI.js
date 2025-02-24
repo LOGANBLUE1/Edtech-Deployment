@@ -5,6 +5,7 @@ import { resetCart } from "../../slices/cartSlice"
 import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiConnector"
 import { endpoints } from "../apis"
+import { HttpStatusCode } from "axios"
 
 const {
   SENDOTP_API,
@@ -100,12 +101,14 @@ export function login(
         email,
         password,
       })
-      console.log("Backend Url: ", LOGIN_API);
+      console.log("Backend Url: ", process.env.REACT_APP_BASE_URL);
 
       // console.log("LOGIN API RESPONSE............", response)
 
       if (!response.success) {
         toast.error(response.message);
+        if(response.status === HttpStatusCode.NotFound)
+          navigate("/signup")
         return;
       }
 

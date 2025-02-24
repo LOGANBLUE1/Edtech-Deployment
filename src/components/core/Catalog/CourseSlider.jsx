@@ -11,7 +11,7 @@ import "swiper/css/pagination"
 import { FreeMode, Pagination } from "swiper"
 
 // import { getAllCourses } from "../../services/operations/courseDetailsAPI"
-import Course_Card from "./Course_Card"
+import Course_Card from "./CourseCard"
 
 function Course_Slider({ courses }) {
   return (

@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-
+import { allowOnlyAlphabet } from "../../../utils/utils"
 import { sendOtp } from "../../../services/operations/authAPI"
 import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
@@ -29,7 +29,7 @@ function SignupForm({userType}) {
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
   // Password regex
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
 
   // Handle input fields, when some value changes
   const handleOnChange = (e) => {
@@ -108,6 +108,7 @@ function SignupForm({userType}) {
               onChange={handleOnChange}
               placeholder="Enter first name"
               className="form-style w-full"
+              onKeyDown={allowOnlyAlphabet}
             />
           </label>
           <label className="w-full">
@@ -122,6 +123,7 @@ function SignupForm({userType}) {
               onChange={handleOnChange}
               placeholder="Enter last name"
               className="form-style w-full"
+              onKeyDown={allowOnlyAlphabet}
             />
           </label>
         </div>

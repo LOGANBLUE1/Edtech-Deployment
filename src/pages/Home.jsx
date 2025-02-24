@@ -21,9 +21,14 @@ function Home() {
     <div>
       {/* Section 1 */}
       <div className="relative mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 text-white">
+        <div className="text-center text-4xl font-semibold mt-16">
+          Empower Your Future with
+          <HighlightText text={"Coding Skills"} />
+        </div>
+
         {/* Become a Instructor Button */}
         <Link to={`/signup?user=${ACCOUNT_TYPE.INSTRUCTOR}`}>
-          <div className="group mx-auto mt-16 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
+          <div className="group mx-auto  w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
             <div className="flex flex-row items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
               <p>Become an Instructor</p>
               <FaArrowRight />
@@ -32,11 +37,7 @@ function Home() {
         </Link>
 
         {/* Heading */}
-        <div className="text-center text-4xl font-semibold">
-          Empower Your Future with
-          <HighlightText text={"Coding Skills"} />
-        </div>
-
+        
         {/* Sub Heading */}
         <div className="-mt-3 w-[90%] text-center text-lg font-bold text-richblack-300">
           With our online coding courses, you can learn at your own pace, from
@@ -137,7 +138,7 @@ function Home() {
           <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
             <div className="lg:h-[150px]"></div>
             <div className="flex flex-row gap-7 text-white lg:mt-8">
-              <CTAButton active={true} linkto={"/signup"}>
+              <CTAButton active={true} linkto={"/catalog/all"}>
                 <div className="flex items-center gap-2">
                   Explore Full Catalog
                   <FaArrowRight />

@@ -35,6 +35,7 @@ import ViewCourse from "./pages/ViewCourse"
 import { getUserDetails } from "./services/operations/profileAPI"
 import { ACCOUNT_TYPE } from "./utils/constants"
 import Controls from "./components/core/Dashboard/AdminControls"
+import HitAPI from "./components/core/Dashboard/AdminControls/HitAPI"
 
 function App() {
   const dispatch = useDispatch()
@@ -137,6 +138,9 @@ function App() {
             {/* Route only for Admin */}
             {user?.accountType === ACCOUNT_TYPE.ADMIN && (
             <Route path="dashboard/controls" element={<Controls />} />)}
+
+            {user?.accountType === ACCOUNT_TYPE.ADMIN && (
+            <Route path="dashboard/hitapi" element={<HitAPI />} />)}
             
         </Route>
 

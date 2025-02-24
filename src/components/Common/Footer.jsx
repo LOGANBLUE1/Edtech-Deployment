@@ -1,6 +1,7 @@
 import React from "react";
 import { FooterLink2 } from "../../data/footer-links";
 import { Link } from "react-router-dom";
+import useScrollToTop from "../../hooks/useScrollToTop";
 
 // Images
 import Logo from "../../assets/Logo/Logo-Full-Light.png";
@@ -23,6 +24,8 @@ const Plans = ["Paid memberships", "For students", "Business solutions"];
 const Community = ["Forums", "Chapters", "Events"];
 
 const Footer = () => {
+  useScrollToTop();
+  
   return (
     <div className="bg-richblack-800">
       <div className="flex lg:flex-row gap-8 items-center justify-between w-11/12 max-w-maxContent text-richblack-400 leading-6 mx-auto relative py-14">
@@ -41,7 +44,7 @@ const Footer = () => {
                       key={i}
                       className="text-[14px] cursor-pointer hover:text-richblack-50 transition-all duration-200"
                     >
-                      <Link to={ele.toLowerCase()}>{ele}</Link>
+                      <Link to={`/${ele.toLowerCase()}`}>{ele}</Link>
                     </div>
                   );
                 })}

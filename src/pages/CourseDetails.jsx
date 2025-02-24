@@ -13,7 +13,7 @@ import CourseDetailsCard from "../components/core/Course/CourseDetailsCard"
 import { formatDate } from "../services/formatDate"
 import { fetchCourseDetails } from "../services/operations/courseDetailsAPI"
 import { BuyCourse, BuyFreeCourse } from "../services/operations/studentFeaturesAPI"
-import GetAvgRating from "../utils/avgRating"
+import GetAvgRating from "../utils/utils"
 import Error from "./Error"
 
 function CourseDetails() {

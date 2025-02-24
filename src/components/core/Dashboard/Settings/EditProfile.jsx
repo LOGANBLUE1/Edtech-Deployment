@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-
+import { allowOnlyAlphabet } from "../../../../utils/utils"
 import { updateProfile } from "../../../../services/operations/SettingsAPI"
 import IconBtn from "../../../Common/IconBtn"
 
@@ -48,6 +48,7 @@ export default function EditProfile() {
                 className="form-style"
                 {...register("firstName", { required: true })}
                 defaultValue={user?.firstName}
+                onKeyDown={allowOnlyAlphabet}
               />
               {errors.firstName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">
@@ -67,6 +68,7 @@ export default function EditProfile() {
                 className="form-style"
                 {...register("lastName", { required: true })}
                 defaultValue={user?.lastName}
+                onKeyDown={allowOnlyAlphabet}
               />
               {errors.lastName && (
                 <span className="-mt-1 text-[12px] text-yellow-100">

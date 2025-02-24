@@ -122,14 +122,14 @@ function Navbar() {
           )}
           {!token && (
             <Link to="/login">
-              <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
+              <button className={`rounded-[8px] border bg-richblack-800 px-[12px] py-[8px] text-richblack-100 ${matchRoute("/login") ? "text-yellow-25 border-richblack-500" : "border-richblack-700"}`}>
                 Log in
               </button>
             </Link>
           )}
           {!token && (
             <Link to="/signup">
-              <button className="rounded-[8px] border border-richblack-700 bg-richblack-800 px-[12px] py-[8px] text-richblack-100">
+              <button className={`rounded-[8px] border bg-richblack-800 px-[12px] py-[8px] text-richblack-100 ${matchRoute("/signup") ? "text-yellow-25 border-richblack-500" : "border-richblack-700"}`}>
                 Sign up
               </button>
             </Link>

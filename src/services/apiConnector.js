@@ -1,3 +1,5 @@
+import { toast } from "react-hot-toast"
+
 export const apiConnector = async (method, url, bodyData = null, headers = {}, params = {}) => {
   try {
     // Remove Content-Type if bodyData is FormData, let fetch handle it
@@ -19,33 +21,35 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
 
     // Handle query parameters
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
-    const requestUrl = `${url}${queryString}`;
+    url += queryString;
 
-    // Log the full request details
+    // Log the request details
+    // console.log("API Request:", method, url, options);
 
     // Make the fetch request
-    const response = await fetch(requestUrl, options);
+    const response = await fetch(url, options);
 
     let data;
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       data = await response.json();
+      data.status = response.status;
+      // console.log("Resonse :", data)
+      if(!response.ok) {
+        if (response.status === 500)
+          data.message = "Server is down, please try again later";
+        toast.error(data?.message || "API response is not OK");
+      }
     } else {
       const text = await response.text();
       throw new Error(`Unexpected content-type: ${contentType}, Response: ${text}`);
     }
-
-    // Handle server errors gracefully
-    if (response.status === 500) {
-      data.message = "Server is down, please try again later";
-    }
-    
     return data;
   } catch (error) {
     console.error("API Connector Error:", error);
     return {
       success: false,
-      message: 'Server Error occurred',
+      message: 'API Connector throwing Error',
       status: null,
     };
   }

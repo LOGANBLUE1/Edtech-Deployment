@@ -3,8 +3,8 @@ import { useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
 
 import Footer from "../components/Common/Footer"
-import Course_Card from "../components/core/Catalog/Course_Card"
-import Course_Slider from "../components/core/Catalog/Course_Slider"
+import Course_Card from "../components/core/Catalog/CourseCard"
+import Course_Slider from "../components/core/Catalog/CourseSlider"
 import { getCatalogPageData, getAllCategories } from "../services/operations/pageAndComponentDatas"
 import Error from "./Error"
 function Catalog() {
@@ -73,7 +73,7 @@ function Catalog() {
             } cursor-pointer`}
             onClick={() => setActive(1)}
           >
-            Most Populer
+            Most Popular
           </p>
           <p
             className={`px-4 py-2 ${
