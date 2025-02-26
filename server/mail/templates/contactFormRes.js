@@ -8,7 +8,6 @@ exports.contactUsEmail = (
   phoneNo,
   countrycode,
   baseurl=process.env.FRONTEND_URL
-//   ??'https://edtech-website-tau.vercel.app'
 ) => {
   return `<!DOCTYPE html>
   <html>
