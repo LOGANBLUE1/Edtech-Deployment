@@ -6,6 +6,7 @@ import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiConnector"
 import { endpoints } from "../apis"
 import { HttpStatusCode } from "axios"
+import { HTTP_METHODS } from "../../utils/constants"
 
 const {
   SENDOTP_API,
@@ -21,7 +22,7 @@ export function sendOtp(email, navigate) {
     dispatch(setLoading(true))
     try {
       // console.log('Before going to apiCaller')
-      const response = await apiConnector("POST", SENDOTP_API, {
+      const response = await apiConnector(HTTP_METHODS.POST, SENDOTP_API, {
         email,
         // checkUserPresent: true,
       })
@@ -58,7 +59,7 @@ export function signUp(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      const response = await apiConnector("POST", SIGNUP_API, {
+      const response = await apiConnector(HTTP_METHODS.POST, SIGNUP_API, {
         accountType,
         firstName,
         lastName,
@@ -97,7 +98,7 @@ export function login(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      const response = await apiConnector("POST", LOGIN_API, {
+      const response = await apiConnector(HTTP_METHODS.POST, LOGIN_API, {
         email,
         password,
       })
@@ -105,6 +106,7 @@ export function login(
 
       // console.log("LOGIN API RESPONSE............", response)
 
+      // if user does not exist
       if (!response.success) {
         toast.error(response.message);
         if(response.status === HttpStatusCode.NotFound)
@@ -138,7 +140,7 @@ export function getPasswordResetToken(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      const response = await apiConnector("POST", RESETPASSTOKEN_API, {
+      const response = await apiConnector(HTTP_METHODS.POST, RESETPASSTOKEN_API, {
         email,
       })
 
@@ -171,7 +173,7 @@ export function resetPassword(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      const response = await apiConnector("POST", RESETPASSWORD_API, {
+      const response = await apiConnector(HTTP_METHODS.POST, RESETPASSWORD_API, {
         password,
         confirmPassword,
         token,

@@ -5,6 +5,7 @@ import { resetCart } from "../../slices/cartSlice"
 import { setPaymentLoading } from "../../slices/courseSlice"
 import { apiConnector } from "../apiConnector"
 import { studentEndpoints } from "../apis"
+import { HTTP_METHODS } from "../../utils/constants"
 
 const {
   COURSE_PAYMENT_API,
@@ -46,7 +47,7 @@ export async function BuyCourse(
     }
 
     // Initiating the Order in Backend
-    const orderResponse = await apiConnector("POST",
+    const orderResponse = await apiConnector(HTTP_METHODS.POST,
       COURSE_PAYMENT_API, 
       {courses},
       { Authorization: `Bearer ${token}`}
@@ -99,7 +100,7 @@ export async function BuyFreeCourse(
   const toastId = toast.loading("Loading...")
   try {
     // Initiating the Order in Backend
-    const orderResponse = await apiConnector("POST",
+    const orderResponse = await apiConnector(HTTP_METHODS.POST,
       COURSE_PAYMENT_API, 
       {courses},
       { Authorization: `Bearer ${token}`}
@@ -130,7 +131,7 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
   const toastId = toast.loading("Verifying Payment...")
   dispatch(setPaymentLoading(true))
   try {
-    const response = await apiConnector("POST", 
+    const response = await apiConnector(HTTP_METHODS.POST, 
       COURSE_VERIFY_API, 
       bodyData, 
       { Authorization: `Bearer ${token}`}
@@ -156,7 +157,7 @@ async function verifyPayment(bodyData, token, navigate, dispatch) {
 // Send the Payment Success Email
 async function sendPaymentSuccessEmail(response, amount, token) {
   try {
-    await apiConnector("POST",
+    await apiConnector(HTTP_METHODS.POST,
       SEND_PAYMENT_SUCCESS_EMAIL_API,
       {
         orderId: response.razorpay_order_id,

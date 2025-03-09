@@ -4,6 +4,7 @@ import { setLoading, setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiConnector"
 import { profileEndpoints } from "../apis"
 import { logout } from "./authAPI"
+import { HTTP_METHODS } from "../../utils/constants"
 
 const {
   GET_USER_DETAILS_API,
@@ -16,7 +17,7 @@ export function getUserDetails(token, navigate) {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      const response = await apiConnector("GET", GET_USER_DETAILS_API, null, {
+      const response = await apiConnector(HTTP_METHODS.GET, GET_USER_DETAILS_API, null, {
         Authorization: `Bearer ${token}`,
       })
       // console.log("GET_USER_DETAILS RESPONSE............", response)
@@ -42,7 +43,7 @@ export async function getUserEnrolledCourses(token) {
   let result = []
   try {
     const response = await apiConnector(
-      "GET",
+      HTTP_METHODS.GET,
       GET_USER_ENROLLED_COURSES_API,
       null,
       {
@@ -67,7 +68,7 @@ export async function getInstructorData(token) {
   const toastId = toast.loading("Loading...")
   let result = []
   try {
-    const response = await apiConnector("GET", GET_INSTRUCTOR_DATA_API, null, {
+    const response = await apiConnector(HTTP_METHODS.GET, GET_INSTRUCTOR_DATA_API, null, {
       Authorization: `Bearer ${token}`,
     })
     // console.log("GET_INSTRUCTOR_DATA_API RESPONSE............", response)

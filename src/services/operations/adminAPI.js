@@ -1,6 +1,7 @@
 import { toast } from "react-hot-toast"
 import { adminEndpoints } from "../apis"
 import { apiConnector } from "../apiConnector"
+import { HTTP_METHODS } from "../../utils/constants"
 
 const {
     DELETE_PROFILE_PERMANENTLY_API
@@ -9,7 +10,7 @@ const {
 export const deleteUserPermanently = async (token, userId) => {
     const toastId = toast.loading("Loading...")
     try {
-        const response = await apiConnector("DELETE", DELETE_PROFILE_PERMANENTLY_API, {userId: userId}, {
+        const response = await apiConnector(HTTP_METHODS.DELETE, DELETE_PROFILE_PERMANENTLY_API, {userId: userId}, {
             Authorization: `Bearer ${token}`,
         })
         // console.log("DELETE_PROFILE_API RESPONSE............", response)

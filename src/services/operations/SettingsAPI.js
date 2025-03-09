@@ -4,6 +4,7 @@ import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiConnector"
 import { settingsEndpoints } from "../apis"
 import { logout } from "./authAPI"
+import { HTTP_METHODS } from "../../utils/constants"
 
 const {
   UPDATE_DISPLAY_PICTURE_API,
@@ -17,7 +18,7 @@ export function updateDisplayPicture(token, formData) {
     const toastId = toast.loading("Loading...")
     try {
       const response = await apiConnector(
-        "PUT",
+        HTTP_METHODS.PUT,
         UPDATE_DISPLAY_PICTURE_API,
         formData,
         {
@@ -46,7 +47,7 @@ export function updateProfile(token, formData) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
-      const response = await apiConnector("PUT", UPDATE_PROFILE_API, formData, {
+      const response = await apiConnector(HTTP_METHODS.PUT, UPDATE_PROFILE_API, formData, {
         Authorization: `Bearer ${token}`,
       })
       // console.log("UPDATE_PROFILE_API RESPONSE............", response)
@@ -74,7 +75,7 @@ export function updateProfile(token, formData) {
 export async function changePassword(token, formData) {
   const toastId = toast.loading("Loading...")
   try {
-    const response = await apiConnector("POST", CHANGE_PASSWORD_API, formData, {
+    const response = await apiConnector(HTTP_METHODS.POST, CHANGE_PASSWORD_API, formData, {
       Authorization: `Bearer ${token}`,
     })
     // console.log("CHANGE_PASSWORD_API RESPONSE............", response)
@@ -96,7 +97,7 @@ export function deleteProfile(token, navigate) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
-      const response = await apiConnector("DELETE", DELETE_PROFILE_API, null, {
+      const response = await apiConnector(HTTP_METHODS.DELETE, DELETE_PROFILE_API, null, {
         Authorization: `Bearer ${token}`,
       })
       // console.log("DELETE_PROFILE_API RESPONSE............", response)
