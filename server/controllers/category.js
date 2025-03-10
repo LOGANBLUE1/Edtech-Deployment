@@ -1,4 +1,5 @@
 // const redisClient = require('../config/redis');
+const mongoose = require("mongoose");
 const Category = require("../models/Category")
 
 function getRandomInt(max) {
@@ -43,20 +44,17 @@ exports.createCategory = async (req, res) => {
 
 exports.deleteCategory = async (req, res) => {
   try {
-    const { id, name } = req.body;
-
-    if (!id && !name) {
+    const { field } = req.body;
+    if (!field) {
       return res.status(400).json({
         success: false,
         message: "Category ID or name is required",
       });
     }
 
-    let category;
-    if (id) {
-      category = await Category.findById(id);
-    } else if (name) {
-      category = await Category.findOne({ name: name });
+    let category = await Category.findOne({ name: field });
+    if (!category && mongoose.Types.ObjectId.isValid(field)) {
+      category = await Category.findById(field);
     }
 
     if (!category) {

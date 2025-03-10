@@ -1,24 +1,27 @@
 import { useState } from "react";
 import { useSelector } from "react-redux"
 import { toast } from "react-hot-toast"
-import IconBtn from "../../../Common/IconBtn";
-import { deleteUserPermanently } from "../../../../services/operations/adminAPI";
+import { deleteCategory } from "../../../../services/operations/adminAPI";
 import ControlsTemplate from "./ControlsTemplate";
 
-export default function DeleteUser() {
-    const { token } = useSelector((state) => state.auth)
+export default function DeleteCategory() {
+    const {token} = useSelector((state) => state.auth)
     const [field, setField] = useState("");
 
-    async function deleteUser() {
+    async function deleteCat() {
         if (!field) {
-            toast.error("Please enter a user id/email.");
+            toast.error("Please enter a category name/field.");
             return;
         }
-        const res = await deleteUserPermanently(token, field)
+        console.log("FIELD............", field)
+        const res = await deleteCategory(token, field)
+        if(res?.success){
+            toast.success(`User:${res.email} deleted Successfully.`)
+        }
     }
 
     return (
-        <ControlsTemplate onSubmit={deleteUser} text="Delete a User" url="/admin/deleteUserPermanently">
+        <ControlsTemplate onSubmit={deleteCat} text="Delete a Category" url="/admin//deleteCategory">
             <div className="flex justify-start items-center gap-x-2">
                 <label htmlFor="field" className="text-richblack-300 w-1/5">field: </label>
                 <input
@@ -27,7 +30,7 @@ export default function DeleteUser() {
                     name="field"
                     value={field}
                     onChange={(e) => setField(e.target.value)}
-                    placeholder="Enter user id/email"
+                    placeholder="Enter category id/name"
                     className="form-style"
                 />
             </div>

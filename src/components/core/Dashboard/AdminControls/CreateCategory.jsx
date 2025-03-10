@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useSelector } from "react-redux"
 import { toast } from "react-hot-toast"
 import ControlsTemplate from "./ControlsTemplate";
-import { deleteUserPermanently } from "../../../../services/operations/adminAPI";
+import { createCategory } from "../../../../services/operations/adminAPI";
+import { allowOnlyAlphabet } from "../../../../utils/utils";
 
 export default function CreateCategory() {
+    const {token} = useSelector((state) => state.auth)
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
 
@@ -12,10 +15,7 @@ export default function CreateCategory() {
             toast.error("Please enter a name and description.");
             return;
         }
-        const res = await deleteUserPermanently()
-        if(res?.success){
-            toast.success(`User:${res.email} created Successfully.`)
-        }
+        const res = await createCategory(token, name, description)
     }
 
     return (
@@ -31,6 +31,7 @@ export default function CreateCategory() {
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Enter name"
                         className="form-style"
+                        onKeyDown={allowOnlyAlphabet}
                     />
                 </div>
                 <div className="flex justify-start items-center gap-x-2">

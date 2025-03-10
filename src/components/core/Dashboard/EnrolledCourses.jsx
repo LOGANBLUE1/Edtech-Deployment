@@ -40,16 +40,16 @@ export default function EnrolledCourses() {
           <div className="spinner"></div>
         </div>
       ) : !enrolledCourses.length ? (
-        <p className="grid h-[10vh] w-full place-content-center text-richblack-5">
-          You have not enrolled in any course yet.
+        <div className="w-full place-content-center text-richblack-5 mt-[20vh] flex flex-col justify-center items-center">
           {/* TODO: Modify this Empty State */}
-          <div className="flex justify-center my-4">
+          <div className="flex flex-col items-center my-4">
             <CTAButton active={false} linkto={"/catalog/all"} className>
               <div className="text-xl">+</div>
             </CTAButton>
-            <p>Add courses</p>
+            <p className="text-xs pt-1">Add courses</p>
           </div>
-        </p>
+          You have not enrolled in any course yet.
+        </div>
       ) : (
         <div className="my-8 text-richblack-5">
           {/* Headings */}

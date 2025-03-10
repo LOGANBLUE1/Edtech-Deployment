@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Profile = require("../models/Profile")
 const CourseProgress = require("../models/CourseProgress")
 
@@ -246,16 +247,25 @@ exports.instructorDashboard = async (req, res) => {
 
 exports.deleteUserPermanently = async (req, res) => {
   try {
-    const {userId} = req.body
-    const user = await User.findById({ _id: userId })
+    const {field} = req.body
+    if (!field) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or email is required",
+      });
+    }
+    let user = await User.findOne({ email: field })
+    if (!user && mongoose.Types.ObjectId.isValid(field)) {
+      user = await User.findById(field);
+    }
+    console.log("Printing user to be deleted: ",user)
     if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found",
       })
     }
-
-    await User.findByIdAndDelete(userId);
+    await User.findOneAndDelete({ _id: user._id });
     // The middleware takes care of cascading deletes for you.
 
     res.status(200).json({

@@ -75,6 +75,7 @@ export default function ChangeProfilePicture() {
                 className="hidden"
                 accept="image/png, image/gif, image/jpeg"
               />
+              
               <button
                 onClick={handleClick}
                 disabled={loading}
@@ -86,9 +87,7 @@ export default function ChangeProfilePicture() {
                 text={loading ? "Uploading..." : "Upload"}
                 onclick={handleFileUpload}
               >
-                {!loading && (
-                  <FiUpload className="text-lg text-richblack-900" />
-                )}
+                {!loading && <FiUpload className="text-lg text-richblack-900" />}
               </IconBtn>
             </div>
           </div>

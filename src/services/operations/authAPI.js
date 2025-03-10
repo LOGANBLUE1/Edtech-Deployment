@@ -77,7 +77,7 @@ export function signUp(
         return;
       }
       toast.success("Signup Successful")
-      navigate("/login")
+      dispatch(login(email, password, navigate))
     } catch (error) {
       console.log("SIGNUP API ERROR............", error)
       toast.error("Signup Failed")
@@ -95,6 +95,7 @@ export function login(
   navigate
 ) {
   return async (dispatch) => {
+    console.log("Inside login :", email, password)
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
@@ -104,7 +105,7 @@ export function login(
       })
       console.log("Backend Url: ", process.env.REACT_APP_BASE_URL);
 
-      // console.log("LOGIN API RESPONSE............", response)
+      console.log("LOGIN API RESPONSE............", response)
 
       // if user does not exist
       if (!response.success) {
