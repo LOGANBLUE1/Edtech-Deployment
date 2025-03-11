@@ -52,10 +52,11 @@ exports.deleteCategory = async (req, res) => {
       });
     }
 
-    let category = await Category.findOne({ name: field });
-    if (!category && mongoose.Types.ObjectId.isValid(field)) {
+    let category;
+    if (mongoose.Types.ObjectId.isValid(field)) 
       category = await Category.findById(field);
-    }
+    if(!category)
+      category = await Category.findOne({ name: field });
 
     if (!category) {
       return res.status(404).json({
