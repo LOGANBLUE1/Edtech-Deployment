@@ -24,7 +24,6 @@ function Navbar() {
     setLoading(true)
     try {
       const res = await apiConnector("GET", categories.CATEGORIES_API)
-      console.log("Fetched")
       setSubLinks(res.data)
     } catch (error) {
       console.log("Could not fetch Categories.", error)

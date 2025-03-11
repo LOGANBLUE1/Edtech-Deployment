@@ -254,11 +254,13 @@ exports.deleteUserPermanently = async (req, res) => {
         message: "User ID or email is required",
       });
     }
-    let user = await User.findOne({ email: field })
-    if (!user && mongoose.Types.ObjectId.isValid(field)) {
+    
+    let user;
+    if (mongoose.Types.ObjectId.isValid(field))
       user = await User.findById(field);
-    }
-    console.log("Printing user to be deleted: ",user)
+    if(!user)
+      user = await User.findOne({ email: field });
+
     if (!user) {
       return res.status(404).json({
         success: false,

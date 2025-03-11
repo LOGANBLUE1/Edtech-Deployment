@@ -8,7 +8,6 @@ import { HTTP_METHODS } from "../../utils/constants"
 
 const {
   COURSE_DETAILS_API,
-  COURSE_CATEGORIES_API,
   GET_ALL_COURSE_API,
   CREATE_COURSE_API,
   EDIT_COURSE_API,
