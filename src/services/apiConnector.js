@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast"
-
+import { IS_LOCALHOST } from "../utils/constants"
 export const apiConnector = async (method, url, bodyData = null, headers = {}, params = {}) => {
   try {
     // Remove Content-Type if bodyData is FormData, let fetch handle it
@@ -13,7 +13,8 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
       method: method.toUpperCase(),
       headers: headers,
     };
-    console.log("API Request:", method, url, bodyData);
+    if(IS_LOCALHOST)
+      console.log("API Request:", method, url, bodyData);
     // Set the body to bodyData (either FormData or JSON string)
     if (bodyData) {
       options.body = bodyData instanceof FormData ? bodyData : JSON.stringify(bodyData);
@@ -23,19 +24,16 @@ export const apiConnector = async (method, url, bodyData = null, headers = {}, p
     const queryString = params ? `?${new URLSearchParams(params)}` : '';
     url += queryString;
 
-    // Log the request details
-    // console.log("API Request:", method, url, options);
-
     // Make the fetch request
-    const response = await fetch(url, options);
- 
+    const response = await fetch(process.env.REACT_APP_BASE_URL + url, options);
 
     let data;
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       data = await response.json();
       data.status = response.status;
-      console.log("RESfor url:",url, "DATA:",data)
+      if(IS_LOCALHOST)
+        console.log("RES:",url,data)
       // console.log("Resonse :", data)
       if(!response.ok) {
         if (response.status === 500)

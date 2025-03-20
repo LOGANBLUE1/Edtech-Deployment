@@ -13,23 +13,21 @@ import { useNavigate } from "react-router-dom"
 import { formatDate } from "../../../../utils/formatDate"
 import {
   deleteCourse,
-  fetchInstructorCourses,
 } from "../../../../services/operations/courseDetailsAPI"
 import { COURSE_STATUS } from "../../../../utils/constants"
 import ConfirmationModal from "../../../Common/ConfirmationModal"
 
-export default function CoursesTable({ courses, setCourses }) {
+export default function CoursesTable({ courses, setCourses, getCourses }) {
   // const dispatch = useDispatch()
   const navigate = useNavigate()
   const { token } = useSelector((state) => state.auth)
   const [loading, setLoading] = useState(false)
   const [confirmationModal, setConfirmationModal] = useState(null)
   const TRUNCATE_LENGTH = 30
-
   const handleCourseDelete = async (courseId) => {
     setLoading(true)
     await deleteCourse({ courseId: courseId }, token)
-    const result = await fetchInstructorCourses(token)
+    const result = await getCourses(token)
     if (result) {
       setCourses(result)
     }
@@ -85,7 +83,7 @@ export default function CoursesTable({ courses, setCourses }) {
                       {course.courseName}
                     </p>
                     <p className="text-xs text-richblack-300">
-                      {course.courseDescription.split(" ").length >
+                      {course?.courseDescription && course.courseDescription.split(" ").length >
                       TRUNCATE_LENGTH
                         ? course.courseDescription
                             .split(" ")
@@ -94,7 +92,7 @@ export default function CoursesTable({ courses, setCourses }) {
                         : course.courseDescription}
                     </p>
                     <p className="text-[12px] text-white">
-                      Created: {formatDate(course.createdAt)}
+                      Created: {formatDate(course?.createdAt)}
                     </p>
                     {course.status === COURSE_STATUS.DRAFT ? (
                       <p className="flex w-fit flex-row items-center gap-2 rounded-full bg-richblack-700 px-2 py-[2px] text-[12px] font-medium text-pink-100">

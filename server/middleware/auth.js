@@ -30,10 +30,9 @@ exports.auth = async (req, res, next) => {
 			// If JWT verification fails, return 401 Unauthorized response
 			return res.status(401).json({ 
 				success: false,
-				message: "token is invalid"
+				message: "token is invalid/user is not authorised"
 			});
 		}
-
 		// If JWT is valid, move on to the next middleware or request handler
 		next();
 	} catch (error) {
@@ -92,6 +91,25 @@ exports.isInstructor = async (req, res, next) => {
 		// console.log("Account type: "userDetails.accountType);
 
 		if (userDetails.accountType !== ACCOUNT_TYPE.INSTRUCTOR) {
+			return res.status(401).json({
+				success: false,
+				message: "This is a Protected Route for Instructor",
+			});
+		}
+		next();
+	} catch (error) {
+		return res.status(500).json({ 
+			success: false, 
+			message: `User Role Can't be Verified` 
+		});
+	}
+};
+
+exports.isInstructorOrAdmin = async (req, res, next) => {
+	try {
+		const userDetails = await User.findOne({ email: req.user.email });
+
+		if (userDetails.accountType !== ACCOUNT_TYPE.INSTRUCTOR && userDetails.accountType !== ACCOUNT_TYPE.ADMIN) {
 			return res.status(401).json({
 				success: false,
 				message: "This is a Protected Route for Instructor",

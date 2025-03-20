@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast"
 // import { updateCompletedLectures } from "../../slices/viewCourseSlice"
 // import { setLoading } from "../../slices/profileSlice";
 import { apiConnector } from "../apiConnector"
-import { courseEndpoints } from "../apis"
+import { adminEndpoints, courseEndpoints } from "../apis"
 import { HTTP_METHODS } from "../../utils/constants"
 
 const {
@@ -18,11 +18,12 @@ const {
   DELETE_SECTION_API,
   DELETE_SUBSECTION_API,
   GET_ALL_INSTRUCTOR_COURSES_API,
-  DELETE_COURSE_API,
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   CREATE_RATING_API,
   LECTURE_COMPLETION_API,
 } = courseEndpoints
+
+const {DELETE_COURSE_ADMIN_API} = adminEndpoints
 
 export const getAllCourses = async () => {
   const toastId = toast.loading("Loading...")
@@ -33,7 +34,7 @@ export const getAllCourses = async () => {
       toast.error("Could Not Fetch Course Categories")
       return
     }
-    result = response?.allCourses
+    result = response?.data
   } catch (error) {
     console.log("GET_ALL_COURSE_API API ERROR............", error)
     toast.error(error.message)
@@ -292,15 +293,16 @@ export const fetchInstructorCourses = async (token) => {
 
 // delete a course
 export const deleteCourse = async (data, token) => {
+  console.log("delete course data", data, "token", token)
   const toastId = toast.loading("Loading...")
   try {
-    // console.log("delete course data", data, token, DELETE_COURSE_API)
-    const response = await apiConnector(HTTP_METHODS.DELETE, DELETE_COURSE_API, data, {
+    // console.log("delete course data", data, token, DELETE_COURSE_ADMIN_API)
+    const response = await apiConnector(HTTP_METHODS.DELETE, DELETE_COURSE_ADMIN_API, data, {
       Authorization: `Bearer ${token}`,
     })
     // console.log("DELETE COURSE API RESPONSE............", response)
     if (!response?.success) {
-      toast.error("Could Not Delete Course")
+      // toast.error("Could Not Delete Course")
       return
     }
     toast.success("Course Deleted")

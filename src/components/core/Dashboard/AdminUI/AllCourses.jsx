@@ -1,16 +1,29 @@
+import {getAllCourses} from "../../../../services/operations/courseDetailsAPI";
+import { useEffect, useState } from "react";
+import CoursesTable from "../InstructorCourses/CoursesTable";
 
 export default function AllCourses(){
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        ;(async () => {
+            try {
+                const res = await getAllCourses();
+                console.log("Course : ",res)
+                setCourses(res)
+            } catch (error) {
+                console.log("Could not fetch Course Details")
+            }
+        })()
+    }, []);
+
     return (
-        <div className=" mx-auto box-content w-full max-w-maxContentTab px-4 py-12 lg:max-w-maxContent">
-            <div className="section_heading">All courses</div>
-            <div className="py-8">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                {catalogPageData?.mostSellingCourses
-                ?.slice(0, 4)
-                .map((course, i) => (
-                    <Course_Card course={course} key={i} Height={"h-[400px]"} />
-                ))}
-            </div>
+        <div className="flex flex-col justify-center items-center">
+            <div className="w-11/12">
+                <div className="mb-14 flex justify-between">
+                    <h1 className={`text-3xl font-medium text-richblack`}>My Courses</h1>
+                </div>
+                {courses && <CoursesTable courses={courses} setCourses={setCourses} getCourses={getAllCourses}/>}
             </div>
         </div>
     )

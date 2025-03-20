@@ -2,6 +2,7 @@ export const ACCOUNT_TYPE = {
   STUDENT: "Student",
   INSTRUCTOR: "Instructor",
   ADMIN: "Admin",
+  ALL: "All",
 }
 
 export const COURSE_STATUS = {
@@ -21,3 +22,5 @@ export const HTTP_METHODS = {
   DELETE: "DELETE",
   PATCH: "PATCH",
 };
+
+export const IS_LOCALHOST = process.env.REACT_APP_BASE_URL === "http://localhost:4000/api/v1";

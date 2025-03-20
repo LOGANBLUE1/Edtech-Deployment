@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsChevronDown } from "react-icons/bs"
 import { useSelector } from "react-redux"
@@ -20,6 +20,10 @@ function Navbar() {
   const [subLinks, setSubLinks] = useState([])
   const [loading, setLoading] = useState(false)
 
+  const allowedLinks = NavbarLinks.filter(link =>
+      link.roles.includes(ACCOUNT_TYPE.ALL) || link.roles.includes(user?.accountType)
+  );
+  
   const fetchCategories = async () => {
     setLoading(true)
     try {
@@ -50,7 +54,7 @@ function Navbar() {
         <nav className="hidden md:block">
           <ul className="flex gap-x-6 text-richblack-25">
             {
-              NavbarLinks.map((link, index) => (
+              allowedLinks.map((link, index) => (
                 <li key={index}>
                   {link?.title === "Catalog" ? (
                     <div onMouseEnter={fetchCategories}
@@ -84,7 +88,7 @@ function Navbar() {
                         )}
                       </div>
                     </div>
-                  ) : ((!user || user?.accountType !== ACCOUNT_TYPE.ADMIN) &&
+                  ) :
                     <Link to={link?.path}>
                       <p
                         className={`${
@@ -96,7 +100,7 @@ function Navbar() {
                         {link.title}
                       </p>
                     </Link>
-                  )}
+                  }
                 </li>
               ))
             }

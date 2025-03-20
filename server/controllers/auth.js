@@ -7,6 +7,8 @@ const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
 const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 require("dotenv").config()
 
 exports.signup = async (req, res) => {
@@ -21,7 +23,7 @@ exports.signup = async (req, res) => {
       });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,16}$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
@@ -194,7 +196,7 @@ exports.sendotp = async (req, res) => {
     const { email } = req.body;
 
     // Basic email validation (optional)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,16}$/;
     if (!email || !emailRegex.test(email)) {
       return res.status(400).json({
         success: false,

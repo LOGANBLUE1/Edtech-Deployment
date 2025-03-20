@@ -8,7 +8,7 @@ import { sendOtp } from "../../../services/operations/authAPI"
 import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 import Tab from "../../Common/Tab"
-import google from "../../../assets/Logo/gogole.png";
+import GoogleAuth from "./GoogleAuth"
 
 function SignupForm({userType}) {
   const navigate = useNavigate();
@@ -192,13 +192,7 @@ function SignupForm({userType}) {
           </label>
         </div>
 
-        <button
-          type="submit"
-          className="flex justify-center items-center mt-6 rounded-[8px] py-[8px] px-[12px] font-medium text-richblack-5 border border-richblack-500"
-        >
-          <img src={google} alt="google logo" className="h-7 px-2"/>
-          Continue with Google
-        </button>
+        <GoogleAuth />
 
         <button
           type="submit"
