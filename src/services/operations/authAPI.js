@@ -135,16 +135,19 @@ export function login(
 }
 
 export function googleLogin(
-  // googleToken,
-  // accountType,
   navigate,
-  response
+  tokenResponse,
+  accountType
 ) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
-      console.log("GOOGLE API RESPONSE............", response)
+      const response = await apiConnector(HTTP_METHODS.POST, GOOGLE_LOGIN_API, {
+        googleToken: tokenResponse.access_token, // Send only the access_token
+		    accountType: accountType,
+      });
+      // console.log("GOOGLE API RESPONSE............", response)
       
       // if user does not exist
       if (!response.success) {
