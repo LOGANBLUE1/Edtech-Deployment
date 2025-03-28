@@ -1,21 +1,25 @@
 import { useMemo, useState, useEffect } from "react"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsChevronDown } from "react-icons/bs"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { Link, matchPath, useLocation } from "react-router-dom"
-
+import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import logo from "../../assets/Logo/Logo-Full-Light.png"
 import { NavbarLinks } from "../../data/navbar-links"
 import { apiConnector } from "../../services/apiConnector"
 import { categories } from "../../services/apis"
 import { ACCOUNT_TYPE } from "../../utils/constants"
+import { setMode } from "../../slices/modeSlice"
 import ProfileDropdown from "../core/Auth/ProfileDropdown"
 
 function Navbar() {
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const { mode } = useSelector((state) => state.mode)
   const { token } = useSelector((state) => state.auth)// if logged in
   const { user } = useSelector((state) => state.profile)// if student
   const { totalItems } = useSelector((state) => state.cart)
-  const location = useLocation()
+
 
   const [subLinks, setSubLinks] = useState([])
   const [loading, setLoading] = useState(false)
@@ -110,6 +114,17 @@ function Navbar() {
 
         {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
+          <button
+             className={`h-10 w-10 bg-richblack-800 rounded-full cursor-pointer ${
+               mode ? `bg-black` : `bg-white`
+             }`}
+             onClick={() => dispatch(setMode(!mode))}
+            >
+             <div className="flex items-center justify-center h-full w-full text-white">
+               {mode ? <MdOutlineDarkMode className="text-white" /> : <MdOutlineLightMode />}
+             </div>
+          </button>
+
           {user && user?.accountType === ACCOUNT_TYPE.STUDENT && (// Cart
             <Link to="/dashboard/cart" className="relative">
               <AiOutlineShoppingCart className="text-2xl text-richblack-100" />

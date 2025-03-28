@@ -338,3 +338,84 @@ exports.getAllEmails = async (req, res) => {
     })
   }
 }
+
+
+exports.googleLogin = async (req, res) => {
+  const { googleToken, accountType } = req.body;
+  console.log("ACC:",accountType,"googleToken:", googleToken);
+  try {
+    if (!googleToken) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Google token is required" 
+      });
+    }
+    const ticket = await client.verifyIdToken({
+      idToken: googleToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const data = ticket.getPayload();
+    console.log("DATA:",data);
+    if (!data) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Invalid Google token" 
+      });
+    }
+
+    const { given_name, family_name,  email, picture } = data;
+    let user = await User.findOne({ email:email })
+    if(user && user.loginType !== "Google"){
+      return res.status(400).json({ 
+        success: false, 
+        message: "User(Direct) already exists with this email id. Please login using email and password" 
+      });
+    }
+    if (!user) {
+      // create new user
+      const profile = await Profile.create({
+        gender: null,
+        dateOfBirth: null,
+        about: null,
+        contactNumber: null,
+      });
+      user = await User.create({
+        firstName: data.given_name,
+        lastName: data.family_name,
+        email: data.email,
+        googleId: data.sub,
+        loginType: "Google",
+        active: true,
+        approved: data.email_verified ?? false,
+        accountType: accountType,
+        additionalDetails: profile._id,
+        image: data.picture,
+      });
+    }
+
+    const payload = { email: user.email, id: user._id, accountType: user.accountType };
+    const token = jwt.sign( payload,
+        process.env.JWT_SECRET,
+        {expiresIn: "24h"}
+    );
+
+    const options = {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),// 3 days
+      httpOnly: true
+      // sameSite: 'Strict'
+    }
+    // Custom logic here (e.g., user lookup or creation)
+    res.cookie("token", token, options).status(200).json({
+      success: true,
+      token,
+      user,
+      message: `Google Login Success`
+    });
+  } catch (err) {
+    console.error("Token verification failed", err);
+    res.status(401).json({ 
+      success: false, 
+      message: "Invalid token" 
+    });
+  }
+}

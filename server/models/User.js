@@ -21,14 +21,26 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    loginType: {
+      type: String,
+      enum: ['Direct', 'Google'], // Add more as needed
+      default: 'Direct',
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true // Allows nulls for non-Google users
+    },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return this.loginType === 'Direct';
+      }
     },
     accountType: {
       type: String,
       enum: ["Admin", "Student", "Instructor"],
-      required: true,
+      default: "Student",
     },
     active: {                          //disable it instead of deleting account
       type: Boolean,
@@ -36,7 +48,7 @@ const userSchema = new mongoose.Schema(
     },
     approved: {                        //???
       type: Boolean,
-      default: true,
+      default: false,
     },
     additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,7 +61,7 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-    token: {                           
+    token: {    // for reset password                       
       type: String,
     },
     resetPasswordExpires: {                 //token expiry time

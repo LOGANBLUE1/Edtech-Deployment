@@ -7,7 +7,8 @@ const {
   login,
   signup,
   sendotp,
-  changePassword
+  changePassword,
+  googleLogin
 } = require("../controllers/auth")
 const {
   resetPasswordToken,
@@ -33,6 +34,8 @@ router.post("/sendotp", sendotp)
 
 // Route for Changing the password
 router.post("/changepassword", auth, changePassword)
+
+router.post("/google", googleLogin);
 
 // ********************************************************************************************************
 //                                      Reset Password

@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  mode: true,
-  loading: false,
+  mode: true
 }
 
 const modeSlice = createSlice({
@@ -11,13 +10,10 @@ const modeSlice = createSlice({
   reducers: {
     setMode(state, value) {
       state.mode = value.payload
-    },
-    setLoading(state, value) {
-      state.loading = value.payload
-    },
+    }
   },
 })
 
-export const { setMode, setLoading } = modeSlice.actions
+export const { setMode } = modeSlice.actions
 
 export default modeSlice.reducer

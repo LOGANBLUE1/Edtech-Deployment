@@ -15,13 +15,12 @@ exports.resetPasswordToken = async (req, res) => {
     }
     const token = crypto.randomBytes(20).toString("hex")
 
-    const updatedDetails = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email: email },
       {
         token: token,
         resetPasswordExpires: Date.now() + 3600*1000,
-      },
-      { new: true }
+      }
     )
     // console.log("DETAILS", updatedDetails)
 

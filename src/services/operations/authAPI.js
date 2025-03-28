@@ -12,6 +12,7 @@ const {
   SENDOTP_API,
   SIGNUP_API,
   LOGIN_API,
+  GOOGLE_LOGIN_API,
   RESETPASSTOKEN_API,
   RESETPASSWORD_API,
 } = endpoints
@@ -116,6 +117,44 @@ export function login(
       }
 
       toast.success("Login Successful")
+      dispatch(setToken(response.token))
+      const userImage = response?.user?.image ??
+        `https://api.dicebear.com/5.x/initials/svg?seed=${response.user.firstName} ${response.user.lastName}`
+      
+      dispatch(setUser({ ...response.user, image: userImage }))
+      localStorage.setItem("token", JSON.stringify(response.token))
+      navigate("/dashboard/my-profile")
+    } catch (error) {
+      console.log("LOGIN API ERROR............", error)
+      toast.error("Login Failed")
+    } finally {
+      dispatch(setLoading(false))
+      toast.dismiss(toastId)
+    }
+  }
+}
+
+export function googleLogin(
+  // googleToken,
+  // accountType,
+  navigate,
+  response
+) {
+  return async (dispatch) => {
+    const toastId = toast.loading("Loading...")
+    dispatch(setLoading(true))
+    try {
+      console.log("GOOGLE API RESPONSE............", response)
+      
+      // if user does not exist
+      if (!response.success) {
+        toast.error(response.message);
+        if(response.status === HttpStatusCode.NotFound)
+          navigate("/signup")
+        return;
+      }
+
+      toast.success("Google login Successful")
       dispatch(setToken(response.token))
       const userImage = response?.user?.image ??
         `https://api.dicebear.com/5.x/initials/svg?seed=${response.user.firstName} ${response.user.lastName}`

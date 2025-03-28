@@ -8,7 +8,7 @@ import { sendOtp } from "../../../services/operations/authAPI"
 import { setSignupData } from "../../../slices/authSlice"
 import { ACCOUNT_TYPE } from "../../../utils/constants"
 import Tab from "../../Common/Tab"
-import GoogleAuth from "./GoogleAuth"
+import GoogleAuth from './GoogleAuth'
 
 function SignupForm({userType}) {
   const navigate = useNavigate();
@@ -192,7 +192,7 @@ function SignupForm({userType}) {
           </label>
         </div>
 
-        <GoogleAuth />
+        <GoogleAuth accountType={accountType}/>
 
         <button
           type="submit"
