@@ -355,7 +355,7 @@ exports.googleLogin = async (req, res) => {
       audience: process.env.GOOGLE_CLIENT_ID,
     });
     const data = ticket.getPayload();
-    console.log("DATA:",data);
+
     if (!data) {
       return res.status(400).json({ 
         success: false, 
@@ -371,7 +371,7 @@ exports.googleLogin = async (req, res) => {
         message: "User(Direct) already exists with this email id. Please login using email and password" 
       });
     }
-    if (!user) {
+    if (!user && accountType !== "Default") {
       // create new user
       const profile = await Profile.create({
         gender: null,
@@ -380,8 +380,8 @@ exports.googleLogin = async (req, res) => {
         contactNumber: null,
       });
       user = await User.create({
-        firstName: data.given_name,
-        lastName: data.family_name,
+        firstName: given_name,
+        lastName: family_name,
         email: data.email,
         googleId: data.sub,
         loginType: "Google",
@@ -389,7 +389,13 @@ exports.googleLogin = async (req, res) => {
         approved: data.email_verified ?? false,
         accountType: accountType,
         additionalDetails: profile._id,
-        image: data.picture,
+        image: picture
+      });
+    }
+    else{
+      return res.status(404).json({ 
+        success: false, 
+        message: "Please signup to continue" 
       });
     }
 

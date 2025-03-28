@@ -3,6 +3,7 @@ export const ACCOUNT_TYPE = {
   INSTRUCTOR: "Instructor",
   ADMIN: "Admin",
   ALL: "All",
+  DEFAULT: "Default"
 }
 
 export const COURSE_STATUS = {
