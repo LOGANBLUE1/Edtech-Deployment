@@ -9,6 +9,8 @@ const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const fetch = require("node-fetch");
+
 require("dotenv").config()
 
 exports.signup = async (req, res) => {
@@ -50,9 +52,9 @@ exports.signup = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
+      return res.status(409).json({
         success: false,
-        message: "User already exists. Please sign in to continue."
+        message: "User already exists. Please login to continue."
       });
     }
 
@@ -207,7 +209,7 @@ exports.sendotp = async (req, res) => {
     const checkUserPresent = await User.findOne({ email })
     
     if (checkUserPresent) {
-      return res.status(401).json({
+      return res.status(409).json({
         success: false,
         message: `User is Already Registered`,
       });
@@ -339,8 +341,30 @@ exports.getAllEmails = async (req, res) => {
   }
 }
 
-
-const fetch = require("node-fetch"); // Import fetch for making API requests
+exports.getAllUsers = async (req, res) => {
+  try {
+    let Users = await User.find({},{
+      firstName: true,
+      lastName: true,
+      email: true,
+      accountType: true,
+      loginType: true,
+      active: true,
+      courses: true,
+      image: true
+    })
+    res.status(200).json({
+      success: true,
+      message: "Users fetched successfully",
+      data: Users,
+    })
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
+  }
+}
 
 exports.googleLogin = async (req, res) => {
   const { googleToken, accountType } = req.body;
@@ -372,39 +396,48 @@ exports.googleLogin = async (req, res) => {
 
     // Check if the user already exists
     let user = await User.findOne({ email: email });
-    if (user && user.loginType !== "Google") {
-      return res.status(400).json({
-        success: false,
-        message: "User(Direct) already exists with this email id. Please login using email and password",
-      });
-    }
 
     // If user doesn't exist, create a new user
-    if (!user && accountType !== "Default") {
-      const profile = await Profile.create({
-        gender: null,
-        dateOfBirth: null,
-        about: null,
-        contactNumber: null,
-      });
+    if (!user) {
+      if(accountType !== "Default"){
+        const profile = await Profile.create({
+          gender: null,
+          dateOfBirth: null,
+          about: null,
+          contactNumber: null,
+        });
 
-      user = await User.create({
-        firstName: given_name,
-        lastName: family_name,
-        email: email,
-        googleId: data.sub, // Use the Google user ID
-        loginType: "Google",
-        active: true,
-        approved: data.email_verified ?? false,
-        accountType: accountType,
-        additionalDetails: profile._id,
-        image: picture,
-      });
-    } else if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "Please signup to continue",
-      });
+        user = await User.create({
+          firstName: given_name,
+          lastName: family_name,
+          email: email,
+          googleId: data.sub, // Use the Google user ID
+          loginType: "Google",
+          active: true,
+          approved: data.email_verified ?? false,
+          accountType: accountType,
+          additionalDetails: profile._id,
+          image: picture,
+        });
+      } else {
+        return res.status(404).json({
+          success: false,
+          message: "Please signup to continue",
+        });
+      }
+    } else {
+      if(user.loginType !== "Google"){
+        return res.status(400).json({
+          success: false,
+          message: "User(Direct) already exists with this email id. Please login using email and password",
+        });
+      }
+      else if(accountType !== "Default"){
+        return res.status(409).json({
+          success: false,
+          message: "User already exists with this email id. Please login using Google",
+        });
+      }
     }
 
     // Generate a JWT token for the user

@@ -9,7 +9,6 @@ export default function AllCourses(){
         ;(async () => {
             try {
                 const res = await getAllCourses();
-                console.log("Course : ",res)
                 setCourses(res)
             } catch (error) {
                 console.log("Could not fetch Course Details")
@@ -20,10 +19,10 @@ export default function AllCourses(){
     return (
         <div className="flex flex-col justify-center items-center">
             <div className="w-11/12">
-                <div className="mb-14 flex justify-between">
-                    <h1 className={`text-3xl font-medium text-richblack`}>My Courses</h1>
+                <div className="flex flex-col justify-center items-center">
+                    <h1 className={`text-3xl m-5 font-medium text-richblack-5`}>All Courses</h1>
                 </div>
-                {courses && <CoursesTable courses={courses} setCourses={setCourses} getCourses={getAllCourses}/>}
+                {courses && <CoursesTable courses={courses} setCourses={setCourses} getCourses={getAllCourses} isAdmin={true}/>}
             </div>
         </div>
     )

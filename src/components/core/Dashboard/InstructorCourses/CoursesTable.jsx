@@ -17,7 +17,7 @@ import {
 import { COURSE_STATUS } from "../../../../utils/constants"
 import ConfirmationModal from "../../../Common/ConfirmationModal"
 
-export default function CoursesTable({ courses, setCourses, getCourses }) {
+export default function CoursesTable({ courses, setCourses, getCourses, isAdmin=false}) {
   // const dispatch = useDispatch()
   const navigate = useNavigate()
   const { token } = useSelector((state) => state.auth)
@@ -119,7 +119,7 @@ export default function CoursesTable({ courses, setCourses, getCourses }) {
                   <button
                     disabled={loading}
                     onClick={() => {
-                      navigate(`/dashboard/edit-course/${course._id}`)
+                      navigate(isAdmin?`/admin/edit-course/${course._id}`:`/dashboard/edit-course/${course._id}`)
                     }}
                     title="Edit"
                     className="px-2 transition-all duration-200 hover:scale-110 hover:text-caribbeangreen-300"

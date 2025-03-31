@@ -65,6 +65,7 @@ function App() {
         
         <Route path="courses/:courseId" element={<CourseDetails />} />
         <Route path="catalog/:catalogName" element={<Catalog />} />
+
         {/* Open Route - for Only Non Logged in User */}
         <Route path="/login" element={<OpenRoute> <Login /> </OpenRoute>} />
         <Route path="forgot-password" element={<OpenRoute> <ForgotPassword /> </OpenRoute>} />
@@ -78,7 +79,7 @@ function App() {
             <Route path="dashboard/my-profile" element={<MyProfile />} />
             <Route path="dashboard/settings" element={<Settings />} />
             {/* Route only for Instructors */}
-            {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+            {(user?.accountType === ACCOUNT_TYPE.INSTRUCTOR) && (
               <>
                 <Route path="dashboard/instructor" element={<Instructor />} />
                 <Route path="dashboard/my-courses" element={<MyCourses />} />
@@ -97,10 +98,14 @@ function App() {
 
             {/* Route only for Admin */}
             {user?.accountType === ACCOUNT_TYPE.ADMIN && (
-            <Route path="dashboard/controls" element={<Controls />} />)}
-
-            {user?.accountType === ACCOUNT_TYPE.ADMIN && (
-            <Route path="dashboard/hitapi" element={<HitAPI />} />)}
+              <>
+                <Route path="dashboard/all-users" element={<AllUsers />} />
+                <Route path="dashboard/all-courses" element={<AllCourses />} />
+                <Route path="dashboard/controls" element={<Controls />} />
+                <Route path="dashboard/hitapi" element={<HitAPI />} />
+                <Route path="admin/edit-course/:courseId" element={<EditCourse />} />
+              </>
+            )}
         
         </Route>
 
