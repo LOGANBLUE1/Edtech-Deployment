@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react"
+import {useState } from "react"
 import { AiOutlineMenu, AiOutlineShoppingCart } from "react-icons/ai"
 import { BsChevronDown } from "react-icons/bs"
 import { useSelector, useDispatch } from "react-redux"
@@ -27,7 +27,7 @@ function Navbar() {
   const allowedLinks = NavbarLinks.filter(link =>
       link.roles.includes(ACCOUNT_TYPE.ALL) || link.roles.includes(user?.accountType)
   );
-  
+
   const fetchCategories = async () => {
     setLoading(true)
     try {
@@ -45,9 +45,8 @@ function Navbar() {
 
   return (
     <div
-      className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700 ${
-        location.pathname !== "/" ? "bg-richblack-800" : ""
-      } transition-all duration-200`}
+      className={`flex h-14 items-center justify-center border-b-[1px] border-b-richblack-700
+       transition-all duration-200`}
     >
       <div className="flex w-11/12 max-w-maxContent items-center justify-between">
         {/* Logo */}
@@ -56,7 +55,7 @@ function Navbar() {
         </Link>
         {/* Navigation links */}
         <nav className="hidden md:block">
-          <ul className="flex gap-x-6 text-richblack-25">
+          <ul className={`flex gap-x-6 text-richblack-800`}>
             {
               allowedLinks.map((link, index) => (
                 <li key={index}>
@@ -64,8 +63,8 @@ function Navbar() {
                     <div onMouseEnter={fetchCategories}
                       className={`group relative flex cursor-pointer items-center gap-1 ${
                         matchRoute(`${link?.path}/:catalogName`)
-                          ? "text-yellow-25"
-                          : "text-richblack-25"
+                          ? `text-yellow-100`
+                          : mode?`text-richblack-600`:`text-richblack-25`
                       }`}
                     >
                       <p>{link?.title}</p>
@@ -97,9 +96,9 @@ function Navbar() {
                       <p
                         className={`${
                           matchRoute(link?.path)
-                            ? "text-yellow-25"
-                            : "text-richblack-25"
-                        }`}
+                            ? `text-yellow-100`
+                            : mode?`text-richblack-600`:`text-richblack-25`
+                        } hover:text-yellow-25`}
                       >
                         {link.title}
                       </p>
@@ -115,13 +114,12 @@ function Navbar() {
         {/* Login / Signup / Dashboard */}
         <div className="hidden items-center gap-x-4 md:flex">
           <button
-             className={`h-10 w-10 bg-richblack-800 rounded-full cursor-pointer ${
-               mode ? `bg-black` : `bg-white`
-             }`}
+             className={`h-10 w-10 rounded-full cursor-pointer border border-richblack-100
+             ${mode ? `bg-white`:`bg-richblack-800`}`}
              onClick={() => dispatch(setMode(!mode))}
             >
              <div className="flex items-center justify-center h-full w-full text-white">
-               {mode ? <MdOutlineDarkMode className="text-white" /> : <MdOutlineLightMode />}
+               {mode ? <MdOutlineDarkMode className="text-black" /> : <MdOutlineLightMode />}
              </div>
           </button>
 
@@ -137,21 +135,21 @@ function Navbar() {
           )}
           {!token && (
             <Link to="/login">
-              <button className={`rounded-[8px] border bg-richblack-800 px-[12px] py-[8px] text-richblack-100 ${matchRoute("/login") ? "text-yellow-25 border-richblack-500" : "border-richblack-700"}`}>
+              <button className={`rounded-[8px] border ${mode ? `bg-white`:`bg-richblack-800`} hover:text-yellow-25 px-[12px] py-[8px] text-richblack-100 border-richblack-100 ${matchRoute("/login") ? `text-yellow-100` : ``}`}>
                 Log in
               </button>
             </Link>
           )}
           {!token && (
             <Link to="/signup">
-              <button className={`rounded-[8px] border bg-richblack-800 px-[12px] py-[8px] text-richblack-100 ${matchRoute("/signup") ? "text-yellow-25 border-richblack-500" : "border-richblack-700"}`}>
+              <button className={`rounded-[8px] border ${mode ? `bg-white`:`bg-richblack-800`} hover:text-yellow-25 px-[12px] py-[8px] text-richblack-100 border-richblack-100 ${matchRoute("/signup") ? "text-yellow-100" : ``}`}>
                 Sign up
               </button>
             </Link>
           )}
 
           {token && <ProfileDropdown />}
-          
+
         </div>
         {/* TODO: Show login and pass */}
         <button className="mr-4 md:hidden">

@@ -1,11 +1,8 @@
-import { FcGoogle } from "react-icons/fc"
 import { useSelector } from "react-redux"
 
 import frameImg from "../../../assets/Images/frame.png"
-import LoginForm from "./LoginForm"
-import SignupForm from "./SignupForm"
 
-function Template({ title, description1, description2, image, formType, userType }) {
+function Template({ title, description1, description2, image, children }) {
   const { loading } = useSelector((state) => state.auth)
 
   return (
@@ -24,7 +21,7 @@ function Template({ title, description1, description2, image, formType, userType
                 {description2}
               </span>
             </p>
-            {formType === "signup" ? <SignupForm userType={userType}/> : <LoginForm />}
+            {children}
           </div>
           <div className="relative mx-auto w-11/12 max-w-[450px] md:mx-0">
             <img

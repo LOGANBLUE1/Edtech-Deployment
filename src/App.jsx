@@ -54,7 +54,7 @@ function App() {
   }, [])
 
   return (
-    <div className={`flex min-h-screen w-screen flex-col ${mode?`bg-richblack-900`:`bg-richwhite-900`} font-inter`}>
+    <div className={`flex min-h-screen w-screen flex-col ${mode?`bg-white`:`bg-richblack-900`} font-inter`}>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -62,7 +62,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/allcourses" element={<PrivateRoute><AllCourses /></PrivateRoute>} />
         <Route path="/allusers" element={<PrivateRoute><AllUsers /></PrivateRoute>} />
-        
+
         <Route path="courses/:courseId" element={<CourseDetails />} />
         <Route path="catalog/:catalogName" element={<Catalog />} />
 
@@ -106,7 +106,7 @@ function App() {
                 <Route path="admin/edit-course/:courseId" element={<EditCourse />} />
               </>
             )}
-        
+
         </Route>
 
         {/* For the watching course lectures */}

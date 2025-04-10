@@ -7,6 +7,8 @@
     "@ramonak/react-progress-bar": "^5.0.3",
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@sentry/cli": "^2.43.0",
+    "@sentry/react": "^9.12.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -48,11 +50,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npm run sentry:sourcemaps",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "cd server && npm run dev",
-    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm start\" \"npm run server\""
+    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm start\" \"npm run server\"",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org aditya-pareek --project edtech-react src && sentry-cli sourcemaps upload --org aditya-pareek --project edtech-react src"
   },
   "eslintConfig": {
     "extends": [

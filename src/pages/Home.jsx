@@ -15,8 +15,10 @@ import InstructorSection from "../components/core/HomePage/InstructorSection"
 import LearningLanguageSection from "../components/core/HomePage/LearningLanguageSection"
 import TimelineSection from "../components/core/HomePage/Timeline"
 import { ACCOUNT_TYPE } from "../utils/constants"
+import {useSelector} from "react-redux";
 
 function Home() {
+  const {mode} = useSelector((state) => state.mode)
   return (
     <div>
       {/* Section 1 */}
@@ -37,7 +39,7 @@ function Home() {
         </Link>
 
         {/* Heading */}
-        
+
         {/* Sub Heading */}
         <div className="-mt-3 w-[90%] text-center text-lg font-bold text-richblack-300">
           With our online coding courses, you can learn at your own pace, from
@@ -48,10 +50,10 @@ function Home() {
 
         {/* CTA Buttons */}
         <div className="mt-8 flex flex-row gap-7">
-          <CTAButton active={true} linkto={"/signup"}>
+          <CTAButton active={true} linkto={"/signup"} mode={mode}>
             Learn More
           </CTAButton>
-          <CTAButton active={false} linkto={"/login"}>
+          <CTAButton active={false} linkto={"/login"} mode={mode}>
             Book a Demo
           </CTAButton>
         </div>
@@ -138,13 +140,13 @@ function Home() {
           <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
             <div className="lg:h-[150px]"></div>
             <div className="flex flex-row gap-7 text-white lg:mt-8">
-              <CTAButton active={true} linkto={"/catalog/all"}>
+              <CTAButton active={true} linkto={"/catalog/all"} mode={mode}>
                 <div className="flex items-center gap-2">
                   Explore Full Catalog
                   <FaArrowRight />
                 </div>
               </CTAButton>
-              <CTAButton active={false} linkto={"/login"}>
+              <CTAButton active={false} linkto={"/login"} mode={mode}>
                 Learn More
               </CTAButton>
             </div>
@@ -164,7 +166,7 @@ function Home() {
                 be a competitive specialist requires more than professional
                 skills.
               </div>
-              <CTAButton active={true} linkto={"/signup"}>
+              <CTAButton active={true} linkto={"/signup"} mode={mode}>
                 <div className="">Learn More</div>
               </CTAButton>
             </div>

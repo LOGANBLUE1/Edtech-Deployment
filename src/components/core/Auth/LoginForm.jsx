@@ -47,7 +47,7 @@ function LoginForm() {
           value={email}
           onChange={handleOnChange}
           placeholder="Enter email address"
-          className="form-style w-full"
+          className="form-style w-full bg-white"
         />
       </label>
       <label className="relative">

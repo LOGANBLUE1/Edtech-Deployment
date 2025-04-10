@@ -63,7 +63,7 @@ details > summary::-webkit-details-marker {
     123.77deg,
     #8a2be2 -6.46%,
     #ffa500 59.04%,
-    #f8f8ff 124.53%
+    /*#f8f8ff 124.53%*/
   );
   opacity: 0.2;
   filter: blur(34px);

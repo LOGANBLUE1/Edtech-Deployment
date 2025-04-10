@@ -13,7 +13,7 @@ import GoogleAuth from './GoogleAuth'
 function SignupForm({userType}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const [accountType, setAccountType] = useState(userType ?? ACCOUNT_TYPE.STUDENT);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -64,15 +64,15 @@ function SignupForm({userType}) {
     // Send OTP to user for verification
     dispatch(sendOtp(formData.email, navigate));
 
-    // Reset form
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
-    setAccountType(ACCOUNT_TYPE.STUDENT);
+    // // Reset form
+    // setFormData({
+    //   firstName: "",
+    //   lastName: "",
+    //   email: "",
+    //   password: "",
+    //   confirmPassword: "",
+    // });
+    // setAccountType(ACCOUNT_TYPE.STUDENT);
   };
 
   // data to pass to Tab component
