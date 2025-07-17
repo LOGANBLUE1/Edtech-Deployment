@@ -10,7 +10,7 @@ import { setCourse, setEditCourse, setStep,} from "../../../../../slices/courseS
 import IconBtn from "../../../../Common/IconBtn"
 import NestedView from "./NestedView"
 
-export default function CourseBuilderForm() {
+export default function CourseBuilderForm({course}) {
   const {
     register,
     handleSubmit,
@@ -18,7 +18,6 @@ export default function CourseBuilderForm() {
     formState: { errors }
   } = useForm()
 
-  const { course } = useSelector((state) => state.course)
   const { token } = useSelector((state) => state.auth)
   const [loading, setLoading] = useState(false)
   const [editSectionName, setEditSectionName] = useState(null)

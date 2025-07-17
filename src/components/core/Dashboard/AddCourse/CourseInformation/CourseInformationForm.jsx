@@ -17,7 +17,7 @@ import Upload from "../Upload"
 import ChipInput from "./ChipInput"
 import RequirementsField from "./RequirementsField"
 
-export default function CourseInformationForm() {
+export default function CourseInformationForm({course}) {
   const {
     register,
     handleSubmit,
@@ -25,11 +25,11 @@ export default function CourseInformationForm() {
     getValues,
     formState: { errors },
   } = useForm()
-
+  
   const dispatch = useDispatch()
   const { token } = useSelector((state) => state.auth)
   // only for editing course
-  const { course, editCourse } = useSelector((state) => state.course)
+  const { editCourse } = useSelector((state) => state.course)
   const [loading, setLoading] = useState(false)
   const [courseCategories, setCourseCategories] = useState([])
   const [courseFree, setCourseFree] = useState(false);
@@ -39,6 +39,12 @@ export default function CourseInformationForm() {
       setValue("coursePrice", "0");
     }
   };
+
+  useEffect(() => {
+    if (editCourse && courseCategories.length > 0) {
+      setValue("courseCategory", course.category._id)
+    }
+  }, [editCourse, courseCategories]);
 
   useEffect(() => {
     //self invoking async function
@@ -57,8 +63,6 @@ export default function CourseInformationForm() {
       setValue("coursePrice", course.price)
       setValue("courseTags", course.tag)
       setValue("courseBenefits", course.whatYouWillLearn)
-      setValue("courseCategory", course.category._id)
-    
       setValue("courseRequirements", course.instructions)
       setValue("courseImage", course.thumbnail)
     }
@@ -66,14 +70,14 @@ export default function CourseInformationForm() {
 
   const isFormUpdated = () => {
     const currentValues = getValues()
-    // console.log("changes after editing form values:", currentValues)
+
     return (
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDesc !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
       currentValues.courseTags.toString() !== course.tag.toString() ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
-      currentValues.courseCategory._id !== course.category._id ||
+      currentValues.courseCategory !== course.category._id ||
       currentValues.courseRequirements.toString() !== course.instructions.toString() ||
       currentValues.courseImage !== course.thumbnail ||
       currentValues.courseFree !== course.courseFree
@@ -82,7 +86,6 @@ export default function CourseInformationForm() {
 
   //   handle next button click
   const onSubmit = async (data) => {
-
       if (editCourse) {
           if (isFormUpdated()) {
               const currentValues = getValues()
@@ -103,7 +106,7 @@ export default function CourseInformationForm() {
               if (currentValues.courseBenefits !== course.whatYouWillLearn) {
                 formData.append("whatYouWillLearn", data.courseBenefits)
               }
-              if (currentValues.courseCategory._id !== course.category._id) {
+              if (currentValues.courseCategory !== course.category._id) {
                 formData.append("category", data.courseCategory)
               }
               if (
@@ -118,7 +121,11 @@ export default function CourseInformationForm() {
               if (currentValues.courseImage !== course.thumbnail) {
                 formData.append("thumbnailImage", data.courseImage)
               }
-              // console.log("Edit Form data: ", formData)
+              ////
+              // console.log("Form Data being sent to edit course:");
+              // for(const [key, value] of formData.entries()) {
+              //   console.log(`${key}: ${value}`);
+              // }
               setLoading(true)
               const result = await editCourseDetails(formData, token)
               setLoading(false)
@@ -245,7 +252,6 @@ export default function CourseInformationForm() {
         </label>
         <select
           {...register("courseCategory", { required: true })}
-          value={getValues("courseCategory") || ""}
           id="courseCategory"
           className="form-style w-full"
         >
@@ -253,8 +259,8 @@ export default function CourseInformationForm() {
             Choose a Category
           </option>
           {!loading &&
-            courseCategories?.map((category, indx) => (
-              <option key={indx} value={category?._id}>
+            courseCategories?.map((category, idx) => (
+              <option key={idx} value={category?._id}>
                 {category?.name}
               </option>
             ))}

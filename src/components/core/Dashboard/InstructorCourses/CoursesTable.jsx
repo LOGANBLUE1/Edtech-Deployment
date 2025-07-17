@@ -119,7 +119,7 @@ export default function CoursesTable({ courses, setCourses, getCourses, isAdmin=
                   <button
                     disabled={loading}
                     onClick={() => {
-                      navigate(isAdmin?`/admin/edit-course/${course._id}`:`/dashboard/edit-course/${course._id}`)
+                      navigate(`/${isAdmin?`admin`:`dashboard`}/edit-course/${course._id}`)
                     }}
                     title="Edit"
                     className="px-2 transition-all duration-200 hover:scale-110 hover:text-caribbeangreen-300"

@@ -8,13 +8,12 @@ import { resetCourseState, setStep } from "../../../../../slices/courseSlice"
 import { COURSE_STATUS } from "../../../../../utils/constants"
 import IconBtn from "../../../../Common/IconBtn"
 
-export default function PublishCourse() {
+export default function PublishCourse({course}) {
   const { register, handleSubmit, setValue, getValues } = useForm()
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { token } = useSelector((state) => state.auth)
-  const { course } = useSelector((state) => state.course)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import CourseBuilderForm from "./CourseBuilder/CourseBuilderForm"
 import CourseInformationForm from "./CourseInformation/CourseInformationForm"
 import PublishCourse from "./PublishCourse"
 
-export default function RenderSteps() {
+export default function RenderSteps({course}) {
   const { step } = useSelector((state) => state.course)
 
   const steps = [
@@ -81,9 +81,9 @@ export default function RenderSteps() {
         ))}
       </div>
       {/* Render specific component based on current step */}
-      {step === 1 && <CourseInformationForm />}
-      {step === 2 && <CourseBuilderForm />}
-      {step === 3 && <PublishCourse />}
+      {step === 1 && <CourseInformationForm course={course}/>}
+      {step === 2 && <CourseBuilderForm course={course}/>}
+      {step === 3 && <PublishCourse course={course}/>}
     </>
   )
 }
