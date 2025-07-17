@@ -247,6 +247,13 @@ exports.changePassword = async (req, res) => {
   try {
     const userDetails = await User.findById(req.user.id)
 
+    if(userDetails.loginType !== "Direct"){
+      return res.status(403).json({
+        success: false,
+        message: "User is registered via Google auth"
+      })
+    }
+
     const { oldPassword, newPassword } = req.body
     // Validate old password
     const isPasswordMatch = await bcrypt.compare(
