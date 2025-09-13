@@ -1,19 +1,25 @@
 version: "3.9"
 services:
   backend:
-    build: .
-    working_dir: /src/app/server
-    command: npm run dev
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     environment:
       - PORT=4000
     ports:
       - "4000:4000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
 
   frontend:
-    build: .
-    working_dir: /src/app/client
-    command: npm run dev
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     environment:
       - PORT=3000
     ports:
       - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
