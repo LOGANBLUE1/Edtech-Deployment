@@ -77,7 +77,7 @@ exports.deleteAccount = async (req, res) => {
     user.active = false
     user.courseProgress = []
     await user.save()
-    
+
     // deletes course progress of user
     await CourseProgress.deleteMany({ userId: id })
 
@@ -87,9 +87,9 @@ exports.deleteAccount = async (req, res) => {
     })
   } catch (error) {
     console.log(error)
-    res.status(500).json({ 
-      success: false, 
-      message: "User Cannot be deleted successfully" 
+    res.status(500).json({
+      success: false,
+      message: "User Cannot be deleted successfully"
     })
   }
 }
@@ -126,7 +126,7 @@ exports.updateDisplayPicture = async (req, res) => {
     const userId = req.user.id
     const image = await uploadImageToCloudinary(
       displayPicture,
-      process.env.FOLDER_NAME,
+      process.env?.FOLDER_NAME,
       1000,
       1000
     )
@@ -235,7 +235,7 @@ exports.instructorDashboard = async (req, res) => {
       return courseDataWithStats
     })
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
       data: courseData
     })
@@ -254,7 +254,7 @@ exports.deleteUserPermanently = async (req, res) => {
         message: "User ID or email is required",
       });
     }
-    
+
     let user;
     if (mongoose.Types.ObjectId.isValid(field))
       user = await User.findById(field);
@@ -277,9 +277,9 @@ exports.deleteUserPermanently = async (req, res) => {
     })
   } catch (error) {
     console.log(error)
-    res.status(500).json({ 
-      success: false, 
-      message: "User Cannot be deleted successfully" 
+    res.status(500).json({
+      success: false,
+      message: "User Cannot be deleted successfully"
     })
   }
 }

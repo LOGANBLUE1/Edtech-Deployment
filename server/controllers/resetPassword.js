@@ -1,6 +1,6 @@
 const User = require("../models/User")
 const mailSender = require("../utils/mailSender")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const crypto = require('crypto');
 require("dotenv").config();
 
@@ -25,7 +25,7 @@ exports.resetPasswordToken = async (req, res) => {
     )
     // console.log("DETAILS", updatedDetails)
 
-    const url = `${process.env.FRONTEND_URL}/update-password/${token}`
+    const url = `${process.env?.FRONTEND_URL}/update-password/${token}`
 
     await mailSender(
       email,
@@ -77,7 +77,7 @@ exports.resetPassword = async (req, res) => {
         message: `Token is Expired, Please Regenerate Your Token`,
       })
     }
-    
+
     const encryptedPassword = await bcrypt.hash(password, 10)
     if(encryptedPassword === userDetails.password){
       return res.status(403).json({

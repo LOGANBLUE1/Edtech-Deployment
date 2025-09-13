@@ -21,21 +21,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    loginType: {
-      type: String,
-      enum: ['Direct', 'Google'], // Add more as needed
-      default: 'Direct',
-    },
-    googleId: {
-      type: String,
-      unique: true,
-      sparse: true // Allows nulls for non-Google users
-    },
+    authMethods: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'AuthProvider',
+      default: []
+    }],
     password: {
-      type: String,
-      required: function () {
-        return this.loginType === 'Direct';
-      }
+      type: String
     },
     accountType: {
       type: String,
@@ -61,7 +53,7 @@ const userSchema = new mongoose.Schema(
         ref: "Course",
       },
     ],
-    token: {    // for reset password                       
+    token: {    // for reset password
       type: String,
     },
     resetPasswordExpires: {                 //token expiry time

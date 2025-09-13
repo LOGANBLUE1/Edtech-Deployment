@@ -17,9 +17,9 @@ exports.createCourse = async (req, res) => {
     const userId = req.user.id
 
     let {
-      courseName, 
+      courseName,
       courseDescription,
-      whatYouWillLearn, 
+      whatYouWillLearn,
       price,
       tag,
       category,
@@ -76,7 +76,7 @@ exports.createCourse = async (req, res) => {
     // Upload the Thumbnail to Cloudinary
     const thumbnailImage = await uploadImageToCloudinary(
       thumbnail,
-      process.env.FOLDER_NAME
+      process.env?.FOLDER_NAME
     )
     // console.log("Uploaded image to cloudinary: ",thumbnailImage)
     // Create a new course with the given details
@@ -142,7 +142,7 @@ exports.editCourse = async (req, res) => {
     const course = await Course.findById(courseId)
 
     if (!course) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
         error: "Course not found"
       })
@@ -156,7 +156,7 @@ exports.editCourse = async (req, res) => {
       const thumbnail = req.files.thumbnailImage
       const thumbnailImage = await uploadImageToCloudinary(
         thumbnail,
-        process.env.FOLDER_NAME
+        process.env?.FOLDER_NAME
       )
       course.thumbnail = thumbnailImage.secure_url
     }
@@ -424,9 +424,9 @@ exports.deleteCourse = async (req, res) => {
     // Find the course
     const course = await Course.findById(courseId)
     if (!course) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         status:false,
-        message: "Course not found" 
+        message: "Course not found"
       })
     }
 
@@ -447,7 +447,7 @@ exports.deleteCourse = async (req, res) => {
           $pull: { courseProgress: deletedProgress._id }
         })
       }
-        
+
       // await RatingAndReview.findByIdAndDelete({ user: studentId, course:courseId });
     }
     await User.findByIdAndUpdate(course.instructor, {

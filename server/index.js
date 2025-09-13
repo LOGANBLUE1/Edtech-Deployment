@@ -15,11 +15,11 @@ const fileUpload = require("express-fileupload");
 require("dotenv").config();
 
 // Setting up port number
-const PORT = process.env.PORT || 5000;
+const PORT = process.env?.PORT || 5000;
 
 // Connecting to database
 database.connect();
- 
+
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());

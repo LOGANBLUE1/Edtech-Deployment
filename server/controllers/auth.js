@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 const User = require("../models/User")
 const OTP = require("../models/OTP")
 const CourseProgress = require("../models/CourseProgress")
@@ -7,8 +7,7 @@ const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
 const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
-const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const AuthProvider = require("../models/AuthProvider")
 const fetch = require("node-fetch");
 
 require("dotenv").config()
@@ -17,7 +16,7 @@ exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email,
       password, confirmPassword, accountType, otp } = req.body;
-    
+
     if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
       return res.status(403).send({
         success: false,
@@ -41,7 +40,7 @@ exports.signup = async (req, res) => {
       });
     }
 
-    
+
     if (password !== confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -65,7 +64,7 @@ exports.signup = async (req, res) => {
         success: false,
         message: "The OTP did not found"
       });
-    } 
+    }
 
     else if (otp !== recentOtp.otp) {
       return res.status(400).json({
@@ -73,7 +72,7 @@ exports.signup = async (req, res) => {
         message: "The OTP is not valid"
       });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const profileDetails = await Profile.create({
@@ -161,10 +160,10 @@ exports.login = async (req, res) => {
 
       const payload = { email: user.email, id: user._id, accountType: user.accountType };
       const token = jwt.sign( payload,
-          process.env.JWT_SECRET,
-          {expiresIn: "24h"}
+        process.env?.JWT_SECRET,
+        {expiresIn: "24h"}
       );
-    
+
       //creating cookie
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),// 3 days
@@ -207,7 +206,7 @@ exports.sendotp = async (req, res) => {
     }
 
     const checkUserPresent = await User.findOne({ email })
-    
+
     if (checkUserPresent) {
       return res.status(409).json({
         success: false,
@@ -246,43 +245,49 @@ exports.sendotp = async (req, res) => {
 exports.changePassword = async (req, res) => {
   try {
     const userDetails = await User.findById(req.user.id)
-
-    if(userDetails.loginType !== "Direct"){
-      return res.status(403).json({
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    if(!userDetails){
+      return res.status(404).json({
         success: false,
-        message: "User is registered via Google auth"
+        message: "User not found"
       })
     }
 
-    const { oldPassword, newPassword } = req.body
+    if(!newPassword !== confirmPassword){
+      return res.status(400).json({
+        success: false,
+        message: "Passwords do not match"
+      })
+    }
+
     // Validate old password
     const isPasswordMatch = await bcrypt.compare(
       oldPassword,
       userDetails.password
     )
+    if(userDetails.password) {
+      if (!isPasswordMatch) {
+        return res.status(401).json({
+          success: false,
+          message: "The password is incorrect"
+        })
+      }
 
-    if (!isPasswordMatch) {
-      return res.status(401).json({ 
-        success: false, 
-        message: "The password is incorrect" 
-      })
+      if (oldPassword === newPassword) {
+        return res.status(401).json({
+          success: false,
+          message: "The password is same as old password"
+        })
+      }
+
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
+      if (!passwordRegex.test(newPassword)) {
+        return res.status(400).json({
+          success: false,
+          message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
+        });
+      }
     }
-
-    if(oldPassword === newPassword){
-      return res.status(401).json({ 
-        success: false, 
-        message: "The password is same as old password" 
-      })
-    }
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
-    if (!passwordRegex.test(newPassword)) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
-      });
-    }
-
     const encryptedPassword = await bcrypt.hash(newPassword, 10)
     const updatedUserDetails = await User.findByIdAndUpdate(
       req.user.id,
@@ -292,7 +297,7 @@ exports.changePassword = async (req, res) => {
 
     // Send notification email
     try {
-        const emailResponse = await mailSender(
+      const emailResponse = await mailSender(
         updatedUserDetails.email,
         "Password for your account has been updated",
         passwordUpdated(
@@ -310,9 +315,9 @@ exports.changePassword = async (req, res) => {
       })
     }
 
-    return res.status(200).json({ 
-      success: true, 
-      message: "Password updated successfully" 
+    return res.status(200).json({
+      success: true,
+      message: "Password updated successfully"
     })
   } catch (error) {
     console.error("Error occurred while updating password:", error)
@@ -414,12 +419,17 @@ exports.googleLogin = async (req, res) => {
           contactNumber: null,
         });
 
+        const authObject = await AuthProvider.create({
+          provider: "Google",
+          providerId: data.sub,
+        });
+
         user = await User.create({
           firstName: given_name,
           lastName: family_name,
           email: email,
           googleId: data.sub, // Use the Google user ID
-          loginType: "Google",
+          authMethods: [authObject],
           active: true,
           approved: data.email_verified ?? false,
           accountType: accountType,
@@ -449,7 +459,7 @@ exports.googleLogin = async (req, res) => {
 
     // Generate a JWT token for the user
     const payload = { email: user.email, id: user._id, accountType: user.accountType };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "24h" });
+    const token = jwt.sign(payload, process.env?.JWT_SECRET, { expiresIn: "24h" });
 
     const options = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days

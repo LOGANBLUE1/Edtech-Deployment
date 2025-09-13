@@ -14,21 +14,21 @@ exports.auth = async (req, res, next) => {
 
 		// If JWT is missing, return 401 Unauthorized response
 		if (!token) {
-			return res.status(401).json({ 
+			return res.status(401).json({
 				success: false,
-				message: `Token Missing unable to authenticate` 
+				message: `Token Missing unable to authenticate`
 			});
 		}
 
 		try {
 			// Verifying the JWT using the secret key stored in environment variables
-			const decode = await jwt.verify(token, process.env.JWT_SECRET);
+			const decode = await jwt.verify(token, process.env?.JWT_SECRET);
 			// console.log("From auth middleware: ",decode);
 			// Storing the decoded JWT payload in the request object for further use
 			req.user = decode;
 		} catch (error) {
 			// If JWT verification fails, return 401 Unauthorized response
-			return res.status(401).json({ 
+			return res.status(401).json({
 				success: false,
 				message: "token is invalid/user is not authorised"
 			});
@@ -57,9 +57,9 @@ exports.isStudent = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res.status(500).json({ 
-			success: false, 
-			message: `User Role Can't be Verified` 
+		return res.status(500).json({
+			success: false,
+			message: `User Role Can't be Verified`
 		});
 	}
 };
@@ -76,9 +76,9 @@ exports.isAdmin = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res.status(500).json({ 
-			success: false, 
-			message: `User Role Can't be Verified` 
+		return res.status(500).json({
+			success: false,
+			message: `User Role Can't be Verified`
 		});
 	}
 };
@@ -98,9 +98,9 @@ exports.isInstructor = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res.status(500).json({ 
-			success: false, 
-			message: `User Role Can't be Verified` 
+		return res.status(500).json({
+			success: false,
+			message: `User Role Can't be Verified`
 		});
 	}
 };
@@ -117,9 +117,9 @@ exports.isInstructorOrAdmin = async (req, res, next) => {
 		}
 		next();
 	} catch (error) {
-		return res.status(500).json({ 
-			success: false, 
-			message: `User Role Can't be Verified` 
+		return res.status(500).json({
+			success: false,
+			message: `User Role Can't be Verified`
 		});
 	}
 };

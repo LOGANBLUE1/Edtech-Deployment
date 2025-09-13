@@ -10,19 +10,19 @@ exports.createSubSection = async (req, res) => {
     const video = req.files.video
 
     if (!sectionId || !title || !description || !video) {
-      return res.status(404).json({ 
-        success: false, 
-        message: "All Fields are Required" 
+      return res.status(404).json({
+        success: false,
+        message: "All Fields are Required"
       })
     }
 
     const uploadDetails = await uploadImageToCloudinary(
       video,
-      process.env.FOLDER_NAME
+      process.env?.FOLDER_NAME
     )
-    
+
     // console.log(uploadDetails)
-    
+
     const SubSectionDetails = await SubSection.create({
       title: title,
       timeDuration: `${uploadDetails.duration}`,
@@ -30,7 +30,7 @@ exports.createSubSection = async (req, res) => {
       videoUrl: uploadDetails.secure_url,
     })
 
-    
+
     const updatedSection = await Section.findByIdAndUpdate(
       { _id: sectionId },
       { $push: { subSection: SubSectionDetails._id } },
@@ -38,9 +38,9 @@ exports.createSubSection = async (req, res) => {
     ).populate("subSection")
 
     // Return the updated section in the response
-    return res.status(200).json({ 
-      success: true, 
-      data: updatedSection 
+    return res.status(200).json({
+      success: true,
+      data: updatedSection
     })
   } catch (error) {
     // Handle any errors that may occur during the process
@@ -76,7 +76,7 @@ exports.updateSubSection = async (req, res) => {
       const video = req.files.video
       const uploadDetails = await uploadImageToCloudinary(
         video,
-        process.env.FOLDER_NAME
+        process.env?.FOLDER_NAME
       )
       subSection.videoUrl = uploadDetails.secure_url
       subSection.timeDuration = `${uploadDetails.duration}`
@@ -119,7 +119,7 @@ exports.deleteSubSection = async (req, res) => {
     const subSection = await SubSection.findByIdAndDelete({ _id: subSectionId })
 
     if (!subSection) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
         message: "SubSection not found"
       })
