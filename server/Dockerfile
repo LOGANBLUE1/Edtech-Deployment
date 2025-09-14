@@ -1,4 +1,5 @@
 FROM node:22-alpine
+
 # Create app directory
 WORKDIR /src/app
 
@@ -9,9 +10,8 @@ RUN npm install --only=production
 # Copy the rest of the app
 COPY . .
 
-# App listens on port 4000 (Cloud Run requirement)
-ENV PORT=4000
-EXPOSE 4000
+# Expose the Cloud Run port (8080)
+EXPOSE 8080
 
 # Start the app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
