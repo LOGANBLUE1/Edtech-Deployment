@@ -26,7 +26,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: ["http://localhost:3000", "https://edtech-deployment-291728099387.europe-west1.run.app/", "https://edtech-website-tau.vercel.app", "https://edtech-deployment.vercel.app"],
+		origin: [process.env.FRONTEND_URL],
 		credentials: true
 	})
 );
