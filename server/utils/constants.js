@@ -9,7 +9,14 @@ const COURSE_STATUS = {
   PUBLISHED: "Published",
 }
 
+const AUTH_TYPE = {
+  DIRECT: "Direct",
+  GOOGLE: "Google",
+  GITHUB: "GitHub",
+}
+
 module.exports = {
   ACCOUNT_TYPE,
   COURSE_STATUS,
+  AUTH_TYPE
 };

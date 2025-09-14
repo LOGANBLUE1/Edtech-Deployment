@@ -3,10 +3,9 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { googleLogin } from "../../../services/operations/authAPI";
-const GoogleAuth = ({ accountType }) => {
+const GoogleAuth = ({ accountType=null }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const handleLogin = async (tokenResponse) => {
       dispatch(googleLogin(navigate, tokenResponse, accountType));
   };

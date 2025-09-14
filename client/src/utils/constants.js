@@ -2,8 +2,7 @@ export const ACCOUNT_TYPE = {
   STUDENT: "Student",
   INSTRUCTOR: "Instructor",
   ADMIN: "Admin",
-  ALL: "All",
-  DEFAULT: "Default"
+  ALL: "All"
 }
 
 export const COURSE_STATUS = {

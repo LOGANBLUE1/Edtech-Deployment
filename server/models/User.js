@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Profile = require('./Profile');
+const { ACCOUNT_TYPE, AUTH_TYPE } = require("../utils/constants");
 const CourseProgress = require('./CourseProgress');
 const RatingAndReview = require('./RatingandReview');
 const Course = require('./Course');
@@ -22,8 +23,8 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
     authMethods: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'AuthProvider',
+      type: String,
+      enum: [AUTH_TYPE.DIRECT, AUTH_TYPE.GOOGLE, AUTH_TYPE.GITHUB],
       default: []
     }],
     password: {
@@ -31,8 +32,8 @@ const userSchema = new mongoose.Schema(
     },
     accountType: {
       type: String,
-      enum: ["Admin", "Student", "Instructor"],
-      default: "Student",
+      enum: [ACCOUNT_TYPE.ADMIN, ACCOUNT_TYPE.STUDENT, ACCOUNT_TYPE.INSTRUCTOR],
+      default: ACCOUNT_TYPE.STUDENT,
     },
     active: {                          //disable it instead of deleting account
       type: Boolean,

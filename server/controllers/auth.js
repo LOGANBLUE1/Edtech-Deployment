@@ -7,8 +7,8 @@ const otpGenerator = require("otp-generator")
 const mailSender = require("../utils/mailSender")
 const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
-const AuthProvider = require("../models/AuthProvider")
 const fetch = require("node-fetch");
+const { AUTH_TYPE } = require("../utils/constants")
 
 require("dotenv").config()
 
@@ -86,6 +86,7 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       email,
+      authMethods: [AUTH_TYPE.DIRECT],
       password: hashedPassword,
       accountType,
       active:true,
@@ -128,6 +129,12 @@ exports.login = async (req, res) => {
         success: false,
         message: `User is not Registered with Us Please SignUp to Continue`
       })
+    }
+    else if(!user.authMethods.includes(AUTH_TYPE.DIRECT)){
+      return res.status(400).json({
+        success: false,
+        message: `Please set a password, or use ${user.authMethods.join(" / ")} to login`
+      });
     }
 
     if (await bcrypt.compare(password, user.password)) {
@@ -398,7 +405,7 @@ exports.googleLogin = async (req, res) => {
     if (!response.ok) {
       return res.status(400).json({
         success: false,
-        message: "Invalid Google token",
+        message: "Failed to fetch user info from Google",
       });
     }
 
@@ -411,7 +418,7 @@ exports.googleLogin = async (req, res) => {
 
     // If user doesn't exist, create a new user
     if (!user) {
-      if(accountType !== "Default"){
+      if(accountType){ // signup
         const profile = await Profile.create({
           gender: null,
           dateOfBirth: null,
@@ -419,40 +426,21 @@ exports.googleLogin = async (req, res) => {
           contactNumber: null,
         });
 
-        const authObject = await AuthProvider.create({
-          provider: "Google",
-          providerId: data.sub,
-        });
-
         user = await User.create({
           firstName: given_name,
           lastName: family_name,
           email: email,
-          googleId: data.sub, // Use the Google user ID
-          authMethods: [authObject],
+          authMethods: [AUTH_TYPE.GOOGLE],
           active: true,
           approved: data.email_verified ?? false,
           accountType: accountType,
           additionalDetails: profile._id,
           image: picture,
         });
-      } else {
+      } else { // login
         return res.status(404).json({
           success: false,
           message: "Please signup to continue",
-        });
-      }
-    } else {
-      if(user.loginType !== "Google"){
-        return res.status(400).json({
-          success: false,
-          message: "User(Direct) already exists with this email id. Please login using email and password",
-        });
-      }
-      else if(accountType !== "Default"){
-        return res.status(409).json({
-          success: false,
-          message: "User already exists with this email id. Please login using Google",
         });
       }
     }
