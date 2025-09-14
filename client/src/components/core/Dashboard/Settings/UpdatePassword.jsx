@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import { useState } from "react"
+import { toast } from "react-hot-toast"
 import { useForm } from "react-hook-form"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { useSelector } from "react-redux"
@@ -24,7 +25,17 @@ export default function UpdatePassword() {
   } = useForm()
 
   const submitPasswordForm = async (data) => {
-    console.log("password Data - ", data)
+    const { newPassword, confirmPassword } = data;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
+    if (!passwordRegex.test(newPassword) || !passwordRegex.test(confirmPassword)) {
+      toast.error("Password must be at least 6 characters long and include Number, lowercase letter, uppercase letter, and special character.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
     try {
       await changePassword(token, data)
     } catch (error) {

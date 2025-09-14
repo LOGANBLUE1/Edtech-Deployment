@@ -9,6 +9,7 @@ const { passwordUpdated } = require("../mail/templates/passwordUpdate")
 const Profile = require("../models/Profile")
 const fetch = require("node-fetch");
 const { AUTH_TYPE } = require("../utils/constants")
+const e = require("express")
 
 require("dotenv").config()
 
@@ -251,56 +252,61 @@ exports.sendotp = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
   try {
-    const userDetails = await User.findById(req.user.id)
-    const { oldPassword, newPassword, confirmPassword } = req.body;
-    if(!userDetails){
+    const user = await User.findById(req.user.id)
+    const { oldPassword=null, newPassword, confirmPassword } = req.body;
+    if(!user){
       return res.status(404).json({
         success: false,
         message: "User not found"
       })
     }
-
-    if(!newPassword !== confirmPassword){
+    if(newPassword !== confirmPassword){
       return res.status(400).json({
         success: false,
         message: "Passwords do not match"
       })
     }
 
-    // Validate old password
-    const isPasswordMatch = await bcrypt.compare(
-      oldPassword,
-      userDetails.password
-    )
-    if(userDetails.password) {
+    // if updating
+    if(oldPassword){
+      // Validate old password
+      const isPasswordMatch = await bcrypt.compare(
+        oldPassword,
+        user.password
+      )
       if (!isPasswordMatch) {
         return res.status(401).json({
           success: false,
           message: "The password is incorrect"
         })
       }
-
       if (oldPassword === newPassword) {
         return res.status(401).json({
           success: false,
           message: "The password is same as old password"
         })
       }
-
-      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
-      if (!passwordRegex.test(newPassword)) {
-        return res.status(400).json({
-          success: false,
-          message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
-        });
-      }
     }
+
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d~`!@#$%^&*()-_=+{};:"'.,<>|]{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long and include one number, one lowercase letter, one uppercase letter, and one special character."
+      });
+    }
+
     const encryptedPassword = await bcrypt.hash(newPassword, 10)
     const updatedUserDetails = await User.findByIdAndUpdate(
       req.user.id,
       { password: encryptedPassword },
       { new: true }
     )
+    if(!updatedUserDetails?.authMethods.includes(AUTH_TYPE.DIRECT)){
+      updatedUserDetails.authMethods.push(AUTH_TYPE.DIRECT);
+    }
+    updatedUserDetails.save()
 
     // Send notification email
     try {
@@ -443,6 +449,11 @@ exports.googleLogin = async (req, res) => {
           message: "Please signup to continue",
         });
       }
+    }
+    // For tracking if user has used google auth
+    if(!user.authMethods.includes(AUTH_TYPE.GOOGLE)){
+      user.authMethods.push(AUTH_TYPE.GOOGLE);
+      await user.save();
     }
 
     // Generate a JWT token for the user
