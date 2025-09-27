@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom"
 
 import { login } from "../../../services/operations/authAPI"
 import GoogleAuth from "./GoogleAuth"
-import { ACCOUNT_TYPE } from "../../../utils/constants"
 
 function LoginForm() {
   const navigate = useNavigate()

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import CTAButton from '../HomePage/Button'
 import ProgressBar from "@ramonak/react-progress-bar"
 import { useSelector } from "react-redux"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/profileAPI"
 import { COURSE_STATUS } from "../../../utils/constants"
