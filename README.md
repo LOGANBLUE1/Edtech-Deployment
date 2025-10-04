@@ -58,7 +58,50 @@ This platform enables course creation, secure enrollment, and seamless payment i
 
 ## 🧪 Project Setup
 
-### 1️⃣ Clone the repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/LOGANBLUE1/Edtech-Deployment.git
 cd Edtech-Deployment
+```
+### 2. Set up environment variables
+Create a `.env` file in both the `client` and `server` directories with the following variables:
+#### Sever `.env`
+Here's a sample `.env` file for the server:
+```env
+
+CLOUD_NAME = drkjvozea
+CLOUDINARY_API_KEY = 
+CLOUDINARY_API_SECRET = 
+MONGODB_URL="mongodb+srv://adityafake____:CumJDQ6xL3Hs9JCP@cluster0.djs7m.mongodb.net/EdTech-dev"
+PORT = 4000
+MAIL_HOST = smtp.gmail.com
+COMPANY_NAME = "Career Counselling"
+MAIL_USER = 
+MAIL_PASS =
+JWT_SECRET = 
+CLOUDINARY_FOLDER_NAME =
+RAZORPAY_KEY =         
+RAZORPAY_SECRET =
+```
+#### Client `.env`
+Here's a sample `.env` file for the client:
+```env
+REACT_APP_BASE_URL=http://localhost:4000/api/v1
+REACT_APP_ENV=
+REACT_APP_TEST=
+REACT_APP_GOOGLE_CLIENT_ID=fake____-iob86bhmrc3pk1ottpf0eggvcm6k968u.apps.googleusercontent.com
+PORT=
+```
+### 2. Run the server
+```bash
+cd server
+npm install
+npm run dev
+```
+
+### 3. Run the client
+```bash
+cd client
+npm install
+npm start
+```
