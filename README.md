@@ -45,7 +45,7 @@ This platform enables course creation, secure enrollment, and seamless payment i
 
 | Category | Technologies |
 |-----------|---------------|
-| **Frontend** | React.js, TailwindCSS |
+| **Frontend** | React.js, Redux, TailwindCSS |
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB |
 | **Auth & Security** | JWT, Google OAuth 2.0, bcrypt |
