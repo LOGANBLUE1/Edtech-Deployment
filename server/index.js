@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
+const { swaggerUi, specs} = require("./config/swagger");
 require("dotenv").config();
 
 // Setting up port number
@@ -26,7 +27,7 @@ app.use(cookieParser());
 
 app.use(
 	cors({
-		origin: [process.env.FRONTEND_URL],
+		origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL_VERCEL],
 		credentials: true
 	})
 );
@@ -40,6 +41,7 @@ app.use(
 // Connecting to cloudinary
 cloudinaryConnect();
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 // Setting up routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
