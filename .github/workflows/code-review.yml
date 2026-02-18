@@ -95,6 +95,11 @@ jobs:
         with:
           category: "/language:javascript"
       
+      - name: Setup Node.js for npm audit
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      
       - name: Run npm audit on client
         run: |
           cd client
