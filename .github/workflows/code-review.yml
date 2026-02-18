@@ -66,7 +66,8 @@ jobs:
       - name: Check server for syntax errors
         run: |
           cd server
-          node -c index.js
+          MAIN_FILE=$(node -p "require('./package.json').main || 'index.js'")
+          node -c "$MAIN_FILE"
       
       - name: Validate server package.json
         run: |
@@ -138,7 +139,12 @@ jobs:
       
       - name: Verify docker-compose configuration
         run: |
-          docker-compose config
+          # Try Docker Compose V2 first, fall back to V1 if not available
+          if command -v docker compose &> /dev/null; then
+            docker compose config
+          else
+            docker-compose config
+          fi
 
   summary:
     name: Review Summary
