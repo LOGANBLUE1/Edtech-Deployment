@@ -1,5 +1,7 @@
 # 🎓 EdTech Web App
 
+![Code Review](https://github.com/LOGANBLUE1/Edtech-Deployment/actions/workflows/code-review.yml/badge.svg)
+
 A **full-stack EdTech platform** built using the **MERN stack**, designed for Students, Instructors, and Admins.  
 This platform enables course creation, secure enrollment, and seamless payment integration — all deployed in scalable containers on **Google Cloud Run**.
 
@@ -38,6 +40,7 @@ This platform enables course creation, secure enrollment, and seamless payment i
 - Deployed on **Google Cloud Run** for automatic scaling.
 - Separate **dev** and **prod** environments with isolated databases and configurations.
 - **CI/CD pipeline** set up to auto-build and deploy on each Git push.
+- **Automated code review** on pull requests to main branch with quality checks, security scanning, and build verification. See [Code Review Documentation](.github/CODE_REVIEW.md) for details.
 
 ---
 
