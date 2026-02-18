@@ -40,6 +40,7 @@ jobs:
         run: |
           cd client
           npx prettier --check "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
+        # Allow formatting violations for now - remove this flag once codebase is fully formatted
         continue-on-error: true
       
       - name: Build client application
@@ -53,6 +54,7 @@ jobs:
         run: |
           cd client
           npm test -- --passWithNoTests --watchAll=false
+        # Allow test failures for now - remove this flag once all tests pass consistently
         continue-on-error: true
       
       # Server checks
@@ -70,6 +72,7 @@ jobs:
         run: |
           cd server
           npm ls --depth=0
+        # Allow dependency warnings for now - remove this flag once all dependencies are resolved
         continue-on-error: true
 
   security-scan:
@@ -104,12 +107,14 @@ jobs:
         run: |
           cd client
           npm audit --audit-level=high
+        # Allow vulnerabilities for now - remove this flag once all high-severity issues are resolved
         continue-on-error: true
       
       - name: Run npm audit on server
         run: |
           cd server
           npm audit --audit-level=high
+        # Allow vulnerabilities for now - remove this flag once all high-severity issues are resolved
         continue-on-error: true
 
   docker-build-check:

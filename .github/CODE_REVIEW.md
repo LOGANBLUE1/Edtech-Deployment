@@ -49,6 +49,20 @@ You can add the following badge to your README.md to show the workflow status:
 ![Code Review](https://github.com/LOGANBLUE1/Edtech-Deployment/actions/workflows/code-review.yml/badge.svg)
 ```
 
+## Important Notes
+
+### Soft Failures
+Some checks are currently set to `continue-on-error: true`, which means they report issues but don't block the workflow:
+- **Prettier formatting check**: Allows formatting violations (remove flag once codebase is fully formatted)
+- **Client tests**: Allows test failures (remove flag once all tests pass consistently)
+- **Package validation**: Allows dependency warnings (remove flag once dependencies are resolved)
+- **npm audit**: Allows security vulnerabilities (remove flag once critical issues are resolved)
+
+These flags are in place to avoid blocking the workflow on pre-existing issues. As you improve the codebase:
+1. Fix the underlying issues (formatting, tests, dependencies, vulnerabilities)
+2. Remove the corresponding `continue-on-error: true` flag from `.github/workflows/code-review.yml`
+3. Enforce strict checks for new code
+
 ## Troubleshooting
 
 ### Failed Prettier Check
