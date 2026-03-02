@@ -123,7 +123,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).populate("additionalDetails");
 
     if (!user) {
       return res.status(404).json({
@@ -434,7 +434,7 @@ exports.googleLogin = async (req, res) => {
 
         user = await User.create({
           firstName: given_name,
-          lastName: family_name,
+          lastName: family_name ?? "",
           email: email,
           authMethods: [AUTH_TYPE.GOOGLE],
           active: true,

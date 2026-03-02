@@ -1,11 +1,20 @@
 const User = require("../models/User")
 const mailSender = require("../utils/mailSender")
 const bcrypt = require("bcryptjs")
+const crypto = require('crypto')
+const {AUTH_TYPE} = require("../utils/constants");
 require("dotenv").config();
 
 exports.resetPasswordToken = async (req, res) => {
   try {
     const email = req.body.email
+    if (!email) {
+        return res.json({
+            success: false,
+            message: "Email is Required",
+        })
+    }
+
     const user = await User.findOne({ email: email })
     if (!user) {
       return res.json({
@@ -13,6 +22,13 @@ exports.resetPasswordToken = async (req, res) => {
         message: `This Email: ${email} is not Registered With Us Enter a Valid Email `,
       })
     }
+    else if(!user.authMethods.includes(AUTH_TYPE.DIRECT)){
+      return res.json({
+        success: false,
+        message: `Login with your original ways: ${user.authMethods.join(" / ")}`,
+      })
+    }
+
     const token = crypto.randomBytes(20).toString("hex")
 
     await User.findOneAndUpdate(

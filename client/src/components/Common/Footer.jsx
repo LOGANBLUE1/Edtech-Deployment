@@ -1,4 +1,3 @@
-import React from "react";
 import { FooterLink2 } from "../../data/footer-links";
 import { Link } from "react-router-dom";
 import useScrollToTop from "../../hooks/useScrollToTop";
@@ -175,7 +174,7 @@ const Footer = () => {
             })}
           </div>
 
-          <div className="text-center">Made with ❤️ Aditya © 2023 EdTech</div>
+          <div className="text-center">Made with ❤️ Aditya © 2024 EdTech</div>
         </div>
       </div>
     </div>
